@@ -1,17 +1,31 @@
-# Starlink Edu — Documentation
+# Docs
 
-Canonical product and engineering context for humans and future coding agents.
+Reference material for product and engineering context. **Not required reading for every chat or PR.**
 
-| Document | Purpose |
-|----------|---------|
-| [PRODUCT.md](./PRODUCT.md) | Vision, audience, principles, non-goals |
-| [CURRICULUM.md](./CURRICULUM.md) | Learning path, pedagogy, module map |
-| [CODE_ALONGS.md](./CODE_ALONGS.md) | Optional Python code-along strategy |
-| [ROADMAP.md](./ROADMAP.md) | Phased roadmap and priorities |
-| [ARCHITECTURE.md](./ARCHITECTURE.md) | Stack, repo layout, key systems |
-| [CONTENT_GUIDE.md](./CONTENT_GUIDE.md) | How to write lessons, sources, tone |
-| [DECISIONS.md](./DECISIONS.md) | Locked product/tech decisions log |
+## When to open these
 
-**Start here if you are new to the repo:** PRODUCT → CURRICULUM → ARCHITECTURE → ROADMAP.
+| Situation | Read |
+|-----------|------|
+| Routine bugfix / small UI tweak | Skip docs; use code |
+| New feature or scope question | Relevant doc only |
+| Curriculum / lesson rewrite | [CURRICULUM.md](./CURRICULUM.md) |
+| Code-along / Python work | [CODE_ALONGS.md](./CODE_ALONGS.md) |
+| Stack / where files live | [ARCHITECTURE.md](./ARCHITECTURE.md) |
+| Priorities / what’s next | [ROADMAP.md](./ROADMAP.md) |
+| “What is this product?” | [PRODUCT.md](./PRODUCT.md) |
 
-> Not affiliated with SpaceX or Starlink. Educational models only.
+## How to treat them
+
+- **Lanes, not laws.** Prefer the documented direction; deviate when a better approach is clear.
+- **Update when major.** If you change vision, curriculum shape, roadmap phase, or a locked decision, update the matching doc in the same change.
+- **Keep them short.** Prefer editing code + a one-line doc fix over essay-length process.
+
+| Doc | Contents |
+|-----|----------|
+| [PRODUCT.md](./PRODUCT.md) | Vision, audience, principles, decisions |
+| [CURRICULUM.md](./CURRICULUM.md) | Path, pedagogy, how to edit lessons |
+| [CODE_ALONGS.md](./CODE_ALONGS.md) | Optional Python practice plan |
+| [ARCHITECTURE.md](./ARCHITECTURE.md) | Stack and repo map |
+| [ROADMAP.md](./ROADMAP.md) | Phases |
+
+Not affiliated with SpaceX. Educational models only.
