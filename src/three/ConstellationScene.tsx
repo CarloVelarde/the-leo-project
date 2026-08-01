@@ -78,8 +78,13 @@ export function ConstellationScene({
   )
 
   return (
-    <div className={className ?? 'relative h-full min-h-[320px] w-full'}>
-      <Canvas camera={{ position: [0, 1.15, 2.65], fov: 42 }} dpr={[1, 2]}>
+    <div className={className ?? 'relative h-full w-full'}>
+      <Canvas
+        camera={{ position: [0, 1.15, 2.65], fov: 42 }}
+        dpr={[1, 2]}
+        style={{ width: '100%', height: '100%', display: 'block' }}
+        gl={{ antialias: true, alpha: false }}
+      >
         <color attach="background" args={['#05070f']} />
         <ambientLight intensity={0.28} />
         <directionalLight position={[4.5, 2.5, 3.5]} intensity={1.35} />
