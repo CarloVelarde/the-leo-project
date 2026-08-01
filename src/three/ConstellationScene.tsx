@@ -1,8 +1,15 @@
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Stars } from '@react-three/drei'
-import { useCallback, useState } from 'react'
+import { Stars } from '@react-three/drei'
+import { useCallback, useRef, useState } from 'react'
 import { computeInsights } from '@/sim/insights'
-import type { LabParams, LiveSimStats, SceneDisplayOptions } from '@/sim/types'
+import type {
+  CameraMode,
+  LabParams,
+  LiveSimStats,
+  SceneDisplayOptions,
+  SimFocusState,
+} from '@/sim/types'
+import { CameraRig } from './CameraRig'
 import { Earth } from './Earth'
 import { LabCore } from './LabCore'
 import { OrbitRings } from './OrbitRings'
@@ -13,14 +20,32 @@ const DEFAULT_DISPLAY: SceneDisplayOptions = {
   showFootprint: true,
   showLink: true,
   showInViewHighlight: true,
+  showGroundTrack: true,
+}
+
+function initialFocus(params: LabParams): SimFocusState {
+  const insights = computeInsights(params, 0)
+  return {
+    userUnit: [0, 0, 1],
+    servingUnit: insights.coverage.servingPositionKm
+      ? ([
+          insights.coverage.servingPositionKm[0] / 6371,
+          insights.coverage.servingPositionKm[1] / 6371,
+          insights.coverage.servingPositionKm[2] / 6371,
+        ] as [number, number, number])
+      : null,
+    handoffFlash: 0,
+    simTimeSeconds: 0,
+  }
 }
 
 type ConstellationSceneProps = {
   params: LabParams
   className?: string
-  /** Compact hero mode: slightly lighter stars */
   mode?: 'lab' | 'hero'
   paused?: boolean
+  resetToken?: number
+  cameraMode?: CameraMode
   display?: Partial<SceneDisplayOptions>
   onStats?: (stats: LiveSimStats) => void
 }
@@ -30,14 +55,18 @@ export function ConstellationScene({
   className,
   mode = 'lab',
   paused = false,
+  resetToken = 0,
+  cameraMode = 'free',
   display: displayOverride,
   onStats,
 }: ConstellationSceneProps) {
   const display: SceneDisplayOptions = {
     ...DEFAULT_DISPLAY,
+    ...(mode === 'hero' ? { showGroundTrack: false } : null),
     ...displayOverride,
   }
 
+  const focusRef = useRef<SimFocusState>(initialFocus(params))
   const [online, setOnline] = useState(() => computeInsights(params, 0).coverage.online)
 
   const handleStats = useCallback(
@@ -71,16 +100,11 @@ export function ConstellationScene({
           display={display}
           onStats={handleStats}
           statsIntervalMs={mode === 'hero' ? 200 : 80}
+          resetToken={resetToken}
+          focusRef={focusRef}
         />
         <UserMarker params={params} online={online} />
-        <OrbitControls
-          enablePan={false}
-          minDistance={1.55}
-          maxDistance={7}
-          enableDamping
-          dampingFactor={0.08}
-          rotateSpeed={0.7}
-        />
+        <CameraRig mode={cameraMode} focusRef={focusRef} />
       </Canvas>
     </div>
   )

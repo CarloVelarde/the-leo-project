@@ -3,7 +3,12 @@ import { useSearchParams } from 'react-router-dom'
 import { LAB_PARAM_RANGES } from '@/sim/constants'
 import { computeInsights } from '@/sim/insights'
 import { SCENARIOS } from '@/sim/scenarios'
-import type { LabParams, LiveSimStats, SceneDisplayOptions } from '@/sim/types'
+import type {
+  CameraMode,
+  LabParams,
+  LiveSimStats,
+  SceneDisplayOptions,
+} from '@/sim/types'
 import { labParamsFromSearch, labParamsToSearch } from '@/lib/labParams'
 import { ConstellationScene } from '@/three/ConstellationScene'
 import { AssumptionsDrawer } from '@/ui/AssumptionsDrawer'
@@ -15,6 +20,7 @@ const DEFAULT_DISPLAY: SceneDisplayOptions = {
   showFootprint: true,
   showLink: true,
   showInViewHighlight: true,
+  showGroundTrack: true,
 }
 
 export function SimulatePage() {
@@ -30,8 +36,11 @@ export function SimulatePage() {
     handoffCount: 0,
     handoffsPerSimMinute: null,
     paused: false,
+    handoffFlash: false,
   }))
   const [paused, setPaused] = useState(false)
+  const [resetToken, setResetToken] = useState(0)
+  const [cameraMode, setCameraMode] = useState<CameraMode>('free')
   const [display, setDisplay] = useState<SceneDisplayOptions>(DEFAULT_DISPLAY)
 
   const onStats = useCallback((next: LiveSimStats) => {
@@ -53,7 +62,7 @@ export function SimulatePage() {
         <div>
           <h1 className="text-3xl font-semibold text-white">Constellation lab</h1>
           <p className="text-slate-400">
-            Change density and altitude. Watch coverage, the user link, and handoffs update live.
+            Change density and altitude. Watch coverage, the user link, ground track, and handoffs.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -64,6 +73,13 @@ export function SimulatePage() {
           >
             {paused ? 'Resume' : 'Pause'}
           </button>
+          <button
+            type="button"
+            onClick={() => setResetToken((n) => n + 1)}
+            className="rounded-lg border border-space-600 px-3 py-1.5 text-xs font-medium text-slate-200 hover:border-accent hover:text-white"
+          >
+            Reset time
+          </button>
         </div>
       </div>
 
@@ -72,7 +88,10 @@ export function SimulatePage() {
           <button
             key={s.id}
             type="button"
-            onClick={() => setSearchParams(labParamsToSearch(s.params), { replace: true })}
+            onClick={() => {
+              setSearchParams(labParamsToSearch(s.params), { replace: true })
+              setResetToken((n) => n + 1)
+            }}
             className="rounded-full border border-space-600 px-3 py-1 text-xs text-slate-300 hover:border-accent hover:text-white"
             title={s.description}
           >
@@ -83,19 +102,44 @@ export function SimulatePage() {
 
       <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
         <div className="relative overflow-hidden rounded-2xl border border-space-700 bg-space-900">
+          <div className="absolute top-3 right-3 z-10 flex flex-wrap justify-end gap-1">
+            {(
+              [
+                ['free', 'Free cam'],
+                ['user', 'Follow user'],
+                ['serving', 'Follow sat'],
+              ] as const
+            ).map(([mode, label]) => (
+              <button
+                key={mode}
+                type="button"
+                onClick={() => setCameraMode(mode)}
+                className={[
+                  'rounded-md px-2 py-1 text-[11px] font-medium backdrop-blur',
+                  cameraMode === mode
+                    ? 'bg-accent text-space-950'
+                    : 'border border-space-600 bg-space-950/70 text-slate-300 hover:border-accent hover:text-white',
+                ].join(' ')}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
           <div className="h-[min(62vh,560px)]">
             <ConstellationScene
               params={params}
               mode="lab"
               paused={paused}
+              resetToken={resetToken}
+              cameraMode={cameraMode}
               display={display}
               onStats={onStats}
             />
           </div>
           <SceneLegend />
           <p className="border-t border-space-800 px-4 py-2 text-xs text-slate-500">
-            Drag to orbit · scroll to zoom · green line is the active user↔sat link · ring is the
-            geometric coverage footprint
+            Drag to orbit · scroll to zoom · orange trail is the serving sat ground track · green
+            disc is the geometric coverage footprint
           </p>
         </div>
 
@@ -122,6 +166,7 @@ function DisplayToggles({
     { key: 'showFootprint', label: 'Coverage footprint' },
     { key: 'showLink', label: 'User link' },
     { key: 'showInViewHighlight', label: 'Highlight in-view' },
+    { key: 'showGroundTrack', label: 'Ground track' },
   ]
 
   return (

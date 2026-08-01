@@ -9,10 +9,10 @@ export function SceneLegend() {
           <span className="inline-block h-2 w-2 rounded-full bg-[#5eead4]" /> In view
         </li>
         <li className="flex items-center gap-2">
-          <span className="inline-block h-2 w-2 rounded-full bg-[#80ed99]" /> Serving + link
+          <span className="inline-block h-2 w-2 rounded-full bg-[#80ed99]" /> Serving + link / footprint
         </li>
         <li className="flex items-center gap-2">
-          <span className="inline-block h-2 w-2 rounded-full bg-[#f4a261]" /> Ground user
+          <span className="inline-block h-2 w-2 rounded-full bg-[#f4a261]" /> User + ground track
         </li>
       </ul>
     </div>

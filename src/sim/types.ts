@@ -57,6 +57,8 @@ export type LiveSimStats = SimInsights & {
   /** Estimated handoffs per sim-minute (null until enough time/history). */
   handoffsPerSimMinute: number | null
   paused: boolean
+  /** True for a short window after a serving-sat switch */
+  handoffFlash: boolean
 }
 
 export type SceneDisplayOptions = {
@@ -64,4 +66,16 @@ export type SceneDisplayOptions = {
   showFootprint: boolean
   showLink: boolean
   showInViewHighlight: boolean
+  showGroundTrack: boolean
+}
+
+/** Camera framing mode for the lab. */
+export type CameraMode = 'free' | 'user' | 'serving'
+
+/** Mutable focus snapshot written each frame for camera rigs / overlays. */
+export type SimFocusState = {
+  userUnit: [number, number, number]
+  servingUnit: [number, number, number] | null
+  handoffFlash: number
+  simTimeSeconds: number
 }

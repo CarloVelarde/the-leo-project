@@ -1,3 +1,4 @@
+export { CameraRig } from './CameraRig'
 export { ConstellationScene } from './ConstellationScene'
 export { Earth } from './Earth'
 export { LabCore } from './LabCore'

@@ -14,33 +14,45 @@ function formatSimClock(seconds: number): string {
     const mm = m % 60
     return `${h}h ${mm}m`
   }
-  return `${m}:${rem.toFixed(1).padStart(4, '0')}`
+  const remStr = rem < 10 ? `0${rem.toFixed(1)}` : rem.toFixed(1)
+  return `${m}:${remStr}`
 }
 
 export function InsightPanel({ params, stats }: InsightPanelProps) {
   const coverage = stats?.coverage
   const online = coverage?.online ?? false
+  const flashing = stats?.handoffFlash ?? false
 
   return (
-    <aside className="rounded-xl border border-space-700 bg-space-900/90 p-4 text-sm shadow-lg backdrop-blur">
+    <aside
+      className={[
+        'rounded-xl border bg-space-900/90 p-4 text-sm shadow-lg backdrop-blur transition-colors',
+        flashing ? 'border-signal/70' : 'border-space-700',
+      ].join(' ')}
+    >
       <div className="mb-3 flex items-center justify-between gap-2">
         <h2 className="text-xs font-semibold tracking-widest text-slate-400 uppercase">
           Live insights
         </h2>
         <span
           className={[
-            'rounded-full px-2 py-0.5 text-[10px] font-semibold tracking-wide uppercase',
-            online
-              ? 'bg-signal/15 text-signal'
-              : 'bg-warn/15 text-warn',
+            'rounded-full px-2 py-0.5 text-[10px] font-semibold tracking-wide uppercase transition-colors',
+            flashing
+              ? 'bg-signal/25 text-signal'
+              : online
+                ? 'bg-signal/15 text-signal'
+                : 'bg-warn/15 text-warn',
           ].join(' ')}
         >
-          {online ? 'Online' : 'Offline'}
+          {flashing ? 'Handoff' : online ? 'Online' : 'Offline'}
         </span>
       </div>
 
       <dl className="grid grid-cols-2 gap-x-3 gap-y-2">
-        <Stat label="Satellites" value={String(stats?.totalSatellites ?? params.planes * params.satsPerPlane)} />
+        <Stat
+          label="Satellites"
+          value={String(stats?.totalSatellites ?? params.planes * params.satsPerPlane)}
+        />
         <Stat label="Planes" value={`${params.planes} × ${params.satsPerPlane}`} />
         <Stat label="Altitude" value={`${params.altitudeKm} km`} />
         <Stat
@@ -86,10 +98,7 @@ export function InsightPanel({ params, stats }: InsightPanelProps) {
           label="Sim time"
           value={stats ? formatSimClock(stats.simTimeSeconds) : '0:00.0'}
         />
-        <Stat
-          label="Time scale"
-          value={`${params.timeScale}×`}
-        />
+        <Stat label="Time scale" value={`${params.timeScale}×`} />
       </dl>
 
       <p className="mt-3 text-xs text-slate-500">
