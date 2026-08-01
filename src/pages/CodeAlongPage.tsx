@@ -3,6 +3,7 @@ import { Link, Navigate, useParams } from 'react-router-dom'
 import { getExercise } from '@/code/exercises'
 import { getPyodide, runPython, type RunResult } from '@/code/pyodideRunner'
 import { useTheme } from '@/lib/theme'
+import { PythonCodeEditor } from '@/ui/PythonCodeEditor'
 
 export function CodeAlongPage() {
   const { exerciseId = '' } = useParams()
@@ -184,14 +185,17 @@ export function CodeAlongPage() {
               </ActionBtn>
             </div>
           </div>
-          <textarea
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            spellCheck={false}
-            className="min-h-[340px] w-full resize-y bg-[#111111] p-4 font-mono text-sm leading-relaxed text-[#f0f0f0] outline-none"
-            style={{ tabSize: 4 }}
-            aria-label="Python editor"
-          />
+          <div className={theme === 'light' ? 'bg-[#f6f8fa]' : 'bg-[#0d1117]'}>
+            <PythonCodeEditor
+              value={code}
+              onChange={setCode}
+              theme={theme === 'light' ? 'light' : 'dark'}
+              minHeight="360px"
+            />
+          </div>
+          <p className="border-t border-line bg-paper-elevated px-4 py-2 text-[11px] text-ink-faint">
+            Enter keeps indent · Tab / Shift+Tab · Ctrl/Cmd+Z undo · brackets match and auto-close
+          </p>
         </div>
 
         {/* Output */}
