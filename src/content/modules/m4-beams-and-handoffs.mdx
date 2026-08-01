@@ -1,0 +1,17 @@
+import { Advanced } from '@/ui/Advanced'
+import { LabButton } from '@/ui/LabButton'
+
+# Staying connected: beams & handoffs
+
+A user is “online” in our model when at least one satellite is above a **minimum elevation** angle. As LEO satellites move, the serving satellite changes — a **handoff**.
+
+<LabButton
+  label="Open lab: default user link"
+  params={{ planes: 12, satsPerPlane: 20, altitudeKm: 550, userLatDeg: 40 }}
+/>
+
+<Advanced title="Elevation mask">
+  If the minimum elevation is $\varepsilon_{\min}$, a satellite too near the horizon is treated as unusable (atmosphere, obstacles, antenna patterns). The lab uses a pure geometric elevation mask — not full RF.
+</Advanced>
+
+> Content stub — full lesson prose lands next.
