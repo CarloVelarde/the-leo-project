@@ -7,57 +7,59 @@ const components = {
     const href = props.href ?? ''
     if (href.startsWith('/')) {
       return (
-        <Link to={href} className="text-accent hover:text-white">
+        <Link to={href} className="text-ink underline decoration-ink/30 underline-offset-4 hover:decoration-ink">
           {props.children}
         </Link>
       )
     }
     return (
-      <a {...props} className="text-accent hover:text-white" rel="noreferrer" target="_blank" />
+      <a
+        {...props}
+        className="text-ink underline decoration-ink/30 underline-offset-4 hover:decoration-ink"
+        rel="noreferrer"
+        target="_blank"
+      />
     )
   },
   h1: (props: ComponentProps<'h1'>) => (
-    <h1 className="mb-4 text-3xl font-semibold tracking-tight text-white" {...props} />
+    <h1 className="mb-4 text-3xl font-semibold tracking-tight text-ink" {...props} />
   ),
   h2: (props: ComponentProps<'h2'>) => (
-    <h2 className="mt-10 mb-3 text-xl font-semibold text-slate-100" {...props} />
+    <h2 className="mt-8 mb-3 text-xl font-semibold text-ink" {...props} />
   ),
   h3: (props: ComponentProps<'h3'>) => (
-    <h3 className="mt-8 mb-2 text-lg font-medium text-slate-200" {...props} />
+    <h3 className="mt-6 mb-2 text-lg font-medium text-ink" {...props} />
   ),
   p: (props: ComponentProps<'p'>) => (
-    <p className="mb-4 text-base leading-relaxed text-slate-300" {...props} />
+    <p className="mb-4 text-base leading-relaxed text-ink-muted" {...props} />
   ),
   ul: (props: ComponentProps<'ul'>) => (
-    <ul className="mb-4 list-disc space-y-2 pl-6 text-slate-300" {...props} />
+    <ul className="mb-4 list-disc space-y-2 pl-5 text-ink-muted" {...props} />
   ),
   ol: (props: ComponentProps<'ol'>) => (
-    <ol className="mb-4 list-decimal space-y-2 pl-6 text-slate-300" {...props} />
+    <ol className="mb-4 list-decimal space-y-2 pl-5 text-ink-muted" {...props} />
   ),
   blockquote: (props: ComponentProps<'blockquote'>) => (
-    <blockquote
-      className="my-6 border-l-2 border-accent/50 pl-4 text-slate-400 italic"
-      {...props}
-    />
+    <blockquote className="my-4 border-l-2 border-ink pl-4 text-ink-muted italic" {...props} />
   ),
   code: (props: ComponentProps<'code'>) => (
-    <code className="rounded bg-space-800 px-1.5 py-0.5 font-mono text-sm text-accent" {...props} />
+    <code className="rounded bg-paper-elevated px-1.5 py-0.5 font-mono text-sm text-ink" {...props} />
   ),
   strong: (props: ComponentProps<'strong'>) => (
-    <strong className="font-semibold text-slate-100" {...props} />
+    <strong className="font-semibold text-ink" {...props} />
   ),
   table: (props: ComponentProps<'table'>) => (
-    <div className="my-6 overflow-x-auto">
-      <table className="w-full border-collapse text-left text-sm text-slate-300" {...props} />
+    <div className="my-4 overflow-x-auto">
+      <table className="w-full border-collapse text-left text-sm" {...props} />
     </div>
   ),
   th: (props: ComponentProps<'th'>) => (
-    <th className="border border-space-700 bg-space-900 px-3 py-2 font-semibold text-slate-100" {...props} />
+    <th className="border border-line bg-paper-elevated px-3 py-2 font-semibold text-ink" {...props} />
   ),
   td: (props: ComponentProps<'td'>) => (
-    <td className="border border-space-700 px-3 py-2 align-top" {...props} />
+    <td className="border border-line px-3 py-2 text-ink-muted" {...props} />
   ),
-  hr: (props: ComponentProps<'hr'>) => <hr className="my-10 border-space-800" {...props} />,
+  hr: (props: ComponentProps<'hr'>) => <hr className="my-8 border-line" {...props} />,
 }
 
 export function MdxContent({ children }: { children: ReactNode }) {

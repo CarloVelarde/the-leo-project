@@ -5,7 +5,6 @@ type InlineSourceProps = {
   children?: string
 }
 
-/** Inline citation-style link into the curated source catalog. */
 export function InlineSource({ id, children }: InlineSourceProps) {
   const s = getSource(id)
   if (!s) return <span>{children ?? id}</span>
@@ -14,7 +13,7 @@ export function InlineSource({ id, children }: InlineSourceProps) {
       href={s.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-accent underline decoration-dotted underline-offset-2 hover:text-white"
+      className="text-ink underline decoration-ink/30 underline-offset-2 hover:decoration-ink"
       title={`${s.org}: ${s.blurb}`}
     >
       {children ?? s.title}

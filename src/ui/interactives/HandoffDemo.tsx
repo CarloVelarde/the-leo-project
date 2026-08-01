@@ -4,7 +4,6 @@ import { evaluateCoverage } from '@/sim/coverage'
 import { generateConstellation } from '@/sim/constellation'
 import { Figure } from './Figure'
 
-/** Lightweight handoff timeline using the pure sim model (no WebGL). */
 export function HandoffDemo() {
   const [t, setT] = useState(0)
   const [playing, setPlaying] = useState(true)
@@ -45,55 +44,39 @@ export function HandoffDemo() {
 
   let handoffs = 0
   for (let i = 1; i < history.length; i++) {
-    if (
-      history[i]!.sat &&
-      history[i]!.sat !== history[i - 1]!.sat &&
-      history[i - 1]!.sat
-    ) {
+    if (history[i]!.sat && history[i]!.sat !== history[i - 1]!.sat && history[i - 1]!.sat) {
       handoffs += 1
     }
   }
 
   return (
     <Figure
-      caption="Serving satellite over sim-time for a fixed ground user. Toggle density to see gaps vs frequent handoffs."
-      credit="Uses the same circular-orbit coverage model as the 3D lab"
+      caption="Serving satellite over sim-time. Toggle density to see gaps vs frequent handoffs."
+      credit="Same circular-orbit model as the 3D lab"
     >
       <div className="mb-3 flex flex-wrap gap-2">
-        <button
-          type="button"
-          onClick={() => setPlaying((p) => !p)}
-          className="rounded-md border border-space-600 px-2 py-1 text-xs text-slate-200 hover:border-accent"
-        >
-          {playing ? 'Pause' : 'Play'}
-        </button>
-        <button
-          type="button"
-          onClick={() => setDense((d) => !d)}
-          className="rounded-md border border-space-600 px-2 py-1 text-xs text-slate-200 hover:border-accent"
-        >
+        <Btn onClick={() => setPlaying((p) => !p)}>{playing ? 'Pause' : 'Play'}</Btn>
+        <Btn onClick={() => setDense((d) => !d)}>
           {dense ? 'Switch to sparse' : 'Switch to dense'}
-        </button>
+        </Btn>
       </div>
 
-      <div className="mb-3 flex flex-wrap gap-4 text-xs">
-        <span className="text-slate-400">
+      <div className="mb-3 flex flex-wrap gap-4 text-xs text-ink-muted">
+        <span>
           Status:{' '}
-          <span className={coverage.online ? 'text-signal' : 'text-warn'}>
+          <span className="font-medium text-ink">
             {coverage.online ? 'Online' : 'Offline'}
           </span>
         </span>
-        <span className="font-mono text-slate-300">
-          sat: {coverage.servingSatId ?? '—'}
-        </span>
-        <span className="text-slate-400">
+        <span className="font-mono">sat: {coverage.servingSatId ?? '—'}</span>
+        <span>
           elev:{' '}
-          <span className="font-mono text-slate-200">
+          <span className="font-mono">
             {coverage.servingElevationDeg?.toFixed(0) ?? '—'}°
           </span>
         </span>
-        <span className="text-slate-400">
-          handoffs in window: <span className="font-mono text-slate-200">{handoffs}</span>
+        <span>
+          handoffs: <span className="font-mono">{handoffs}</span>
         </span>
       </div>
 
@@ -105,13 +88,13 @@ export function HandoffDemo() {
             className="min-w-0 flex-1 rounded-sm"
             style={{
               height: h.online ? '100%' : '30%',
-              background: h.online ? colorForSat(h.sat) : '#3f2a1a',
+              background: h.online ? colorForSat(h.sat) : '#d4d4d4',
               opacity: h.online ? 0.9 : 0.5,
             }}
           />
         ))}
       </div>
-      <div className="mt-1 flex justify-between text-[10px] text-slate-500">
+      <div className="mt-1 flex justify-between text-[10px] text-ink-faint">
         <span>past</span>
         <span>sim t ≈ {t.toFixed(0)} s</span>
         <span>now</span>
@@ -120,9 +103,21 @@ export function HandoffDemo() {
   )
 }
 
+function Btn({ onClick, children }: { onClick: () => void; children: string }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="rounded-full border border-line px-3 py-1 text-xs text-ink hover:border-ink"
+    >
+      {children}
+    </button>
+  )
+}
+
 function colorForSat(id: string | null): string {
-  if (!id) return '#334155'
+  if (!id) return '#a3a3a3'
   let h = 0
   for (let i = 0; i < id.length; i++) h = (h + id.charCodeAt(i) * 17) % 360
-  return `hsl(${h} 70% 45%)`
+  return `hsl(${h} 8% 35%)`
 }

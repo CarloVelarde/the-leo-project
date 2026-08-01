@@ -48,8 +48,7 @@ export function SimulatePage() {
   }, [])
 
   function update(partial: Partial<LabParams>) {
-    const next = { ...params, ...partial }
-    setSearchParams(labParamsToSearch(next), { replace: true })
+    setSearchParams(labParamsToSearch({ ...params, ...partial }), { replace: true })
   }
 
   function toggleDisplay(key: keyof SceneDisplayOptions) {
@@ -57,29 +56,21 @@ export function SimulatePage() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8">
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-3xl font-semibold text-white">Constellation lab</h1>
-          <p className="text-slate-400">
-            Change density and altitude. Watch coverage, the user link, ground track, and handoffs.
+          <h1 className="text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+            Constellation lab
+          </h1>
+          <p className="mt-2 text-ink-muted">
+            Density, altitude, coverage, and handoffs — live.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            onClick={() => setPaused((p) => !p)}
-            className="rounded-lg border border-space-600 px-3 py-1.5 text-xs font-medium text-slate-200 hover:border-accent hover:text-white"
-          >
+          <GhostBtn onClick={() => setPaused((p) => !p)}>
             {paused ? 'Resume' : 'Pause'}
-          </button>
-          <button
-            type="button"
-            onClick={() => setResetToken((n) => n + 1)}
-            className="rounded-lg border border-space-600 px-3 py-1.5 text-xs font-medium text-slate-200 hover:border-accent hover:text-white"
-          >
-            Reset time
-          </button>
+          </GhostBtn>
+          <GhostBtn onClick={() => setResetToken((n) => n + 1)}>Reset time</GhostBtn>
         </div>
       </div>
 
@@ -92,7 +83,7 @@ export function SimulatePage() {
               setSearchParams(labParamsToSearch(s.params), { replace: true })
               setResetToken((n) => n + 1)
             }}
-            className="rounded-full border border-space-600 px-3 py-1 text-xs text-slate-300 hover:border-accent hover:text-white"
+            className="rounded-full border border-line px-3 py-1 text-xs text-ink-muted hover:border-ink hover:text-ink"
             title={s.description}
           >
             {s.title}
@@ -101,13 +92,13 @@ export function SimulatePage() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
-        <div className="relative overflow-hidden rounded-2xl border border-space-700 bg-space-900">
+        <div className="relative overflow-hidden rounded-xl border border-line bg-black">
           <div className="absolute top-3 right-3 z-10 flex flex-wrap justify-end gap-1">
             {(
               [
-                ['free', 'Free cam'],
-                ['user', 'Follow user'],
-                ['serving', 'Follow sat'],
+                ['free', 'Free'],
+                ['user', 'User'],
+                ['serving', 'Sat'],
               ] as const
             ).map(([mode, label]) => (
               <button
@@ -115,10 +106,10 @@ export function SimulatePage() {
                 type="button"
                 onClick={() => setCameraMode(mode)}
                 className={[
-                  'rounded-md px-2 py-1 text-[11px] font-medium backdrop-blur',
+                  'rounded-full px-2.5 py-1 text-[11px] font-medium',
                   cameraMode === mode
-                    ? 'bg-accent text-space-950'
-                    : 'border border-space-600 bg-space-950/70 text-slate-300 hover:border-accent hover:text-white',
+                    ? 'bg-white text-black'
+                    : 'border border-white/30 bg-black/50 text-white/80 hover:border-white/60',
                 ].join(' ')}
               >
                 {label}
@@ -137,9 +128,8 @@ export function SimulatePage() {
             />
           </div>
           <SceneLegend />
-          <p className="border-t border-space-800 px-4 py-2 text-xs text-slate-500">
-            Drag to orbit · scroll to zoom · orange trail is the serving sat ground track · green
-            disc is the geometric coverage footprint
+          <p className="border-t border-white/10 px-4 py-2 text-xs text-white/50">
+            Drag to orbit · scroll to zoom · green link · orange ground track
           </p>
         </div>
 
@@ -151,6 +141,18 @@ export function SimulatePage() {
         </div>
       </div>
     </div>
+  )
+}
+
+function GhostBtn({ onClick, children }: { onClick: () => void; children: string }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="rounded-full border border-line px-4 py-2 text-xs font-medium text-ink hover:border-ink"
+    >
+      {children}
+    </button>
   )
 }
 
@@ -170,16 +172,16 @@ function DisplayToggles({
   ]
 
   return (
-    <div className="rounded-xl border border-space-700 bg-space-900/90 p-4">
-      <h2 className="mb-3 text-xs font-semibold tracking-widest text-slate-400 uppercase">
+    <div className="rounded-lg border border-line bg-paper p-4">
+      <h2 className="mb-3 text-[10px] font-semibold tracking-[0.2em] text-ink-faint uppercase">
         Display
       </h2>
       <div className="flex flex-col gap-2">
         {items.map(({ key, label }) => (
-          <label key={key} className="flex cursor-pointer items-center gap-2 text-xs text-slate-300">
+          <label key={key} className="flex cursor-pointer items-center gap-2 text-xs text-ink-muted">
             <input
               type="checkbox"
-              className="accent-accent"
+              className="accent-ink"
               checked={display[key]}
               onChange={() => onToggle(key)}
             />
@@ -199,59 +201,19 @@ function Controls({
   onChange: (partial: Partial<LabParams>) => void
 }) {
   return (
-    <div className="rounded-xl border border-space-700 bg-space-900/90 p-4">
-      <h2 className="mb-3 text-xs font-semibold tracking-widest text-slate-400 uppercase">
+    <div className="rounded-lg border border-line bg-paper p-4">
+      <h2 className="mb-3 text-[10px] font-semibold tracking-[0.2em] text-ink-faint uppercase">
         Controls
       </h2>
       <div className="space-y-3">
-        <Slider
-          label="Planes"
-          value={params.planes}
-          {...LAB_PARAM_RANGES.planes}
-          onChange={(planes) => onChange({ planes })}
-        />
-        <Slider
-          label="Sats / plane"
-          value={params.satsPerPlane}
-          {...LAB_PARAM_RANGES.satsPerPlane}
-          onChange={(satsPerPlane) => onChange({ satsPerPlane })}
-        />
-        <Slider
-          label="Altitude (km)"
-          value={params.altitudeKm}
-          {...LAB_PARAM_RANGES.altitudeKm}
-          onChange={(altitudeKm) => onChange({ altitudeKm })}
-        />
-        <Slider
-          label="Inclination (°)"
-          value={params.inclinationDeg}
-          {...LAB_PARAM_RANGES.inclinationDeg}
-          onChange={(inclinationDeg) => onChange({ inclinationDeg })}
-        />
-        <Slider
-          label="Min elevation (°)"
-          value={params.minElevationDeg}
-          {...LAB_PARAM_RANGES.minElevationDeg}
-          onChange={(minElevationDeg) => onChange({ minElevationDeg })}
-        />
-        <Slider
-          label="User latitude (°)"
-          value={params.userLatDeg}
-          {...LAB_PARAM_RANGES.userLatDeg}
-          onChange={(userLatDeg) => onChange({ userLatDeg })}
-        />
-        <Slider
-          label="User longitude (°)"
-          value={params.userLonDeg}
-          {...LAB_PARAM_RANGES.userLonDeg}
-          onChange={(userLonDeg) => onChange({ userLonDeg })}
-        />
-        <Slider
-          label="Time scale"
-          value={params.timeScale}
-          {...LAB_PARAM_RANGES.timeScale}
-          onChange={(timeScale) => onChange({ timeScale })}
-        />
+        <Slider label="Planes" value={params.planes} {...LAB_PARAM_RANGES.planes} onChange={(planes) => onChange({ planes })} />
+        <Slider label="Sats / plane" value={params.satsPerPlane} {...LAB_PARAM_RANGES.satsPerPlane} onChange={(satsPerPlane) => onChange({ satsPerPlane })} />
+        <Slider label="Altitude (km)" value={params.altitudeKm} {...LAB_PARAM_RANGES.altitudeKm} onChange={(altitudeKm) => onChange({ altitudeKm })} />
+        <Slider label="Inclination (°)" value={params.inclinationDeg} {...LAB_PARAM_RANGES.inclinationDeg} onChange={(inclinationDeg) => onChange({ inclinationDeg })} />
+        <Slider label="Min elevation (°)" value={params.minElevationDeg} {...LAB_PARAM_RANGES.minElevationDeg} onChange={(minElevationDeg) => onChange({ minElevationDeg })} />
+        <Slider label="User latitude (°)" value={params.userLatDeg} {...LAB_PARAM_RANGES.userLatDeg} onChange={(userLatDeg) => onChange({ userLatDeg })} />
+        <Slider label="User longitude (°)" value={params.userLonDeg} {...LAB_PARAM_RANGES.userLonDeg} onChange={(userLonDeg) => onChange({ userLonDeg })} />
+        <Slider label="Time scale" value={params.timeScale} {...LAB_PARAM_RANGES.timeScale} onChange={(timeScale) => onChange({ timeScale })} />
       </div>
     </div>
   )
@@ -273,14 +235,14 @@ function Slider({
   onChange: (n: number) => void
 }) {
   return (
-    <label className="block text-xs text-slate-400">
+    <label className="block text-xs text-ink-muted">
       <div className="mb-1 flex justify-between gap-2">
         <span>{label}</span>
-        <span className="font-mono text-slate-200">{value}</span>
+        <span className="font-mono text-ink">{value}</span>
       </div>
       <input
         type="range"
-        className="w-full accent-accent"
+        className="w-full accent-ink"
         min={min}
         max={max}
         step={step}

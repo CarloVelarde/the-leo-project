@@ -41,6 +41,8 @@ src/
 
 ## Learning path (core)
 
+Page-by-page modules (minimal scroll, Next/Previous). Routes: `/learn/:slug/:pageId`.
+
 1. How the Internet Actually Moves Data  
 2. Why Ordinary Satellite Internet Felt Slow (GEO)  
 3. Low Earth Orbit: Why Closer Changes Everything  
@@ -52,10 +54,16 @@ src/
 
 Optional tracks: orbit math, space safety, direct-to-cell.
 
-Interactive lesson components live in `src/ui/interactives/` (quizzes, calculators,
-diagrams, handoff demos, coverage sandbox, mini-sims, video embeds).
+## UI
 
-Sources are curated in `src/content/sources.ts` and linked from each module’s “Go deeper” section.  
+- Starlink / Tesla–inspired black & white system (white primary, light default)
+- Light / dark mode toggle (persisted)
+- Full-bleed photographic landing page
+- Lesson reader: sidebar outline + module jump menu + sticky next page
+
+Curriculum structure: `src/content/curriculum.ts` + `src/content/lessonPages.tsx`  
+Interactives: `src/ui/interactives/`  
+Sources: `src/content/sources.ts`  
 
 ## License
 

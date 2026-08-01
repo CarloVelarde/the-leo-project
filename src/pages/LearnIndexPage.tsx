@@ -1,62 +1,70 @@
 import { Link } from 'react-router-dom'
-import { MODULES, OPTIONAL_MODULES } from '@/content/modules'
+import { getCoreModules, getOptionalModules } from '@/content/curriculum'
 
 export function LearnIndexPage() {
+  const core = getCoreModules()
+  const optional = getOptionalModules()
+
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12">
-      <h1 className="mb-2 text-3xl font-semibold text-white">Learning path</h1>
-      <p className="mb-4 text-slate-400">
-        Eight core modules from Internet fundamentals to end-to-end LEO broadband. Lessons include
-        interactive quizzes, diagrams, calculators, mini-sims, and curated videos — plus Advanced
-        math and Go deeper links.
-      </p>
-      <p className="mb-10 text-sm text-slate-500">
-        Pathway: packets & latency → GEO problem → LEO → launch/ops → constellation geometry →
-        user terminal → space network → synthesis.
-      </p>
+    <div className="bg-paper">
+      <section className="border-b border-line px-6 py-16 sm:py-20">
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="text-xs font-medium tracking-[0.3em] text-ink-faint uppercase">
+            Curriculum
+          </p>
+          <h1 className="mt-3 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
+            Learning path
+          </h1>
+          <p className="mx-auto mt-5 max-w-xl text-lg text-ink-muted">
+            Page-by-page modules. Minimal scroll — focus on one idea, then press Next. Light or
+            dark mode for comfortable reading.
+          </p>
+        </div>
+      </section>
 
-      <ol className="space-y-4">
-        {MODULES.map((mod) => (
-          <li key={mod.id}>
-            <Link
-              to={`/learn/${mod.slug}`}
-              className="block rounded-xl border border-space-700 bg-space-900/60 p-5 no-underline transition-colors hover:border-accent/50"
-            >
-              <div className="mb-1 flex flex-wrap items-center gap-2 text-xs text-slate-500">
-                <span>Module {mod.order}</span>
-                <span>·</span>
-                <span>~{mod.minutes} min</span>
-                <span className="rounded bg-signal/15 px-1.5 py-0.5 text-signal">Ready</span>
-              </div>
-              <h2 className="text-lg font-medium text-white">{mod.title}</h2>
-              <p className="mt-1 text-sm text-slate-400">{mod.subtitle}</p>
-              <p className="mt-2 text-xs text-slate-500">{mod.goal}</p>
-            </Link>
-          </li>
-        ))}
-      </ol>
+      <section className="mx-auto max-w-3xl px-6 py-12">
+        <ol className="space-y-3">
+          {core.map((mod) => (
+            <li key={mod.id}>
+              <Link
+                to={`/learn/${mod.slug}/${mod.pages[0]!.id}`}
+                className="group flex items-baseline justify-between gap-4 border-b border-line py-5 no-underline"
+              >
+                <div className="min-w-0">
+                  <div className="flex items-center gap-3 text-xs text-ink-faint">
+                    <span className="font-mono">{String(mod.order).padStart(2, '0')}</span>
+                    <span>{mod.pages.length} pages</span>
+                    <span>·</span>
+                    <span>~{mod.minutes} min</span>
+                  </div>
+                  <h2 className="mt-1 text-lg font-medium text-ink group-hover:opacity-70 sm:text-xl">
+                    {mod.title}
+                  </h2>
+                  <p className="mt-1 text-sm text-ink-muted">{mod.subtitle}</p>
+                </div>
+                <span className="shrink-0 text-sm text-ink-faint group-hover:text-ink">→</span>
+              </Link>
+            </li>
+          ))}
+        </ol>
 
-      <h2 className="mt-14 mb-3 text-xl font-semibold text-white">Optional tracks</h2>
-      <p className="mb-6 text-sm text-slate-400">
-        Side paths after the core story — math depth, space safety, and direct-to-cell evolution.
-      </p>
-      <ul className="space-y-3">
-        {OPTIONAL_MODULES.map((mod) => (
-          <li key={mod.id}>
-            <Link
-              to={`/learn/${mod.slug}`}
-              className="block rounded-xl border border-space-700 bg-space-900/40 px-5 py-4 no-underline transition-colors hover:border-accent/40"
-            >
-              <div className="text-xs text-slate-500">
-                Optional · ~{mod.minutes} min ·{' '}
-                <span className="text-signal">Ready</span>
-              </div>
-              <h3 className="mt-1 font-medium text-slate-100">{mod.title}</h3>
-              <p className="mt-1 text-sm text-slate-500">{mod.subtitle}</p>
-            </Link>
-          </li>
-        ))}
-      </ul>
+        <h2 className="mt-16 text-sm font-semibold tracking-[0.2em] text-ink-faint uppercase">
+          Optional tracks
+        </h2>
+        <ul className="mt-4 space-y-3">
+          {optional.map((mod) => (
+            <li key={mod.id}>
+              <Link
+                to={`/learn/${mod.slug}/${mod.pages[0]!.id}`}
+                className="block border-b border-line py-4 no-underline"
+              >
+                <h3 className="font-medium text-ink">{mod.title}</h3>
+                <p className="mt-1 text-sm text-ink-muted">{mod.subtitle}</p>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   )
 }

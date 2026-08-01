@@ -1,5 +1,4 @@
 type VideoEmbedProps = {
-  /** YouTube video id (e.g. 3QhU9jd03a0) or full watch URL */
   youtubeId?: string
   src?: string
   title: string
@@ -20,7 +19,6 @@ function extractId(input: string): string {
   return input
 }
 
-/** Responsive YouTube embed for lesson media. */
 export function VideoEmbed({
   youtubeId,
   src,
@@ -33,7 +31,7 @@ export function VideoEmbed({
   const embed = `https://www.youtube-nocookie.com/embed/${id}?rel=0${start}`
 
   return (
-    <figure className="my-8 overflow-hidden rounded-xl border border-space-700 bg-space-900">
+    <figure className="my-6 overflow-hidden rounded-lg border border-line bg-paper">
       <div className="relative aspect-video w-full bg-black">
         <iframe
           className="absolute inset-0 h-full w-full"
@@ -44,9 +42,9 @@ export function VideoEmbed({
           loading="lazy"
         />
       </div>
-      <figcaption className="border-t border-space-800 px-4 py-3 text-xs text-slate-400">
-        <span className="font-medium text-slate-300">{title}</span>
-        {caption ? <span className="mt-1 block">{caption}</span> : null}
+      <figcaption className="border-t border-line px-4 py-3 text-xs text-ink-muted">
+        <span className="font-medium text-ink">{title}</span>
+        {caption ? <span className="mt-1 block text-ink-faint">{caption}</span> : null}
       </figcaption>
     </figure>
   )

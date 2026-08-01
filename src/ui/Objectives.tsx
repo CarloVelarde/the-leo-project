@@ -5,11 +5,11 @@ type ObjectivesProps = {
 export function Objectives({ items }: ObjectivesProps) {
   if (items.length === 0) return null
   return (
-    <section className="my-6 rounded-xl border border-space-700 bg-space-900/50 px-5 py-4">
-      <h2 className="mb-3 text-xs font-semibold tracking-widest text-slate-400 uppercase">
-        By the end of this module
+    <section className="my-6 rounded-lg border border-line bg-paper-elevated px-5 py-4">
+      <h2 className="mb-3 text-[10px] font-semibold tracking-[0.2em] text-ink-faint uppercase">
+        On this page
       </h2>
-      <ul className="list-disc space-y-2 pl-5 text-sm text-slate-300">
+      <ul className="list-disc space-y-2 pl-5 text-sm text-ink-muted">
         {items.map((item) => (
           <li key={item}>{item}</li>
         ))}

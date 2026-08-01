@@ -6,20 +6,22 @@ type CalloutProps = {
   children: ReactNode
 }
 
-const styles = {
-  note: 'border-accent/40 bg-accent/5',
-  warning: 'border-warn/40 bg-warn/5',
-  lab: 'border-signal/40 bg-signal/5',
-  key: 'border-space-500 bg-space-900',
-}
-
 export function Callout({ title, variant = 'note', children }: CalloutProps) {
+  const border =
+    variant === 'warning'
+      ? 'border-warn/40'
+      : variant === 'lab'
+        ? 'border-signal/40'
+        : 'border-line'
+
   return (
-    <aside className={`my-6 rounded-xl border px-4 py-3 text-sm leading-relaxed text-slate-300 ${styles[variant]}`}>
+    <aside className={`my-6 rounded-lg border ${border} bg-paper-elevated px-4 py-3 text-sm leading-relaxed text-ink-muted`}>
       {title ? (
-        <p className="mb-1 text-xs font-semibold tracking-widest text-slate-400 uppercase">{title}</p>
+        <p className="mb-1 text-[10px] font-semibold tracking-[0.2em] text-ink-faint uppercase">
+          {title}
+        </p>
       ) : null}
-      <div>{children}</div>
+      <div className="text-ink-muted">{children}</div>
     </aside>
   )
 }

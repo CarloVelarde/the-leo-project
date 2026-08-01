@@ -11,8 +11,7 @@ function formatSimClock(seconds: number): string {
   const rem = s - m * 60
   if (m >= 60) {
     const h = Math.floor(m / 60)
-    const mm = m % 60
-    return `${h}h ${mm}m`
+    return `${h}h ${m % 60}m`
   }
   const remStr = rem < 10 ? `0${rem.toFixed(1)}` : rem.toFixed(1)
   return `${m}:${remStr}`
@@ -26,43 +25,25 @@ export function InsightPanel({ params, stats }: InsightPanelProps) {
   return (
     <aside
       className={[
-        'rounded-xl border bg-space-900/90 p-4 text-sm shadow-lg backdrop-blur transition-colors',
-        flashing ? 'border-signal/70' : 'border-space-700',
+        'rounded-lg border bg-paper p-4 text-sm transition-colors',
+        flashing ? 'border-ink' : 'border-line',
       ].join(' ')}
     >
       <div className="mb-3 flex items-center justify-between gap-2">
-        <h2 className="text-xs font-semibold tracking-widest text-slate-400 uppercase">
+        <h2 className="text-[10px] font-semibold tracking-[0.2em] text-ink-faint uppercase">
           Live insights
         </h2>
-        <span
-          className={[
-            'rounded-full px-2 py-0.5 text-[10px] font-semibold tracking-wide uppercase transition-colors',
-            flashing
-              ? 'bg-signal/25 text-signal'
-              : online
-                ? 'bg-signal/15 text-signal'
-                : 'bg-warn/15 text-warn',
-          ].join(' ')}
-        >
+        <span className="rounded-full border border-line px-2 py-0.5 text-[10px] font-semibold tracking-wide text-ink uppercase">
           {flashing ? 'Handoff' : online ? 'Online' : 'Offline'}
         </span>
       </div>
 
       <dl className="grid grid-cols-2 gap-x-3 gap-y-2">
-        <Stat
-          label="Satellites"
-          value={String(stats?.totalSatellites ?? params.planes * params.satsPerPlane)}
-        />
+        <Stat label="Satellites" value={String(stats?.totalSatellites ?? params.planes * params.satsPerPlane)} />
         <Stat label="Planes" value={`${params.planes} × ${params.satsPerPlane}`} />
         <Stat label="Altitude" value={`${params.altitudeKm} km`} />
-        <Stat
-          label="Period"
-          value={stats ? `${stats.orbitalPeriodMin.toFixed(1)} min` : '—'}
-        />
-        <Stat
-          label="Orbital speed"
-          value={stats ? `${stats.orbitalSpeedKms.toFixed(2)} km/s` : '—'}
-        />
+        <Stat label="Period" value={stats ? `${stats.orbitalPeriodMin.toFixed(1)} min` : '—'} />
+        <Stat label="Orbital speed" value={stats ? `${stats.orbitalSpeedKms.toFixed(2)} km/s` : '—'} />
         <Stat label="Sats in view" value={coverage ? String(coverage.satsInView) : '—'} />
         <Stat
           label="Elevation"
@@ -94,41 +75,22 @@ export function InsightPanel({ params, stats }: InsightPanelProps) {
               : '…'
           }
         />
-        <Stat
-          label="Sim time"
-          value={stats ? formatSimClock(stats.simTimeSeconds) : '0:00.0'}
-        />
+        <Stat label="Sim time" value={stats ? formatSimClock(stats.simTimeSeconds) : '0:00.0'} />
         <Stat label="Time scale" value={`${params.timeScale}×`} />
       </dl>
 
-      <p className="mt-3 text-xs text-slate-500">
+      <p className="mt-3 text-xs text-ink-faint">
         Geometric model: circular orbits, elevation mask {params.minElevationDeg}°. Not full RF.
-        Handoff rate uses sim-time (not wall clock).
       </p>
     </aside>
   )
 }
 
-function Stat({
-  label,
-  value,
-  accent,
-}: {
-  label: string
-  value: string
-  accent?: 'signal' | 'warn'
-}) {
-  const valueClass =
-    accent === 'signal'
-      ? 'text-signal'
-      : accent === 'warn'
-        ? 'text-warn'
-        : 'text-slate-100'
-
+function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="text-xs text-slate-500">{label}</dt>
-      <dd className={`font-mono text-sm ${valueClass}`}>{value}</dd>
+      <dt className="text-xs text-ink-faint">{label}</dt>
+      <dd className="font-mono text-sm text-ink">{value}</dd>
     </div>
   )
 }

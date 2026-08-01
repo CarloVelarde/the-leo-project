@@ -1,8 +1,8 @@
+import { Link } from 'react-router-dom'
 import { DEFAULT_LAB_PARAMS } from '@/sim/constants'
 import type { LabParams } from '@/sim/types'
 import { ConstellationScene } from '@/three/ConstellationScene'
 import { labPath } from '@/lib/labParams'
-import { Link } from 'react-router-dom'
 
 type LessonMiniSimProps = {
   title?: string
@@ -11,30 +11,28 @@ type LessonMiniSimProps = {
   heightClass?: string
 }
 
-/** Compact 3D constellation embed for lessons. */
 export function LessonMiniSim({
   title = 'Live mini-sim',
   caption = 'Drag to orbit. Open the full lab for controls.',
   params,
-  heightClass = 'h-[280px]',
+  heightClass = 'h-[240px]',
 }: LessonMiniSimProps) {
   const merged = { ...DEFAULT_LAB_PARAMS, timeScale: 80, ...params }
 
   return (
-    <section className="my-8 overflow-hidden rounded-xl border border-space-700 bg-space-900">
-      <div className="flex items-center justify-between gap-2 border-b border-space-800 px-4 py-2">
-        <h3 className="text-xs font-semibold tracking-widest text-accent uppercase">{title}</h3>
-        <Link
-          to={labPath(merged)}
-          className="text-xs text-slate-400 no-underline hover:text-white"
-        >
+    <section className="my-6 overflow-hidden rounded-lg border border-line bg-black">
+      <div className="flex items-center justify-between gap-2 border-b border-white/10 px-4 py-2">
+        <h3 className="text-[10px] font-semibold tracking-[0.2em] text-white/70 uppercase">
+          {title}
+        </h3>
+        <Link to={labPath(merged)} className="text-xs text-white/60 no-underline hover:text-white">
           Full lab →
         </Link>
       </div>
       <div className={heightClass}>
         <ConstellationScene mode="hero" params={merged} />
       </div>
-      <p className="border-t border-space-800 px-4 py-2 text-xs text-slate-500">{caption}</p>
+      <p className="border-t border-white/10 px-4 py-2 text-xs text-white/50">{caption}</p>
     </section>
   )
 }

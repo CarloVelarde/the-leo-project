@@ -6,15 +6,14 @@ type FigureProps = {
   children: ReactNode
 }
 
-/** Caption wrapper for SVG diagrams and custom visuals. */
 export function Figure({ caption, credit, children }: FigureProps) {
   return (
-    <figure className="my-8 overflow-hidden rounded-xl border border-space-700 bg-space-900/60">
+    <figure className="my-6 overflow-hidden rounded-lg border border-line bg-paper">
       <div className="px-3 py-4 sm:px-5">{children}</div>
       {caption || credit ? (
-        <figcaption className="border-t border-space-800 px-4 py-3 text-xs text-slate-400">
-          {caption ? <span className="text-slate-300">{caption}</span> : null}
-          {credit ? <span className="mt-1 block text-slate-500">{credit}</span> : null}
+        <figcaption className="border-t border-line px-4 py-3 text-xs text-ink-muted">
+          {caption ? <span className="text-ink-muted">{caption}</span> : null}
+          {credit ? <span className="mt-1 block text-ink-faint">{credit}</span> : null}
         </figcaption>
       ) : null}
     </figure>
