@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { getExercise } from '@/code/exercises'
 import { getPyodide, runPython, type RunResult } from '@/code/pyodideRunner'
@@ -71,12 +71,9 @@ export function CodeAlongPage() {
   return (
     <div className="min-h-screen bg-paper">
       <header className="sticky top-0 z-20 border-b border-line bg-paper/95 backdrop-blur-md">
-        <div className="mx-auto flex h-14 max-w-3xl items-center justify-between gap-3 px-4 sm:max-w-5xl sm:px-6">
-          <div className="flex min-w-0 items-center gap-3 text-sm">
-            <Link
-              to="/"
-              className="shrink-0 font-semibold tracking-[0.12em] text-ink uppercase no-underline hover:opacity-70"
-            >
+        <div className="mx-auto flex h-12 max-w-5xl items-center justify-between gap-3 px-4 sm:px-6">
+          <nav className="flex min-w-0 items-center gap-2 text-sm">
+            <Link to="/" className="font-medium text-ink no-underline hover:opacity-70">
               Home
             </Link>
             <span className="text-ink-faint">/</span>
@@ -84,9 +81,9 @@ export function CodeAlongPage() {
               Code
             </Link>
             <span className="text-ink-faint">/</span>
-            <span className="truncate font-medium text-ink">{ex.title}</span>
-          </div>
-          <div className="flex items-center gap-2">
+            <span className="truncate text-ink-muted">{ex.title}</span>
+          </nav>
+          <div className="flex shrink-0 items-center gap-2">
             <button
               type="button"
               onClick={toggle}
@@ -104,155 +101,45 @@ export function CodeAlongPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-3xl px-4 py-8 sm:max-w-5xl sm:px-6">
-        {/* Title block */}
-        <p className="text-xs font-medium tracking-wide text-ink-faint">
-          Optional · Python · about {ex.minutes} minutes
-        </p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
-          {ex.title}
-        </h1>
-        <p className="mt-3 max-w-2xl text-base leading-relaxed text-ink-muted">{ex.goal}</p>
+      <main className="mx-auto max-w-5xl px-4 py-5 sm:px-6 sm:py-6">
+        {/* Compact assignment header */}
+        <div className="mb-4 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          <h1 className="text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+            {ex.title}
+          </h1>
+          <p className="text-xs text-ink-faint">Python · ~{ex.minutes} min · optional</p>
+        </div>
+        <p className="mb-4 text-sm text-ink-muted">{ex.goal}</p>
 
-        {/* Related lessons — refer back if stuck */}
-        <aside className="mt-6 rounded-2xl border border-line bg-paper-elevated px-5 py-4 sm:px-6">
-          <h2 className="text-sm font-semibold tracking-tight text-ink">
-            Related lessons
-          </h2>
-          <p className="mt-1 text-sm leading-relaxed text-ink-muted">
-            Stuck or need more context? Open the lesson that introduces this idea, then come back
-            here anytime.
-          </p>
-          <ul className="mt-4 space-y-2">
-            <li>
-              <Link
-                to={lessonHref}
-                className="group flex items-start justify-between gap-3 rounded-lg border border-line bg-paper px-4 py-3 no-underline transition-colors hover:border-ink"
-              >
-                <div className="min-w-0">
-                  <p className="text-xs font-medium tracking-wide text-ink-faint uppercase">
-                    Primary lesson
-                  </p>
-                  <p className="mt-0.5 font-medium text-ink group-hover:opacity-80">
-                    {lessonPage?.title ?? 'Open related page'}
-                  </p>
-                  {mod ? (
-                    <p className="mt-0.5 text-sm text-ink-muted">
-                      {mod.track === 'core' ? `Module ${mod.order}` : 'Optional'} · {mod.title}
-                    </p>
-                  ) : null}
-                </div>
-                <span className="shrink-0 text-ink-faint" aria-hidden>
-                  →
-                </span>
-              </Link>
-            </li>
-            {mod && mod.pages[0]!.id !== ex.pageId ? (
-              <li>
-                <Link
-                  to={moduleStartHref}
-                  className="group flex items-start justify-between gap-3 rounded-lg border border-line bg-paper px-4 py-3 no-underline transition-colors hover:border-ink"
-                >
-                  <div className="min-w-0">
-                    <p className="text-xs font-medium tracking-wide text-ink-faint uppercase">
-                      Full module
-                    </p>
-                    <p className="mt-0.5 font-medium text-ink group-hover:opacity-80">
-                      Start of {mod.title}
-                    </p>
-                    <p className="mt-0.5 text-sm text-ink-muted">
-                      Begin at “{mod.pages[0]!.navLabel}” and work through the pages
-                    </p>
-                  </div>
-                  <span className="shrink-0 text-ink-faint" aria-hidden>
-                    →
-                  </span>
-                </Link>
-              </li>
-            ) : null}
-            <li>
-              <Link
-                to="/simulate"
-                className="group flex items-start justify-between gap-3 rounded-lg border border-line bg-paper px-4 py-3 no-underline transition-colors hover:border-ink"
-              >
-                <div className="min-w-0">
-                  <p className="text-xs font-medium tracking-wide text-ink-faint uppercase">
-                    3D lab
-                  </p>
-                  <p className="mt-0.5 font-medium text-ink group-hover:opacity-80">
-                    Constellation lab
-                  </p>
-                  <p className="mt-0.5 text-sm text-ink-muted">
-                    See the same models spatially if numbers feel abstract
-                  </p>
-                </div>
-                <span className="shrink-0 text-ink-faint" aria-hidden>
-                  →
-                </span>
-              </Link>
-            </li>
-          </ul>
-        </aside>
-
-        {/* Instructions — clear hierarchy, readable type */}
-        <section className="mt-8 rounded-2xl border border-line bg-paper shadow-sm">
-          <div className="border-b border-line px-5 py-4 sm:px-6">
-            <h2 className="text-sm font-semibold tracking-tight text-ink">What to do</h2>
-            <p className="mt-1 text-sm leading-relaxed text-ink-muted">
-              Complete the functions in the editor below, then use <strong className="font-medium text-ink">Run checks</strong>.
-            </p>
-          </div>
-
-          <ol className="space-y-0 px-5 py-2 sm:px-6">
+        {/* Slim task list — primary content before the editor */}
+        <section className="mb-4 rounded-xl border border-line bg-paper px-4 py-3">
+          <ol className="space-y-2">
             {ex.steps.map((step, i) => (
-              <li
-                key={i}
-                className="flex gap-4 border-b border-line py-4 last:border-b-0"
-              >
-                <span
-                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-ink text-xs font-semibold text-paper"
-                  aria-hidden
-                >
-                  {i + 1}
+              <li key={i} className="flex gap-3 text-sm leading-snug text-ink">
+                <span className="w-5 shrink-0 font-mono text-xs font-semibold text-ink-faint tabular-nums">
+                  {i + 1}.
                 </span>
-                <p className="pt-0.5 text-[15px] leading-relaxed text-ink">{step}</p>
+                <span>{step}</span>
               </li>
             ))}
           </ol>
-
-          <div className="space-y-3 border-t border-line bg-paper-elevated/80 px-5 py-4 sm:px-6">
-            <div>
-              <p className="text-xs font-semibold tracking-wide text-ink-faint uppercase">
-                When checks pass
-              </p>
-              <p className="mt-1 text-sm leading-relaxed text-ink">{ex.success}</p>
-            </div>
-            {ex.predict ? (
-              <div className="rounded-lg border border-line bg-paper px-4 py-3">
-                <p className="text-xs font-semibold tracking-wide text-ink-faint uppercase">
-                  Think first
-                </p>
-                <p className="mt-1 text-sm leading-relaxed text-ink">{ex.predict}</p>
-              </div>
-            ) : null}
-            <p className="text-xs leading-relaxed text-ink-faint">
-              Uses the same simplified lab model (circular orbits, vacuum light-time where relevant).
-              Not a full RF simulation.
-            </p>
-          </div>
+          <p className="mt-3 border-t border-line pt-3 text-xs text-ink-muted">
+            <span className="font-medium text-ink">Pass when: </span>
+            {ex.success}
+          </p>
         </section>
 
-        {/* Editor */}
-        <div className="mt-8 overflow-hidden rounded-2xl border border-line">
-          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line bg-paper-elevated px-4 py-2.5">
+        {/* Editor first-class */}
+        <div className="overflow-hidden rounded-xl border border-line">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line bg-paper-elevated px-3 py-2">
             <span className="font-mono text-xs text-ink-faint">main.py</span>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5">
               <ActionBtn
                 disabled={busy || loadingRuntime}
                 onClick={() => onRun(false)}
                 secondary
               >
-                {loadingRuntime ? 'Loading Python…' : busy ? 'Running…' : 'Run'}
+                {loadingRuntime ? 'Loading…' : busy ? 'Running…' : 'Run'}
               </ActionBtn>
               <ActionBtn disabled={busy || loadingRuntime} onClick={() => onRun(true)}>
                 Run checks
@@ -274,7 +161,7 @@ export function CodeAlongPage() {
                   if (!showSolution) setCode(ex.solutionCode)
                 }}
               >
-                {showSolution ? 'Hide solution' : 'Show solution'}
+                {showSolution ? 'Hide solution' : 'Solution'}
               </ActionBtn>
             </div>
           </div>
@@ -283,51 +170,101 @@ export function CodeAlongPage() {
               value={code}
               onChange={setCode}
               theme={theme === 'light' ? 'light' : 'dark'}
-              minHeight="360px"
+              minHeight="380px"
             />
           </div>
-          <p className="border-t border-line bg-paper-elevated px-4 py-2 text-[11px] text-ink-faint">
-            Enter keeps indent · Tab / Shift+Tab · Ctrl/Cmd+Z undo · brackets match and auto-close
-          </p>
         </div>
 
-        {/* Output */}
-        <div className="mt-4 overflow-hidden rounded-2xl border border-line">
-          <div className="flex flex-wrap items-center gap-2 border-b border-line bg-paper-elevated px-4 py-2.5">
-            <span className="text-xs font-medium text-ink-faint">Output</span>
+        {/* Compact output */}
+        <div className="mt-3 overflow-hidden rounded-xl border border-line">
+          <div className="flex items-center gap-2 border-b border-line bg-paper-elevated px-3 py-2">
+            <span className="text-xs text-ink-faint">Output</span>
             {result?.checked ? (
               <span
                 className={[
-                  'rounded-full px-2.5 py-0.5 text-[11px] font-semibold',
-                  result.ok
-                    ? 'bg-ink text-paper'
-                    : 'border border-line text-ink-muted',
+                  'rounded-full px-2 py-0.5 text-[10px] font-semibold',
+                  result.ok ? 'bg-ink text-paper' : 'border border-line text-ink-muted',
                 ].join(' ')}
               >
-                {result.ok ? 'Checks passed' : 'Checks failed'}
+                {result.ok ? 'Passed' : 'Failed'}
               </span>
             ) : null}
           </div>
-          <pre className="max-h-64 overflow-auto whitespace-pre-wrap bg-paper p-4 font-mono text-[13px] leading-relaxed text-ink-muted">
+          <pre className="max-h-40 overflow-auto whitespace-pre-wrap bg-paper px-3 py-2.5 font-mono text-xs leading-relaxed text-ink-muted">
             {busy || loadingRuntime
               ? loadingRuntime
-                ? 'Downloading Python runtime (first time only)…'
+                ? 'Downloading Python (first time)…'
                 : 'Running…'
               : result
                 ? [result.output, result.error].filter(Boolean).join('\n') || '(no output)'
-                : 'Run your code, or Run checks when you are ready.'}
+                : 'Run or Run checks when ready.'}
           </pre>
         </div>
 
-        <p className="mt-8 text-sm text-ink-muted">
-          Done exploring?{' '}
-          <Link to={lessonHref} className="font-medium text-ink underline-offset-2 hover:underline">
-            Return to the lesson
-          </Link>
-          . Coding never blocks Next.
-        </p>
+        {/* Secondary — collapsed by default */}
+        <div className="mt-4 space-y-1 border-t border-line pt-3">
+          {ex.predict ? (
+            <Details summary="Think first">
+              <p className="text-sm text-ink">{ex.predict}</p>
+            </Details>
+          ) : null}
+
+          <Details summary="Related lessons">
+            <ul className="space-y-1.5 text-sm">
+              <li>
+                <Link to={lessonHref} className="font-medium text-ink underline-offset-2 hover:underline">
+                  {lessonPage?.title ?? 'Related page'}
+                </Link>
+                {mod ? (
+                  <span className="text-ink-muted">
+                    {' '}
+                    · {mod.track === 'core' ? `Module ${mod.order}` : 'Optional'}: {mod.title}
+                  </span>
+                ) : null}
+              </li>
+              {mod && mod.pages[0]!.id !== ex.pageId ? (
+                <li>
+                  <Link
+                    to={moduleStartHref}
+                    className="text-ink underline-offset-2 hover:underline"
+                  >
+                    Start of module
+                  </Link>
+                </li>
+              ) : null}
+              <li>
+                <Link to="/simulate" className="text-ink underline-offset-2 hover:underline">
+                  Constellation lab
+                </Link>
+              </li>
+            </ul>
+          </Details>
+
+          <Details summary="Editor tips">
+            <p className="text-sm text-ink-muted">
+              Enter keeps indent · Tab / Shift+Tab · Ctrl/Cmd+Z undo · brackets auto-close.
+              Same simplified lab model (not full RF).
+            </p>
+          </Details>
+        </div>
       </main>
     </div>
+  )
+}
+
+function Details({ summary, children }: { summary: string; children: ReactNode }) {
+  return (
+    <details className="group rounded-lg border border-transparent open:border-line open:bg-paper-elevated">
+      <summary className="cursor-pointer list-none px-2 py-2 text-xs font-medium text-ink-muted marker:content-none hover:text-ink [&::-webkit-details-marker]:hidden">
+        <span className="inline-flex items-center gap-1.5">
+          <span className="text-ink-faint transition-transform group-open:rotate-90" aria-hidden>
+            ▸
+          </span>
+          {summary}
+        </span>
+      </summary>
+      <div className="px-3 pb-3 pt-0">{children}</div>
+    </details>
   )
 }
 
@@ -348,7 +285,7 @@ function ActionBtn({
       disabled={disabled}
       onClick={onClick}
       className={[
-        'rounded-full px-3.5 py-1.5 text-xs font-medium disabled:opacity-50',
+        'rounded-full px-3 py-1 text-xs font-medium disabled:opacity-50',
         secondary
           ? 'border border-line text-ink hover:border-ink'
           : 'bg-inverse text-paper hover:opacity-90',
