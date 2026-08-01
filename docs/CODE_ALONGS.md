@@ -1,30 +1,30 @@
-# Code-alongs (planned)
+# Code-alongs
 
-**Stance:** Main path stays conceptual. Optional Python re-expresses the same models in ~15 minutes, mostly in-browser. A few deeper projects for portfolio practice. Never block lesson Next.
+**Stance:** Main path stays conceptual. Optional Python re-expresses high-signal models (~10–15 min), in-browser. Never blocks Next.
 
-## Layers
+## Shipped MVP
 
-| Layer | Time | Format |
-|-------|------|--------|
-| A · See | ~5 min | Working code; change one parameter |
-| B · Tinker | ~15 min | One function; light checks |
-| C · Build | hours | Rare local/Colab projects |
+| Exercise | After | ~min |
+|----------|--------|------|
+| Light-time GEO vs LEO | M2 · Delay | 12 |
+| Orbital period vs altitude | M3 · Latency | 12 |
+| Coverage sparse vs dense | M5 · Density | 15 |
+| Count handoffs | M6 · Handovers | 12 |
+| Path hops (BFS) | M7 · Mesh | 15 |
 
-Aim A/B on about half the modules; C only a couple of times per course.
-
-## Ship order
-
-1. In-browser Python (e.g. Pyodide), lazy-loaded on `/code/*`  
-2. Pure helpers matching `src/sim` (period, light-time, elevation, handoff)  
-3. 4–6 exercises (start: M2, M3, M5, M6) + “Optional code along” cards on lessons  
-4. Later: hidden tests for pure kernels; 1–2 projects  
+- Routes: `/code`, `/code/:exerciseId`  
+- Cards: `CodeAlongCard` on matching lesson pages  
+- Runtime: Pyodide (CDN), lazy on first Run  
+- UI: clean editor, Run / Run checks, Reset, Show solution  
 
 ## Rules
 
-- Time label on every exercise  
-- Same sim assumptions as the lab  
-- Autograde pure functions only (floats with tolerance)  
-- Solutions available  
-- Predict-before-run (or short reflection) so AI-era use still sticks  
+- Code only where quantitative models matter (not every page)  
+- Time labels match difficulty  
+- Same lab model assumptions  
+- Checks = pure asserts + `CHECK_OK`  
+- Colab/download later  
 
-Out of scope early: full coding judge, mandatory install, replacing the 3D lab.
+## Edit
+
+Exercises: `src/code/exercises.ts` · Runner: `src/code/pyodideRunner.ts`

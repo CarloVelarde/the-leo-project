@@ -4,6 +4,7 @@
 import type { ReactNode } from 'react'
 import { Advanced } from '@/ui/Advanced'
 import { Callout } from '@/ui/Callout'
+import { CodeAlongCard } from '@/ui/CodeAlongCard'
 import { FurtherReading } from '@/ui/FurtherReading'
 import { InlineSource } from '@/ui/InlineSource'
 import { LabButton } from '@/ui/LabButton'
@@ -177,6 +178,7 @@ const PAGES: Record<string, ReactNode> = {
         <InlineSource id="starlinkTech" />).
       </p>
       <LatencyCompare />
+      <CodeAlongCard moduleSlug="geo-problem" pageId="delay" />
     </>
   ),
   'geo-problem/tradeoffs': (
@@ -263,6 +265,7 @@ const PAGES: Record<string, ReactNode> = {
         Processing, queues, gateways, and ISLs still add delay. LEO removes the GEO distance tax —
         it does not repeal networking.
       </Callout>
+      <CodeAlongCard moduleSlug="leo-advantage" pageId="latency" />
     </>
   ),
   'leo-advantage/coverage': (
@@ -422,6 +425,7 @@ const PAGES: Record<string, ReactNode> = {
         title="Dense shell"
         params={{ planes: 20, satsPerPlane: 30, altitudeKm: 550, timeScale: 70 }}
       />
+      <CodeAlongCard moduleSlug="constellation-design" pageId="density" />
     </>
   ),
   'constellation-design/reality': (
@@ -509,6 +513,7 @@ const PAGES: Record<string, ReactNode> = {
         label="Watch handoffs in 3D lab"
         params={{ planes: 12, satsPerPlane: 20, userLatDeg: 40, timeScale: 120 }}
       />
+      <CodeAlongCard moduleSlug="user-terminal" pageId="handoff" />
     </>
   ),
   'user-terminal/check': (
@@ -575,6 +580,7 @@ const PAGES: Record<string, ReactNode> = {
         class only — not proprietary algorithms. Apps still send ordinary IP (
         <InlineSource id="mdnInternet" />).
       </p>
+      <CodeAlongCard moduleSlug="space-network" pageId="mesh" />
     </>
   ),
   'space-network/check': (

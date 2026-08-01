@@ -26,6 +26,9 @@ export function Header() {
           <NavLink to="/simulate" className={navClass}>
             Lab
           </NavLink>
+          <NavLink to="/code" className={navClass}>
+            Code
+          </NavLink>
           <NavLink to="/glossary" className={navClass}>
             Glossary
           </NavLink>

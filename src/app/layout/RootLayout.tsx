@@ -4,12 +4,13 @@ import { Header } from './Header'
 
 export function RootLayout() {
   const { pathname } = useLocation()
-  const isLesson = pathname.startsWith('/learn/') && pathname.split('/').length >= 3
-  // /learn/:slug or /learn/:slug/:page — lesson chrome is self-contained
-  const lessonMode =
-    pathname.startsWith('/learn/') && pathname !== '/learn' && pathname.split('/').filter(Boolean).length >= 2
+  const parts = pathname.split('/').filter(Boolean)
+  // Full-chrome pages own their header (lesson reader, code exercise)
+  const bareShell =
+    (pathname.startsWith('/learn/') && parts.length >= 2) ||
+    (pathname.startsWith('/code/') && parts.length >= 2)
 
-  if (lessonMode) {
+  if (bareShell) {
     return (
       <div className="min-h-screen bg-paper">
         <Outlet />
@@ -23,7 +24,7 @@ export function RootLayout() {
       <main className="flex-1">
         <Outlet />
       </main>
-      {!isLesson ? <Footer /> : null}
+      <Footer />
     </div>
   )
 }

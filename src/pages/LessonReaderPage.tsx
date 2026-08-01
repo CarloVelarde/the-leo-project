@@ -37,7 +37,13 @@ export function LessonReaderPage() {
   useEffect(() => {
     if (!mod || pageIndex < 0) return
     const onKey = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement ||
+        e.target instanceof HTMLSelectElement
+      ) {
+        return
+      }
       if (e.key === 'ArrowRight' && pageIndex < mod.pages.length - 1) {
         navigate(`/learn/${mod.slug}/${mod.pages[pageIndex + 1]!.id}`)
       }

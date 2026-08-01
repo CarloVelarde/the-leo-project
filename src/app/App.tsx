@@ -2,6 +2,8 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { ThemeProvider } from '@/lib/theme'
 import { RootLayout } from './layout/RootLayout'
 import { AboutPage } from '@/pages/AboutPage'
+import { CodeAlongPage } from '@/pages/CodeAlongPage'
+import { CodeIndexPage } from '@/pages/CodeIndexPage'
 import { GlossaryPage } from '@/pages/GlossaryPage'
 import { GlossaryTermPage } from '@/pages/GlossaryTermPage'
 import { HomePage } from '@/pages/HomePage'
@@ -19,6 +21,8 @@ export default function App() {
             <Route path="learn" element={<LearnIndexPage />} />
             <Route path="learn/:slug" element={<LessonReaderPage />} />
             <Route path="learn/:slug/:pageId" element={<LessonReaderPage />} />
+            <Route path="code" element={<CodeIndexPage />} />
+            <Route path="code/:exerciseId" element={<CodeAlongPage />} />
             <Route path="simulate" element={<SimulatePage />} />
             <Route path="glossary" element={<GlossaryPage />} />
             <Route path="glossary/:termId" element={<GlossaryTermPage />} />
