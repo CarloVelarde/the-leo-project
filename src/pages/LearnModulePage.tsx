@@ -5,11 +5,14 @@ import { setLastModule } from '@/lib/progress'
 import { MdxContent } from '@/ui/MdxProvider'
 
 const moduleLoaders: Record<string, () => Promise<{ default: ComponentType }>> = {
-  'why-leo': () => import('@/content/modules/m1-why-leo.mdx'),
-  orbits: () => import('@/content/modules/m2-orbits.mdx'),
-  'constellation-design': () => import('@/content/modules/m3-constellation-design.mdx'),
-  'beams-and-handoffs': () => import('@/content/modules/m4-beams-and-handoffs.mdx'),
-  'what-makes-it-special': () => import('@/content/modules/m5-what-makes-it-special.mdx'),
+  'internet-foundations': () => import('@/content/modules/m1-internet-foundations.mdx'),
+  'geo-problem': () => import('@/content/modules/m2-geo-problem.mdx'),
+  'leo-advantage': () => import('@/content/modules/m3-leo-advantage.mdx'),
+  'launch-and-ops': () => import('@/content/modules/m4-launch-and-ops.mdx'),
+  'constellation-design': () => import('@/content/modules/m5-constellation-design.mdx'),
+  'user-terminal': () => import('@/content/modules/m6-user-terminal.mdx'),
+  'space-network': () => import('@/content/modules/m7-space-network.mdx'),
+  'end-to-end': () => import('@/content/modules/m8-end-to-end.mdx'),
 }
 
 export function LearnModulePage() {
@@ -39,13 +42,16 @@ export function LearnModulePage() {
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-12">
-      <p className="mb-6 text-sm text-slate-500">
+      <p className="mb-2 text-sm text-slate-500">
         <Link to="/learn" className="text-slate-400 hover:text-white">
           Learn
         </Link>
         <span className="mx-2">/</span>
         Module {meta.order}
+        <span className="mx-2">·</span>
+        ~{meta.minutes} min
       </p>
+      <p className="mb-8 text-sm text-slate-500">{meta.goal}</p>
 
       <MdxContent>
         <Suspense fallback={<p className="text-slate-400">Loading module…</p>}>

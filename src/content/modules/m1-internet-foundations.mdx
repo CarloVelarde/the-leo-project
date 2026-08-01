@@ -1,0 +1,132 @@
+import { Advanced } from '@/ui/Advanced'
+import { Callout } from '@/ui/Callout'
+import { FurtherReading } from '@/ui/FurtherReading'
+import { InlineSource } from '@/ui/InlineSource'
+import { Objectives } from '@/ui/Objectives'
+import { getSources } from '@/content/sources'
+
+export const meta = {
+  slug: 'internet-foundations',
+}
+
+# How the Internet Actually Moves Data
+
+Before we talk about satellites, we need a shared picture of **how the Internet moves information at all**. You do not need to be a network engineer. You do need a few precise words — *packet*, *router*, *latency*, *bandwidth*, *hop* — because every later module (GEO delay, LEO constellations, handovers) is really a story about those ideas under extreme geometry.
+
+<Objectives
+  items={[
+    'Explain packets and packet switching in plain language',
+    'Distinguish latency from bandwidth with everyday examples',
+    'Describe the client–server model and why round-trip time hurts interactive apps',
+    'Define hop and router at a high level',
+  ]}
+/>
+
+## The Internet is a network of networks
+
+Your laptop, a café Wi‑Fi router, a city fiber ring, an undersea cable, a data center: all of these are **networks**. The Internet is the system that connects them so a message from *here* can reach *there* even if the machines have never “met.”
+
+A classic educational explanation is: computers send data to **routers** (specialized forwarding machines), which read destination information and pass the data toward the next network — like a postal system for digital messages. See MDN’s walkthrough in <InlineSource id="mdnInternet" />.
+
+## Packets: chop the message into envelopes
+
+Large messages are not usually sent as one giant blob. They are split into **packets** — manageable chunks that include:
+
+- a piece of the payload (your data), and  
+- addressing / control information so the network knows where the packet is going and how to reassemble it.
+
+Why packets?
+
+1. **Sharing.** Many users can interleave small packets on the same links.  
+2. **Reliability options.** If one packet is lost, only that piece may need retransmit (depending on the protocol).  
+3. **Flexible paths.** Different packets *can* take different routes (in practice, paths are often stable for a while, but the architecture allows adaptation).
+
+This design is called **packet switching**, as opposed to older **circuit switching** (reserve a dedicated path for the whole conversation — like a classic phone call). Crash Course Computer Science #28 is a strong visual intro: <InlineSource id="crashCourseNetworks" />.
+
+Khan Academy’s short video with Vint Cerf is excellent reinforcement: <InlineSource id="khanPackets" />.
+
+## Routers and hops
+
+A **router** looks at a packet’s destination and chooses an outgoing interface — the next step on the journey. Each step from one router (or network device) to the next is often called a **hop**.
+
+More hops does not *always* mean worse performance, but each hop adds:
+
+- processing time,  
+- possible queueing delay if the link is busy,  
+- and a bit more distance for the signal to travel.
+
+MDN’s Internet primer emphasizes that the more intermediate devices a packet must pass, the longer delivery can take — which is why efficient routing and nearby servers matter (<InlineSource id="mdnInternet" />).
+
+## Client–server (the pattern you already use)
+
+Most of what you do online is **client–server**:
+
+- **Client:** your browser, game, or app that *initiates* requests.  
+- **Server:** a machine (or fleet of machines) that *responds* with pages, video chunks, game state, etc.
+
+When you open a website, your client asks a server for resources; the server answers. That simple loop is the backbone of “interactive” Internet use.
+
+## Latency vs bandwidth (do not mix these up)
+
+Two different performance ideas get confused constantly:
+
+| Concept | Plain meaning | Everyday analogy |
+|--------|----------------|------------------|
+| **Latency** | How long until the *first* bit of a response matters — delay | How long until water starts coming out of a hose after you open the spigot |
+| **Bandwidth** | How much data can flow per unit time once flowing | How thick the hose is |
+
+A link can be “fast” in bandwidth (gigabits per second) and still feel sluggish if **latency** is high — because interactive apps keep waiting for round trips.
+
+MDN defines latency as the time for a packet to travel from source to destination, often discussed as **round-trip** delay from user request to user-visible response: <InlineSource id="mdnLatency" />.
+
+For a deeper technical primer (still readable), Ilya Grigorik’s *High Performance Browser Networking* chapter is outstanding: <InlineSource id="hpbnLatency" />.
+
+### Round-trip time (RTT)
+
+**RTT** is the time to go *there and back*: send a request, wait for a reply. Video calls, multiplayer games, and many web protocols care a lot about RTT because they repeatedly wait for acknowledgements or state updates.
+
+Rough intuition for humans:
+
+- **~20–40 ms** RTT: feels snappy for many interactive uses.  
+- **~100–150 ms**: still fine for web browsing; games start to feel it.  
+- **~500–700+ ms**: conversations get awkward; competitive games break down.
+
+(Those numbers are *experience* bands, not physics laws — they help you interpret later modules.)
+
+<Callout title="Why this module exists" variant="key">
+Starlink-style systems are engineered largely to **attack latency** (and coverage), not just to “add bandwidth from space.” Without latency vocabulary, GEO vs LEO is just trivia.
+</Callout>
+
+## Reliability is a separate layer
+
+The network path can drop or reorder packets. Protocols above the raw network (commonly discussed as TCP vs UDP in Crash Course #29: <InlineSource id="crashCourseInternet" />) decide whether to:
+
+- retransmit and order carefully (good for downloads, bad if you insist on old data), or  
+- send “fire and forget” style (good for live media where late data is useless).
+
+You do not need the full protocol stack yet. Remember: **delivery guarantees are designed**, not magical.
+
+## What to carry forward
+
+Memorize this chain:
+
+**Application → packets → routers/hops → RTT and bandwidth limits → user experience**
+
+In Module 2 we put a satellite at ~36,000 km into that chain and watch latency explode. In Module 3 we move the satellite much closer and watch a different problem appear: continuous coverage.
+
+<Advanced title="Optional: speed of light as a hard floor">
+Propagation delay is bounded by the speed of light. In vacuum, $c \approx 3 \times 10^8$ m/s. One-way time over distance $d$ is $t = d/c$. Round-trip over the same path is roughly $2d/c$ (plus processing). Fiber is slower than vacuum (higher refractive index), which is why long-haul *propagation* comparisons between LEO radio/laser paths and terrestrial fiber get subtle — see Grigorik’s primer for nuance.
+</Advanced>
+
+<FurtherReading
+  sources={getSources([
+    'mdnInternet',
+    'mdnLatency',
+    'hpbnLatency',
+    'khanPackets',
+    'khanWhatIsInternet',
+    'crashCourseNetworks',
+    'crashCourseInternet',
+    'ietf',
+  ])}
+/>

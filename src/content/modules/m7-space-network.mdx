@@ -1,0 +1,95 @@
+import { Advanced } from '@/ui/Advanced'
+import { Callout } from '@/ui/Callout'
+import { FurtherReading } from '@/ui/FurtherReading'
+import { InlineSource } from '@/ui/InlineSource'
+import { Objectives } from '@/ui/Objectives'
+import { getSources } from '@/content/sources'
+
+# The Bigger Network: Lasers, Gateways, and Routing
+
+Your terminal’s radio link to a satellite is only the first hop. For the Internet to work, packets must reach the **terrestrial Internet** — and sometimes they travel across the sky first. This module maps the space network.
+
+<Objectives
+  items={[
+    'Distinguish user link, gateway link, and inter-satellite link',
+    'Sketch user → sat → (ISLs) → gateway → Internet',
+    'Explain why optical ISLs matter',
+    'Frame the constellation as a time-varying graph',
+  ]}
+/>
+
+## Three kinds of links
+
+Think in three layers of connectivity:
+
+| Link | Connects | Role |
+|------|----------|------|
+| **User link** | User terminal ↔ satellite | The “last hop” from Module 6 |
+| **Gateway link** | Satellite ↔ ground station (gateway) | On/off ramp to fiber Internet |
+| **Inter-satellite link (ISL)** | Satellite ↔ satellite | Space mesh / long-haul in orbit |
+
+Starlink’s technology materials describe **optical space lasers** for inter-satellite links (publicly discussed at rates on the order of **~100 Gbps** class in official marketing copy) and the overall LEO network architecture (<InlineSource id="starlinkTech" />).
+
+## Gateways: where space meets fiber
+
+A **gateway** (ground station) is a facility with antennas and fiber backhaul. When a satellite has a path to a nearby gateway, user traffic can dump into the ordinary Internet quickly — the same Internet you learned about in Module 1 (routers, packets, IXPs, data centers).
+
+If every packet needed a gateway under the same satellite footprint, oceans and remote regions would be hard. That is one motivation for ISLs.
+
+## Optical inter-satellite links (the space mesh)
+
+With laser links between satellites, a packet can:
+
+1. leave your terminal to sat A,  
+2. hop A → B → C across the constellation,  
+3. descend from sat C to a gateway near your destination,  
+4. continue over terrestrial fiber.
+
+Benefits (conceptual):
+
+- serve users far from ground infrastructure,  
+- shorten some long-haul paths relative to hairpinning to a distant gateway,  
+- build resilience when a particular ground entry point is unavailable.
+
+Challenges:
+
+- pointing lasers between fast-moving platforms,  
+- routing on a **topology that changes every second**,  
+- capacity planning when many users share the mesh.
+
+## Routing on a time-varying graph
+
+In Module 1, routers forward packets across a mostly slow-changing terrestrial graph. In a LEO mesh, nodes move; neighbors appear and disappear; path quality changes continuously.
+
+Without claiming any proprietary algorithm, the *problem class* is:
+
+> Find a good path through a moving graph subject to capacity, latency, and reliability constraints — and keep updating it.
+
+That problem returns in Module 8 as part of end-to-end performance.
+
+<Callout title="Packets still look like Internet packets" variant="note">
+From the application’s point of view, you still send IP traffic to destinations on the Internet. The satellite system is an access and transit fabric — a sophisticated one — under the familiar end-to-end model MDN describes (<InlineSource id="mdnInternet" />).
+</Callout>
+
+## Path sketches worth remembering
+
+**Simple bent-pipe style path (gateway nearby):**  
+User → serving sat → gateway → Internet → (return path).
+
+**Mesh-assisted path:**  
+User → sat → ISL hops → far gateway → Internet.
+
+**Failure modes to imagine:**  
+No sat in view (coverage gap), gateway congestion, ISL outage, terrestrial issues beyond the gateway.
+
+## What to carry forward
+
+Starlink-style broadband is not only “radio to a flying modem.” It is **access + space backhaul + terrestrial Internet**. Module 8 ties latency, handovers, and routing into one end-to-end story.
+
+<Advanced title="Optional: why optical vs radio for ISLs">
+Optical links can support very high data rates with tight beams (less interference), but require precise pointing and clear line of sight between satellites. Radio crosslinks are a different engineering trade. Public Starlink materials emphasize optical ISLs for the inter-satellite mesh.
+</Advanced>
+
+<FurtherReading
+  sources={getSources(['starlinkTech', 'mdnInternet', 'mdnLatency', 'hpbnLatency'])}
+/>

@@ -1,0 +1,123 @@
+import { Advanced } from '@/ui/Advanced'
+import { Callout } from '@/ui/Callout'
+import { FurtherReading } from '@/ui/FurtherReading'
+import { InlineSource } from '@/ui/InlineSource'
+import { LabButton } from '@/ui/LabButton'
+import { Objectives } from '@/ui/Objectives'
+import { getSources } from '@/content/sources'
+
+# Putting It All Together
+
+You now have the pieces: Internet packets (M1), GEO’s distance tax (M2), LEO’s speed and coverage problem (M3), fleet operations (M4), constellation geometry (M5), user links and handovers (M6), and the space mesh plus gateways (M7). This module is the **synthesis**.
+
+<Objectives
+  items={[
+    'Narrate a realistic end-to-end packet journey',
+    'Separate latency ingredients: propagation, processing, routing, congestion',
+    'Explain continuity under handovers at a systems level',
+    'Name core algorithmic problems without proprietary claims',
+  ]}
+/>
+
+## A packet’s journey (story form)
+
+Suppose you are on a video call.
+
+1. **Your app** generates media; the OS/network stack packetizes it (Module 1).  
+2. Packets leave via Wi‑Fi/Ethernet to your **Starlink-class terminal**.  
+3. The terminal’s **phased array** maintains a beam to a **serving satellite** above min elevation (Module 6).  
+4. The satellite either:  
+   - sends traffic to a **gateway** with fiber into the Internet, or  
+   - forwards via **optical ISLs** across the constellation toward a better exit (Module 7).  
+5. Terrestrial routers deliver packets to the other participant’s network (Module 1 again).  
+6. Return traffic reverses the path — possibly on different sats/gateways milliseconds later.  
+7. Meanwhile, your serving satellite is racing toward the horizon; the system **hands over** to the next bird so the call continues (Module 6).
+
+That entire loop must usually complete fast enough that RTT stays in a comfortable interactive band — the design goal contrasting with GEO’s multi-hundred-millisecond light-time tax (Module 2; <InlineSource id="starlinkTech" />).
+
+## Performance: what “latency” is made of
+
+When people say “Starlink latency,” they mix several contributions:
+
+| Ingredient | What it is |
+|------------|------------|
+| **Propagation** | Speed-of-light time on radio/laser/fiber legs |
+| **Processing** | Modems, coding, encryption, scheduling |
+| **Queueing** | Waiting behind other traffic (congestion) |
+| **Routing path length** | Extra ISL hops or hairpin gateway choices |
+| **Handover transients** | Brief disruptions or path changes during switches |
+| **Terrestrial tail** | Everything after the gateway |
+
+LEO primarily attacks **propagation to/from the space segment** vs GEO. The rest is still classic networking (<InlineSource id="mdnLatency" />, <InlineSource id="hpbnLatency" />).
+
+## Handovers in practice (continuity)
+
+From a user’s perspective, success looks like: apps keep working while the attachment point changes. That requires:
+
+- overlapping coverage so a next sat is ready,  
+- coordinated scheduling between terminal and network,  
+- and backhaul paths that remain valid after the switch.
+
+Mobility (vehicles, ships, aircraft) adds motion on *both* sides: the terminal moves and the sky moves. The algorithmic problem gets harder, but the conceptual model stays the same.
+
+## The algorithm layer (problem names, not secret recipes)
+
+Without reverse-engineering any operator, mega-constellation networking faces known problem classes:
+
+1. **Satellite selection** — which sat should serve this user now? (elevation, load, predicted remaining visibility)  
+2. **Beam / resource scheduling** — who gets which spectrum/time/beam resources?  
+3. **Routing on a dynamic graph** — which ISL/gateway path for this traffic class?  
+4. **Handover planning** — when to switch to minimize disruption?  
+5. **Constellation maintenance** — station-keeping and collision avoidance (Module 4) as the geometry substrate.
+
+Research papers measure latency distributions, reconfiguration timescales, and routing strategies under public assumptions; treat them as *further reading*, not as ground truth for any vendor’s live policy.
+
+## Lab capstone experiments
+
+Try these and write one sentence for each:
+
+1. **Sparse vs dense** — when does offline time disappear, and what happens to handoff rate?  
+2. **Altitude** — how do period and light-time estimates move?  
+3. **User latitude** — does a mid-latitude shell leave high-latitude users unhappy?  
+4. **Min elevation** — raise the mask; watch coverage shrink (stricter geometry).
+
+<LabButton
+  label="Capstone: sparse"
+  params={{ planes: 4, satsPerPlane: 8, altitudeKm: 550, timeScale: 100 }}
+/>
+
+<LabButton
+  label="Capstone: dense"
+  params={{ planes: 30, satsPerPlane: 40, altitudeKm: 550, timeScale: 100 }}
+/>
+
+## Reality checks and humility
+
+- **Public counts** of satellites change weekly — use <InlineSource id="mcdowellStarlink">McDowell’s catalog</InlineSource> for “what is up.”  
+- **Shell altitudes** evolve with operator plans and licenses — prefer <InlineSource id="starlinkAltitudes">Starlink Space Safety altitude docs</InlineSource>.  
+- This course uses **simplified models** in the lab (circular orbits, geometric elevation). Real RF, weather, and policy are richer.
+
+<Callout title="You made it through the core path" variant="lab">
+You can now explain, in your own words, why LEO mega-constellations exist, how they are structured, how a terminal stays connected, and how packets reach the Internet. Optional tracks (orbit math, space safety, direct-to-cell) go deeper without blocking this foundation.
+</Callout>
+
+## Suggested next steps
+
+- Revisit any module that felt thin; use **Go deeper** links.  
+- Spend 20 minutes in the lab with the sparse/dense scenarios.  
+- Skim Starlink’s technology page and ESA’s orbit types back-to-back — you should now read both fluently.
+
+<Advanced title="Optional: TCP meets space RTT">
+Even with LEO RTTs, TCP throughput and fairness still depend on loss, buffering, and RTT. Path changes at handover can interact with congestion control. These are active research and engineering topics at the intersection of satellite systems and Internet transport — start from classic latency/bandwidth mental models in HPBN, then seek measurement papers.
+</Advanced>
+
+<FurtherReading
+  sources={getSources([
+    'starlinkTech',
+    'starlinkAltitudes',
+    'mcdowellStarlink',
+    'mdnLatency',
+    'hpbnLatency',
+    'esaOrbits',
+  ])}
+/>

@@ -1,0 +1,94 @@
+import { Advanced } from '@/ui/Advanced'
+import { Callout } from '@/ui/Callout'
+import { FurtherReading } from '@/ui/FurtherReading'
+import { InlineSource } from '@/ui/InlineSource'
+import { LabButton } from '@/ui/LabButton'
+import { Objectives } from '@/ui/Objectives'
+import { getSources } from '@/content/sources'
+
+# Why Ordinary Satellite Internet Felt Slow
+
+Module 1 gave you **latency** and **RTT**. This module applies them to the classic satellite Internet design: **geostationary (GEO)** satellites. For decades, “satellite Internet” usually meant GEO. It works. It also feels slow for real-time apps — and that is mostly physics, not bad Wi‑Fi.
+
+<Objectives
+  items={[
+    'State what GEO is and why a GEO satellite appears fixed in the sky',
+    'Estimate pure light-time delay for a GEO hop',
+    'Explain why high RTT hurts calls, games, and chatty protocols',
+    'Name the coverage advantage GEO still has',
+  ]}
+/>
+
+## Geostationary orbit in one picture
+
+From the <InlineSource id="esaOrbits">ESA “Types of orbits”</InlineSource> page:
+
+- GEO satellites fly above the **equator**.  
+- They orbit in the same direction as Earth rotates, with a period of one **sidereal day** (~23 h 56 m).  
+- Altitude is about **35,786 km**.  
+- Orbital speed is on the order of **~3 km/s** (much slower than LEO).  
+- From the ground, the satellite appears **fixed** in the sky — so a dish can stay pointed without tracking a racing target.
+
+That “fixed in the sky” property is GEO’s superpower for broadcast TV and for simple terminals: aim once, stay locked.
+
+## Coverage geometry: few satellites, huge footprints
+
+Because GEO is so high, each satellite can see a **vast** region of Earth. ESA notes that a handful of GEO satellites can cover most of the populated world. That is the opposite of LEO, where each satellite’s service region is smaller and temporary for any given user.
+
+So GEO broadband often looks operationally simple: a few expensive satellites, large coverage, stationary antennas.
+
+## The bill comes due as delay
+
+Radio waves travel at (approximately) the speed of light. Distance becomes time.
+
+### Light-time sketch (order of magnitude)
+
+At GEO altitude $h \approx 35{,}786$ km, a signal straight up to a satellite overhead and back down to Earth travels roughly $2h$ for a single “up and down” hop:
+
+$$
+t_{\text{up+down}} \approx \frac{2 \times 35{,}786\ \text{km}}{300{,}000\ \text{km/s}} \approx 0.24\ \text{s} = 240\ \text{ms}
+$$
+
+That ~**240 ms** figure is the classic pure-propagation estimate for a nadir GEO hop (see technical notes such as <InlineSource id="satsigLatency" />). Real user experience is often **worse**:
+
+- the satellite is rarely perfectly overhead,  
+- the path may be user → satellite → **gateway** → Internet (and back),  
+- coding, modulation, and queueing add delay,  
+- TCP and application protocols may need multiple RTTs.
+
+Industry and educational comparisons commonly place **GEO broadband RTT in the ~500–700+ ms** experience band for interactive traffic. Starlink’s technology messaging contrasts LEO service with traditional satellite Internet on latency grounds (<InlineSource id="starlinkTech" />).
+
+<Callout title="Connect to Module 1" variant="key">
+If a video call needs frequent back-and-forth, a half-second RTT means every “your turn / my turn” moment is padded by physics. Bandwidth can still be high (you can download large files), but **conversation and competitive gaming feel the RTT**.
+</Callout>
+
+## Why “more bandwidth” does not fix GEO latency
+
+Buying a thicker hose (bandwidth) does not shorten the hose (distance). Latency is dominated by **path length** and processing. GEO’s path length is locked by orbital mechanics: to stay fixed over a point on the equator with a 24-hour-class period, you must be near that altitude.
+
+## GEO still matters
+
+Be fair to GEO:
+
+- Excellent for **broadcast** and for applications that tolerate delay.  
+- Mature industry and wide coverage with few vehicles.  
+- Simple antenna pointing for fixed installations.
+
+LEO is not “GEO but better at everything.” LEO wins **latency** and can enable different terminal designs — at the cost of a far more complex space segment (Modules 3–7).
+
+## Bridge to LEO
+
+If delay is mostly distance, the engineering temptation is obvious: **fly lower**. Module 3 shows what that buys you — and the new problem it creates: satellites that race across the sky in minutes, not hours.
+
+<LabButton
+  label="Open lab: sparse LEO (coverage gaps preview)"
+  params={{ planes: 4, satsPerPlane: 6, altitudeKm: 550 }}
+/>
+
+<Advanced title="Optional: double-hop mental model">
+Many classic GEO Internet architectures are “bent-pipe”: the satellite relays user traffic to a ground gateway. A full interactive exchange can involve multiple legs (user↔sat↔gateway↔Internet). Light-time adds on each radio leg; terrestrial legs add fiber delay. That is why observed GEO RTTs often exceed the pure 240 ms up-down estimate.
+</Advanced>
+
+<FurtherReading
+  sources={getSources(['esaOrbits', 'starlinkTech', 'satsigLatency', 'mdnLatency', 'hpbnLatency'])}
+/>

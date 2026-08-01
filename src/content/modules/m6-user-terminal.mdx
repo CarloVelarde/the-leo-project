@@ -1,0 +1,98 @@
+import { Advanced } from '@/ui/Advanced'
+import { Callout } from '@/ui/Callout'
+import { FurtherReading } from '@/ui/FurtherReading'
+import { InlineSource } from '@/ui/InlineSource'
+import { LabButton } from '@/ui/LabButton'
+import { Objectives } from '@/ui/Objectives'
+import { getSources } from '@/content/sources'
+
+# Your Terminal Talking to a Fast-Moving Satellite
+
+Module 5 arranged the sky. This module is about the **last hop to you**: how a flat user terminal finds a satellite, holds a link while the satellite races overhead, and **hands over** to the next one without dropping the Internet on the floor.
+
+<Objectives
+  items={[
+    'Explain phased-array electronic beam steering conceptually',
+    'Describe establish / maintain / hand over for a user link',
+    'Connect elevation and footprints to outages',
+    'Map lab “serving sat” and handoff counters to real experience',
+  ]}
+/>
+
+## The user terminal is not a GEO dish
+
+Classic GEO terminals often use a mechanically pointed parabolic dish aimed at a fixed sky location. LEO satellites **move**. Continuously slewing a heavy dish for consumer broadband is awkward, slow, and failure-prone.
+
+Starlink’s public technology materials highlight **phased-array antennas** on both user terminals and satellites — antennas that can steer beams **electronically** (<InlineSource id="starlinkTech" />).
+
+## Phased arrays in plain language
+
+A phased array is many small antenna elements acting together. By adjusting the **phase** (timing) of the signal at each element, the array can reinforce energy in one direction and cancel it in others — steering a beam without physically rotating a big dish.
+
+Intuition:
+
+- **Mechanical dish:** turn the hardware to point.  
+- **Phased array:** retune the electronics to point.
+
+That enables a low-profile “pizza box” terminal (often nicknamed “Dishy” in public discussion) to track LEO satellites across the sky.
+
+<Callout title="What we are not claiming" variant="warning">
+Exact element counts, beam schedules, and proprietary tracking algorithms are not public in full. We teach the *engineering problem* and the public high-level solution class.
+</Callout>
+
+## Establishing a link (mental model)
+
+At a high level, a session looks like:
+
+1. **Discover** candidates: which satellites are above a usable **elevation** angle?  
+2. **Select** a serving satellite (and possibly prepare a next one).  
+3. **Point beams** both ways (user terminal and satellite payloads are both sophisticated).  
+4. **Authenticate / join** the network (details vary; treat as “become a network peer”).  
+5. **Carry packets** while geometry remains good.  
+6. **Hand over** before the link dies.
+
+### Elevation matters
+
+Near the horizon, paths through the atmosphere are longer, blockage is more likely (trees, buildings), and antennas may perform worse. Networks define a **minimum elevation** — below it, a satellite is treated as unusable. Our lab uses a geometric elevation mask as a teaching model.
+
+## Handovers (handoffs)
+
+Because LEO satellites set in minutes, the terminal must switch **serving satellites** regularly. A good system aims for **make-before-break** behavior: prepare the next link before dropping the current one so applications see continuity.
+
+In the lab:
+
+- **Online / offline** ≈ “is anyone above min elevation?”  
+- **Handoff counter** ≈ serving-sat identity changes.  
+- **Elevation / range** on the insight panel show the geometric quality of the current link.
+
+Real networks also juggle load, interference, and gateway/ISL path quality — geometry is necessary but not sufficient.
+
+<LabButton
+  label="Watch handoffs (default mid-latitude user)"
+  params={{ planes: 12, satsPerPlane: 20, altitudeKm: 550, userLatDeg: 40, timeScale: 120 }}
+/>
+
+<LabButton
+  label="Force gaps (sparse) to feel outages"
+  params={{ planes: 3, satsPerPlane: 5, altitudeKm: 550, timeScale: 90 }}
+/>
+
+## Why this feels like cellular — and why it isn’t
+
+Mobile phones hand over between towers as you drive. LEO handovers are similar *in spirit* (change attachment point while moving relative geometry), but:
+
+- the “towers” move at ~7.5+ km/s,  
+- the cell footprints sweep across Earth,  
+- and the backhaul may go through space lasers or distant gateways (Module 7).
+
+## What to carry forward
+
+User experience = **constellation geometry** + **antenna agility** + **handover policy**. Module 7 zooms out: once packets leave your terminal, where do they go?
+
+<Advanced title="Optional: Doppler and tracking">
+Relative motion creates Doppler shift in radio frequencies and requires continuous tracking updates. Phased arrays and modem design absorb this; it is one reason LEO user links are software-defined and compute-heavy compared with static GEO pointing.
+</Advanced>
+
+<FurtherReading
+  sources={getSources(['starlinkTech', 'esaOrbits', 'mdnLatency'])}
+/>

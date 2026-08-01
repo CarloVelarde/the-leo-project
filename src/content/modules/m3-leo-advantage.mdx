@@ -1,0 +1,96 @@
+import { Advanced } from '@/ui/Advanced'
+import { Callout } from '@/ui/Callout'
+import { FurtherReading } from '@/ui/FurtherReading'
+import { InlineSource } from '@/ui/InlineSource'
+import { LabButton } from '@/ui/LabButton'
+import { Objectives } from '@/ui/Objectives'
+import { getSources } from '@/content/sources'
+
+# Low Earth Orbit: Why Closer Changes Everything
+
+GEO sits ~36,000 km up. **Low Earth orbit (LEO)** sits hundreds of kilometers up. That single change reshapes latency, terminal design, and network architecture.
+
+<Objectives
+  items={[
+    'Define LEO with standard altitude bounds and typical speeds/periods',
+    'Relate lower altitude to lower propagation delay',
+    'Explain why one LEO satellite cannot provide continuous coverage',
+    'State why a constellation becomes mandatory',
+  ]}
+/>
+
+## What “LEO” means (authoritative framing)
+
+According to the <InlineSource id="esaOrbits">ESA Types of orbits</InlineSource> page:
+
+- LEO is **relatively close to Earth**, conventionally **below ~2,000 km** altitude (an upper bound related to the harsh environment of the Van Allen belts above).  
+- Satellites generally stay **above ~180 km** because the atmosphere becomes too dense lower down.  
+- Typical LEO motion: about **7.8 km/s** relative to Earth, completing an orbit in roughly **~90 minutes** (the ISS is a familiar example, circling Earth many times per day).
+
+You will also see **MEO** (medium Earth orbit) between LEO and GEO — navigation systems like Galileo live there. For Starlink-style broadband, the action is LEO.
+
+## Latency: the obvious win
+
+Propagation delay scales with path length. If a satellite is ~50–100× closer than GEO, the pure light-time to the spacecraft drops from hundreds of milliseconds toward **a few milliseconds** on the space hop (exact numbers depend on elevation and routing through gateways or inter-satellite links).
+
+That is the core of LEO broadband’s pitch: interactive applications become plausible again. Official Starlink technology materials emphasize lower latency relative to traditional satellite Internet and the LEO architecture that enables it (<InlineSource id="starlinkTech" />).
+
+<Callout title="Still not zero latency" variant="note">
+Even LEO must pay for: radio processing, queueing, path through gateways or space lasers, and the terrestrial Internet beyond. LEO removes the GEO *distance tax*; it does not repeal networking.
+</Callout>
+
+## Link budget intuition (no RF exam required)
+
+Closer also helps the **link**: received signal strength falls off with distance. Lower altitude can mean stronger signals for a given power, or more margin for weather and antenna design. That helps enable **flat user terminals** with electronic steering (Module 6) rather than huge GEO dishes — though the engineering is still sophisticated.
+
+## The continuous-coverage problem
+
+Here is the trade that defines everything after this module.
+
+A GEO sat can linger over a continent for years (from the user’s perspective: forever). A LEO sat:
+
+- moves at ~7–8 km/s,  
+- crosses a user’s sky in minutes,  
+- and then is gone over the horizon.
+
+ESA states the consequence plainly: communications satellites in LEO **often work as part of a constellation** — a coordinated group providing continuous coverage like a net around Earth (<InlineSource id="esaOrbits" />).
+
+One satellite → temporary coverage.  
+Many coordinated satellites → continuous service *if* design and handovers work.
+
+## Why “just one LEO sat over my house” fails
+
+Even if a sat passes over you every 90 minutes, you are offline most of the orbit. Broadband Internet requires **always-on** (or nearly always-on) connectivity. That forces:
+
+1. **Many satellites** in view of Earth at once,  
+2. arranged in **planes and shells** (Module 5),  
+3. with **handovers** as satellites rise and set (Module 6),  
+4. and a plan for traffic after it leaves your terminal (Module 7).
+
+## Lab moment
+
+Raise and lower altitude in the lab. Watch how **orbital period** and **one-way light time** estimates move. Then drop plane/sat counts until the user goes offline — that is the coverage problem in miniature.
+
+<LabButton
+  label="Open lab: altitude trade (~1100 km)"
+  params={{ planes: 12, satsPerPlane: 20, altitudeKm: 1100 }}
+/>
+
+<LabButton
+  label="Open lab: denser shell at ~550 km"
+  params={{ planes: 24, satsPerPlane: 40, altitudeKm: 550 }}
+/>
+
+<Advanced title="Optional: period formula (circular orbit)">
+For a circular orbit with semi-major axis $a = R_E + h$ and Earth gravitational parameter $\mu$:
+
+$$
+T = 2\pi \sqrt{\frac{a^3}{\mu}}
+$$
+
+Higher $h$ → larger $a$ → longer period and (usually) larger geometric footprint, but more light-time. The lab insight panel uses this model under documented assumptions.
+</Advanced>
+
+<FurtherReading
+  sources={getSources(['esaOrbits', 'starlinkTech', 'nasaOrbits', 'hpbnLatency'])}
+/>

@@ -1,0 +1,74 @@
+import { Advanced } from '@/ui/Advanced'
+import { Callout } from '@/ui/Callout'
+import { FurtherReading } from '@/ui/FurtherReading'
+import { InlineSource } from '@/ui/InlineSource'
+import { Objectives } from '@/ui/Objectives'
+import { getSources } from '@/content/sources'
+
+# Getting Satellites into Orbit & Keeping Them There
+
+A constellation is not a poster of dots. It is a **fleet** that must be launched, raised, parked in precise slots, kept there against disturbances, replaced when needed, and removed safely at end of life. This module stays light on physics and heavy on **engineering consequences**.
+
+<Objectives
+  items={[
+    'Outline launch → raise → service → deorbit',
+    'Explain why station-keeping matters in dense LEO',
+    'Describe the role of ion propulsion at a conceptual level',
+    'Connect frequent launches to mega-constellation economics and coverage',
+  ]}
+/>
+
+## Lifecycle at a glance
+
+Starlink’s public space-safety documentation describes a practical lifecycle (<InlineSource id="starlinkAltitudes" />):
+
+1. **Insertion** — the launch vehicle places a stack of satellites into an initial orbit.  
+2. **Orbit raising** — satellites climb toward operational altitude (rate depends on atmosphere and thruster plan).  
+3. **Waypoints** — temporary orbits used while transferring, partly to deconflict with other traffic (including crewed stations).  
+4. **On-station service** — years of providing user connectivity while maintaining slot accuracy.  
+5. **Deorbit** — when health or policy triggers end of life, satellites leave the shell and re-enter (Starlink documents an approach targeting demise over open ocean for re-entry).
+
+Official technology materials also highlight **ion thrusters** (electric propulsion) and autonomous systems for orbit control and collision avoidance maneuvers (<InlineSource id="starlinkTech" />).
+
+## Why LEO is “busy work” for thrusters
+
+LEO is close to the atmosphere. Drag slowly removes energy from low orbits. Gravity field imperfections and other perturbations nudge satellites off their ideal tracks. In a **sparse** fleet, small errors might be tolerable. In a **dense** mega-constellation, spacing and timing are part of the product: you need predictable geometry for coverage and for safety.
+
+**Station-keeping** means continuous or frequent small corrections so each satellite stays near its assigned trajectory and phase.
+
+## Ion thrusters (conceptual)
+
+Chemical thrusters give strong bursts but carry limited high-thrust propellant mass for long missions. **Ion (electric) thrusters** accelerate ions electrically: low thrust, high efficiency, excellent for long-duration station-keeping and slow orbit raising when you can wait hours or days. Starlink’s public materials describe krypton-fueled ion thrusters as part of the satellite design (<InlineSource id="starlinkTech" />).
+
+You do not need plasma physics here. Remember: **efficient continuous control** is what lets thousands of small sats hold a designed pattern.
+
+## Launch cadence is part of the architecture
+
+A GEO operator might launch a few large satellites per decade. A LEO mega-constellation must:
+
+- populate many planes quickly,  
+- replace failures,  
+- refresh technology generations,  
+- and sometimes **lower or re-shell** as plans evolve (Starlink’s space-safety notes describe shell lowering campaigns toward lower altitudes for safety reasons through 2026 planning: <InlineSource id="starlinkAltitudes" />).
+
+Dense packing on reusable launchers is not a side story — it is how the constellation stays full enough that Module 5’s geometry actually works for users.
+
+## Safety and deorbit as first-class requirements
+
+Public Starlink space-safety writing argues that **lower operational altitudes** can drastically shorten passive decay times if a satellite cannot propulsively deorbit — reducing long-lived debris risk (<InlineSource id="starlinkAltitudes" />). Independent trackers such as Jonathan McDowell’s tables let outsiders watch population and shell structure change over time (<InlineSource id="mcdowellStarlink" />).
+
+<Callout title="Pedagogy note" variant="note">
+We teach *public* operational concepts. Exact thruster duty cycles, autonomy software, and collision-avoidance logic are proprietary. The learning goal is the *problem class*: control a dense LEO fleet safely for years.
+</Callout>
+
+## What to carry forward
+
+Without reliable launch + raise + station-keep + deorbit, “thousands of satellites” is a slide deck, not a network. Module 5 assumes those operations exist and asks: **how do you arrange the living fleet for continuous coverage?**
+
+<Advanced title="Optional: insertion vs final shell">
+Rockets often deliver satellites to a lower or intermediate orbit. The spacecraft then uses its own propulsion to reach the final shell. That splits responsibility: launcher gets you to space; satellite propulsion finishes the geometry. Waypoints add intermediate “parking lots” for traffic management during the climb.
+</Advanced>
+
+<FurtherReading
+  sources={getSources(['starlinkTech', 'starlinkAltitudes', 'mcdowellStarlink', 'esaOrbits'])}
+/>

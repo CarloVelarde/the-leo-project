@@ -1,0 +1,130 @@
+import { Advanced } from '@/ui/Advanced'
+import { Callout } from '@/ui/Callout'
+import { FurtherReading } from '@/ui/FurtherReading'
+import { InlineSource } from '@/ui/InlineSource'
+import { LabButton } from '@/ui/LabButton'
+import { Objectives } from '@/ui/Objectives'
+import { getSources } from '@/content/sources'
+
+# What a Constellation Actually Is
+
+A **constellation** is a coordinated set of satellites designed to provide a service together — for LEO broadband, that service is continuous connectivity. This module turns “lots of satellites” into **structure**: shells, planes, inclination, and phasing.
+
+<Objectives
+  items={[
+    'Define shell, orbital plane, inclination, and phasing accessibly',
+    'Explain how planes × sats-per-plane drive coverage continuity',
+    'Describe multi-shell design using public Starlink altitude information',
+    'Use independent catalogs as a reality check',
+  ]}
+/>
+
+## From one orbit to a net
+
+Recall ESA’s point: LEO communications satellites typically work as a **constellation** forming a coverage net (<InlineSource id="esaOrbits" />). Designers choose:
+
+- **how high** (altitude / shell),  
+- **how the orbit is tilted** (inclination),  
+- **how many distinct orbit rings** (planes),  
+- **how many satellites share each ring**,  
+- and **how they are spaced in time** (phasing).
+
+Change those knobs and you change gaps, handovers, polar coverage, and collision geometry.
+
+## Key terms (learn these cold)
+
+### Orbital plane
+Imagine a flat disk slicing through Earth. A satellite’s path lies in that disk (approximately). Multiple satellites can share one plane, chasing each other around the same ring.
+
+### Inclination
+The tilt of the plane relative to the equator.  
+- ~**53°** class inclinations (common in Starlink broadband shells) favor mid-latitudes.  
+- Higher inclinations / near-polar planes help high latitudes.  
+Public Starlink shell tables list inclinations such as 43°, 53°, 70°, and ~97° sun-synchronous-class planes depending on shell (<InlineSource id="starlinkAltitudes" />).
+
+### Shell
+A **shell** is a population of satellites at a common design altitude (and usually a design inclination pattern) intended as a long-term home while providing service. Starlink’s space-safety documentation defines shells as passively deconflicted orbit sets at common altitude and inclination (<InlineSource id="starlinkAltitudes" />).
+
+Multiple shells = layers of the net (different altitudes / missions).
+
+### Phasing
+Where each satellite sits *along* its track relative to neighbors. Even spacing reduces coverage holes and clustering.
+
+### RAAN (advanced vocabulary)
+**Right ascension of the ascending node** is the orientation of the plane around Earth — essentially how the plane is rotated when viewed from above. Spreading planes in RAAN is how you wrap coverage around longitudes.
+
+## Walker-style intuition (not a claim about proprietary layouts)
+
+Satellite engineering often discusses **Walker-type** constellations: a structured pattern of planes and phases that tiles coverage evenly. You do not need the full notation. Remember the idea:
+
+> Pick a symmetric pattern so that as Earth rotates and satellites move, users rarely see “empty sky.”
+
+Our lab uses a simplified even-plane / even-phase model for teaching — **not** a reverse-engineered Starlink configuration.
+
+## Starlink as a multi-shell case study (public data)
+
+As of Starlink’s public constellation-altitude documentation (2026 planning horizon), broadband and other variants occupy **distinct altitude bands**, for example:
+
+- V1/V2 broadband shells planned in roughly the **450–490 km** range (with several inclinations),  
+- lower bands (~**330–370 km**) associated with direct-to-cell and future V3 broadband planning,  
+
+with ongoing **shell lowering** from earlier higher operational altitudes for safety reasons (<InlineSource id="starlinkAltitudes" />).
+
+Exact live counts and which objects are truly operational change continuously. Independent catalogs — notably <InlineSource id="mcdowellStarlink">Jonathan McDowell’s Starlink statistics</InlineSource> — are the standard public reality check used by journalists and researchers.
+
+Regulatory filings (FCC authorizations and modifications) are the legal design envelope; operational reality evolves inside (and sometimes by amending) that envelope (<InlineSource id="fccStarlink" />).
+
+<Callout title="How we use numbers on this site" variant="warning">
+Shell altitudes, plane counts, and satellite totals are **time-sensitive**. We teach structure and public references. For “what is flying this week,” prefer McDowell’s tables and primary Starlink space-safety docs over screenshots in courses.
+</Callout>
+
+## Coverage is geometry + density
+
+In the lab:
+
+- Too few planes or sats → **gaps** (offline stretches).  
+- Higher density → fewer gaps, **more handovers**.  
+- Inclination and user latitude interact (high-latitude users care about polar-ish planes).
+
+<LabButton
+  label="Sparse constellation (expect gaps)"
+  params={{ planes: 4, satsPerPlane: 6, altitudeKm: 550, inclinationDeg: 53 }}
+/>
+
+<LabButton
+  label="Denser shell"
+  params={{ planes: 24, satsPerPlane: 40, altitudeKm: 550, inclinationDeg: 53 }}
+/>
+
+<LabButton
+  label="High-latitude user"
+  params={{ planes: 12, satsPerPlane: 20, altitudeKm: 550, inclinationDeg: 70, userLatDeg: 70 }}
+/>
+
+## Collision awareness (systems view)
+
+Dense shells require disciplined spacing, autonomous maneuvering, and altitude choices that deconflict with other operators and crewed stations. Starlink’s public materials discuss altitude selection partly as a **safety deconfliction** lever (<InlineSource id="starlinkAltitudes" />). Module 4’s station-keeping is what keeps the designed pattern real.
+
+## What to carry forward
+
+You can now read a constellation as:
+
+**shells × planes × sats/plane × inclination × phasing → coverage map over time**
+
+Module 6 asks how a **single user terminal** attaches to that moving geometry.
+
+<Advanced title="Optional: why multiple shells?">
+Different altitudes trade latency, footprint size, debris decay time, and capacity density. Different inclinations target different latitude bands. Separating missions (broadband vs direct-to-cell) into bands can also reduce operational coupling. Multi-shell design is product architecture, not just “more dots.”
+</Advanced>
+
+<FurtherReading
+  sources={getSources([
+    'starlinkAltitudes',
+    'mcdowellStarlink',
+    'mcdowellStarlinkIndex',
+    'esaOrbits',
+    'wikiWalker',
+    'fccStarlink',
+    'starlinkTech',
+  ])}
+/>

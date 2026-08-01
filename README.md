@@ -39,13 +39,20 @@ src/
   lib/           # Progress, URL lab params helpers
 ```
 
-## Learning path (v1)
+## Learning path (core)
 
-1. Why LEO? Starlink in context  
-2. Orbits without fear  
-3. Designing a mega-constellation  
-4. Beams & handoffs  
-5. What makes it special  
+1. How the Internet Actually Moves Data  
+2. Why Ordinary Satellite Internet Felt Slow (GEO)  
+3. Low Earth Orbit: Why Closer Changes Everything  
+4. Getting Satellites into Orbit & Keeping Them There  
+5. What a Constellation Actually Is  
+6. Your Terminal Talking to a Fast-Moving Satellite  
+7. The Bigger Network: Lasers, Gateways, and Routing  
+8. Putting It All Together  
+
+Optional tracks (stubs): orbit math, space safety, direct-to-cell.
+
+Sources are curated in `src/content/sources.ts` and linked from each module’s “Go deeper” section.  
 
 ## License
 

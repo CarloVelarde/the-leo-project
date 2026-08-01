@@ -46,6 +46,18 @@ const components = {
   strong: (props: ComponentProps<'strong'>) => (
     <strong className="font-semibold text-slate-100" {...props} />
   ),
+  table: (props: ComponentProps<'table'>) => (
+    <div className="my-6 overflow-x-auto">
+      <table className="w-full border-collapse text-left text-sm text-slate-300" {...props} />
+    </div>
+  ),
+  th: (props: ComponentProps<'th'>) => (
+    <th className="border border-space-700 bg-space-900 px-3 py-2 font-semibold text-slate-100" {...props} />
+  ),
+  td: (props: ComponentProps<'td'>) => (
+    <td className="border border-space-700 px-3 py-2 align-top" {...props} />
+  ),
+  hr: (props: ComponentProps<'hr'>) => <hr className="my-10 border-space-800" {...props} />,
 }
 
 export function MdxContent({ children }: { children: ReactNode }) {
