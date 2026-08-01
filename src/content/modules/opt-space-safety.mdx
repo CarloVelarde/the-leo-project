@@ -1,0 +1,93 @@
+import { Callout } from '@/ui/Callout'
+import { FurtherReading } from '@/ui/FurtherReading'
+import { InlineSource } from '@/ui/InlineSource'
+import { Objectives } from '@/ui/Objectives'
+import { LifecycleDiagram } from '@/ui/interactives/LifecycleDiagram'
+import { Quiz } from '@/ui/interactives/Quiz'
+import { getSources } from '@/content/sources'
+
+# Optional: Debris, astronomy, and space safety
+
+Mega-constellations change the orbital environment. This track is a **balanced systems overview** — not a manifesto. We stick to public operational concepts and independent tracking, and we separate **engineering facts** from **policy debates**.
+
+<Objectives
+  items={[
+    'Explain why density and altitude choices affect debris risk',
+    'Describe deorbit / demise as part of constellation design',
+    'Note astronomy and sky-brightness concerns at a high level',
+    'Use independent catalogs when discussing “how many sats”',
+  ]}
+/>
+
+## Why LEO density matters
+
+Every satellite is a potential conjunction partner for every other object in overlapping altitudes. Risk scales with **number of objects**, **cross-sections**, and **time spent** in crowded bands. That is why operators care about:
+
+- shell altitudes that **deconflict** with other systems and crewed stations,  
+- accurate tracking and ephemeris sharing,  
+- autonomous avoidance maneuvers,  
+- and **end-of-life disposal**.
+
+Starlink’s public space-safety materials emphasize altitude selection as a deconfliction lever and document planned shell altitudes and lifecycle stages (<InlineSource id="starlinkAltitudes" />).
+
+<LifecycleDiagram />
+
+## Lower shells and passive decay
+
+Public Starlink documentation argues that operating lower can sharply reduce **ballistic decay time** if a vehicle cannot propulsively deorbit — months instead of years in some comparisons during shell-lowering campaigns (<InlineSource id="starlinkAltitudes" />). That is a reliability-and-safety design choice with trade-offs (more drag → more station-keeping work).
+
+## Deorbit is part of the product
+
+A responsible mega-constellation plan includes:
+
+1. Health monitoring,  
+2. controlled deorbit when possible,  
+3. targeted re-entry strategies (Starlink publishes materials on demisability / ocean targeting in public PDFs linked from safety docs),  
+4. transparency about population via tracking.
+
+Independent catalogs such as <InlineSource id="mcdowellStarlink">Jonathan McDowell’s Starlink tables</InlineSource> are how researchers and journalists verify population and shell structure over time.
+
+## Astronomy and the night sky
+
+Bright satellite trains can interfere with optical and radio astronomy. Mitigations discussed publicly include darker coatings, sunshade designs, brightness targets, and coordination with observatories. Exact effectiveness is an active measurement area — treat headlines carefully and prefer primary papers when you go deep.
+
+<Callout title="How we teach this" variant="note">
+Core modules focus on how connectivity works. This optional track acknowledges externalities. Engineering literacy means holding **capability and cost** in the same mental model.
+</Callout>
+
+## Questions worth asking (as a technical citizen)
+
+- What altitude band is an operator using, and who else is there?  
+- What is the mean satellite lifetime and disposal success rate?  
+- How is conjunction screening performed?  
+- What independent data exists (e.g. McDowell) vs marketing claims?
+
+<Quiz
+  title="Space safety intuition"
+  questions={[
+    {
+      id: 's1',
+      prompt: 'Why might lower operational altitudes be argued as safer if propulsion fails?',
+      options: [
+        { id: 'a', label: 'Atmospheric drag can remove the object faster (shorter passive decay).', correct: true },
+        { id: 'b', label: 'Lower sats are outside Earth’s gravity.' },
+        { id: 'c', label: 'Light travels faster below 500 km.' },
+      ],
+      explanation: 'Drag rises as altitude falls; uncontrolled objects decay sooner — a common safety argument.',
+    },
+    {
+      id: 's2',
+      prompt: 'A good habit when citing “how many Starlinks exist” is…',
+      options: [
+        { id: 'a', label: 'Use a dated independent catalog and note the date.', correct: true },
+        { id: 'b', label: 'Pick the largest number from any ad.' },
+        { id: 'c', label: 'Assume the count never changes after the first launch.' },
+      ],
+      explanation: 'The constellation is dynamic; timestamps matter.',
+    },
+  ]}
+/>
+
+<FurtherReading
+  sources={getSources(['starlinkAltitudes', 'mcdowellStarlink', 'mcdowellStarlinkIndex', 'starlinkTech'])}
+/>

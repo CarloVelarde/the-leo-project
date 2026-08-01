@@ -189,7 +189,7 @@ export const MODULES: ModuleMeta[] = [
   },
 ]
 
-/** Optional later tracks (stubs for navigation; content expands over time). */
+/** Optional side tracks — full lessons, not required for the core story. */
 export const OPTIONAL_MODULES: ModuleMeta[] = [
   {
     id: 'opt-math',
@@ -199,11 +199,15 @@ export const OPTIONAL_MODULES: ModuleMeta[] = [
     subtitle: 'Kepler period, light-time, and footprint geometry with the lab formulas.',
     goal: 'Give motivated learners the equations behind the insight panel.',
     minutes: 25,
-    status: 'stub',
+    status: 'ready',
     track: 'optional',
-    objectives: [],
-    keyTerms: [],
-    sourceIds: ['esaOrbits', 'nasaOrbits'],
+    objectives: [
+      'Compute circular-orbit period from altitude',
+      'Compute pure light-time from distance',
+      'Relate footprint geometry to altitude and elevation',
+    ],
+    keyTerms: ['orbital-period', 'propagation-delay', 'footprint'],
+    sourceIds: ['esaOrbits', 'nasaOrbits', 'hpbnLatency', 'satsigLatency'],
   },
   {
     id: 'opt-debris',
@@ -213,11 +217,15 @@ export const OPTIONAL_MODULES: ModuleMeta[] = [
     subtitle: 'Balanced intro to congestion, deorbit policy, and observational impacts.',
     goal: 'Frame sustainability trade-offs without hype.',
     minutes: 20,
-    status: 'stub',
+    status: 'ready',
     track: 'optional',
-    objectives: [],
-    keyTerms: [],
-    sourceIds: ['starlinkAltitudes', 'mcdowellStarlink'],
+    objectives: [
+      'Explain density and altitude effects on debris risk',
+      'Describe deorbit as part of constellation design',
+      'Use independent catalogs for population claims',
+    ],
+    keyTerms: ['deorbit', 'station-keeping', 'shell'],
+    sourceIds: ['starlinkAltitudes', 'mcdowellStarlink', 'mcdowellStarlinkIndex', 'starlinkTech'],
   },
   {
     id: 'opt-dtc',
@@ -226,12 +234,16 @@ export const OPTIONAL_MODULES: ModuleMeta[] = [
     title: 'Optional: Direct-to-cell and future evolution',
     subtitle: 'Phone connectivity from space and how shells continue to change.',
     goal: 'Connect lower shells and DTC variants to the core constellation story.',
-    minutes: 15,
-    status: 'stub',
+    minutes: 18,
+    status: 'ready',
     track: 'optional',
-    objectives: [],
-    keyTerms: [],
-    sourceIds: ['starlinkAltitudes', 'starlinkTech'],
+    objectives: [
+      'Contrast dish broadband vs direct-to-cell constraints',
+      'Relate DTC to lower shell planning',
+      'Watch multi-shell evolution with calibrated sources',
+    ],
+    keyTerms: ['shell', 'user-terminal', 'phased-array'],
+    sourceIds: ['starlinkAltitudes', 'starlinkTech', 'mcdowellStarlink', 'esaOrbits'],
   },
 ]
 

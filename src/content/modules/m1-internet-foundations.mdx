@@ -3,6 +3,9 @@ import { Callout } from '@/ui/Callout'
 import { FurtherReading } from '@/ui/FurtherReading'
 import { InlineSource } from '@/ui/InlineSource'
 import { Objectives } from '@/ui/Objectives'
+import { PacketPathViz } from '@/ui/interactives/PacketPathViz'
+import { Quiz } from '@/ui/interactives/Quiz'
+import { VideoEmbed } from '@/ui/interactives/VideoEmbed'
 import { getSources } from '@/content/sources'
 
 export const meta = {
@@ -44,6 +47,14 @@ Why packets?
 This design is called **packet switching**, as opposed to older **circuit switching** (reserve a dedicated path for the whole conversation — like a classic phone call). Crash Course Computer Science #28 is a strong visual intro: <InlineSource id="crashCourseNetworks" />.
 
 Khan Academy’s short video with Vint Cerf is excellent reinforcement: <InlineSource id="khanPackets" />.
+
+<PacketPathViz />
+
+<VideoEmbed
+  youtubeId="aD_yi5VjF78"
+  title="Packets, routers, and reliability (Khan Academy)"
+  caption="Vint Cerf and team on how packets and routers keep the Internet reliable. Optional but highly recommended."
+/>
 
 ## Routers and hops
 
@@ -113,6 +124,44 @@ Memorize this chain:
 **Application → packets → routers/hops → RTT and bandwidth limits → user experience**
 
 In Module 2 we put a satellite at ~36,000 km into that chain and watch latency explode. In Module 3 we move the satellite much closer and watch a different problem appear: continuous coverage.
+
+<Quiz
+  title="Check your intuition — Internet foundations"
+  questions={[
+    {
+      id: 'q1',
+      prompt: 'A link has huge bandwidth but 600 ms RTT. Which statement is most accurate?',
+      options: [
+        { id: 'a', label: 'Downloads will always feel instant because bandwidth is high.' },
+        { id: 'b', label: 'Interactive apps can still feel sluggish because they wait on round trips.', correct: true },
+        { id: 'c', label: 'Latency and bandwidth are the same quantity measured two ways.' },
+      ],
+      explanation:
+        'Bandwidth is capacity; latency is delay. Video calls and games care a lot about RTT even when the pipe is thick.',
+    },
+    {
+      id: 'q2',
+      prompt: 'Why does the Internet use packets instead of one giant message?',
+      options: [
+        { id: 'a', label: 'Packets let many users share links and limit the damage of a single loss.', correct: true },
+        { id: 'b', label: 'Packets are required by the speed of light.' },
+        { id: 'c', label: 'Routers can only store one packet for the lifetime of the Internet.' },
+      ],
+      explanation:
+        'Packet switching is about sharing, resilience, and flexible forwarding — not about light speed itself.',
+    },
+    {
+      id: 'q3',
+      prompt: 'What does a router primarily do?',
+      options: [
+        { id: 'a', label: 'Compress images for the web.' },
+        { id: 'b', label: 'Forward packets toward their destinations between networks.', correct: true },
+        { id: 'c', label: 'Assign every user a unique GEO satellite.' },
+      ],
+      explanation: 'Routers are the Internet’s traffic directors hop by hop.',
+    },
+  ]}
+/>
 
 <Advanced title="Optional: speed of light as a hard floor">
 Propagation delay is bounded by the speed of light. In vacuum, $c \approx 3 \times 10^8$ m/s. One-way time over distance $d$ is $t = d/c$. Round-trip over the same path is roughly $2d/c$ (plus processing). Fiber is slower than vacuum (higher refractive index), which is why long-haul *propagation* comparisons between LEO radio/laser paths and terrestrial fiber get subtle — see Grigorik’s primer for nuance.

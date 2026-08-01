@@ -3,6 +3,8 @@ import { Callout } from '@/ui/Callout'
 import { FurtherReading } from '@/ui/FurtherReading'
 import { InlineSource } from '@/ui/InlineSource'
 import { Objectives } from '@/ui/Objectives'
+import { NetworkPathDiagram } from '@/ui/interactives/NetworkPathDiagram'
+import { Quiz } from '@/ui/interactives/Quiz'
 import { getSources } from '@/content/sources'
 
 # The Bigger Network: Lasers, Gateways, and Routing
@@ -29,6 +31,8 @@ Think in three layers of connectivity:
 | **Inter-satellite link (ISL)** | Satellite ↔ satellite | Space mesh / long-haul in orbit |
 
 Starlink’s technology materials describe **optical space lasers** for inter-satellite links (publicly discussed at rates on the order of **~100 Gbps** class in official marketing copy) and the overall LEO network architecture (<InlineSource id="starlinkTech" />).
+
+<NetworkPathDiagram />
 
 ## Gateways: where space meets fiber
 
@@ -85,6 +89,32 @@ No sat in view (coverage gap), gateway congestion, ISL outage, terrestrial issue
 ## What to carry forward
 
 Starlink-style broadband is not only “radio to a flying modem.” It is **access + space backhaul + terrestrial Internet**. Module 8 ties latency, handovers, and routing into one end-to-end story.
+
+<Quiz
+  title="Check your intuition — space network"
+  questions={[
+    {
+      id: 'n1',
+      prompt: 'A gateway’s main job is…',
+      options: [
+        { id: 'a', label: 'Connecting the satellite network to the terrestrial Internet.', correct: true },
+        { id: 'b', label: 'Steering the user terminal’s phased array mechanically.' },
+        { id: 'c', label: 'Keeping GEO satellites from falling into LEO.' },
+      ],
+      explanation: 'Gateways are the fiber on/off ramps for space access networks.',
+    },
+    {
+      id: 'n2',
+      prompt: 'Optical ISLs primarily help by…',
+      options: [
+        { id: 'a', label: 'Routing traffic satellite-to-satellite before descending to a gateway.', correct: true },
+        { id: 'b', label: 'Removing the need for any user terminal.' },
+        { id: 'c', label: 'Making orbital period equal to one year.' },
+      ],
+      explanation: 'The space mesh reduces dependence on a gateway under every footprint.',
+    },
+  ]}
+/>
 
 <Advanced title="Optional: why optical vs radio for ISLs">
 Optical links can support very high data rates with tight beams (less interference), but require precise pointing and clear line of sight between satellites. Radio crosslinks are a different engineering trade. Public Starlink materials emphasize optical ISLs for the inter-satellite mesh.

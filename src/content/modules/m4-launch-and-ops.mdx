@@ -3,6 +3,8 @@ import { Callout } from '@/ui/Callout'
 import { FurtherReading } from '@/ui/FurtherReading'
 import { InlineSource } from '@/ui/InlineSource'
 import { Objectives } from '@/ui/Objectives'
+import { LifecycleDiagram } from '@/ui/interactives/LifecycleDiagram'
+import { Quiz } from '@/ui/interactives/Quiz'
 import { getSources } from '@/content/sources'
 
 # Getting Satellites into Orbit & Keeping Them There
@@ -29,6 +31,8 @@ Starlink’s public space-safety documentation describes a practical lifecycle (
 5. **Deorbit** — when health or policy triggers end of life, satellites leave the shell and re-enter (Starlink documents an approach targeting demise over open ocean for re-entry).
 
 Official technology materials also highlight **ion thrusters** (electric propulsion) and autonomous systems for orbit control and collision avoidance maneuvers (<InlineSource id="starlinkTech" />).
+
+<LifecycleDiagram />
 
 ## Why LEO is “busy work” for thrusters
 
@@ -64,6 +68,32 @@ We teach *public* operational concepts. Exact thruster duty cycles, autonomy sof
 ## What to carry forward
 
 Without reliable launch + raise + station-keep + deorbit, “thousands of satellites” is a slide deck, not a network. Module 5 assumes those operations exist and asks: **how do you arrange the living fleet for continuous coverage?**
+
+<Quiz
+  title="Check your intuition — operations"
+  questions={[
+    {
+      id: 'o1',
+      prompt: 'Station-keeping is mainly about…',
+      options: [
+        { id: 'a', label: 'Keeping satellites near assigned orbits/slots despite drag and perturbations.', correct: true },
+        { id: 'b', label: 'Broadcasting TV channels to GEO dishes.' },
+        { id: 'c', label: 'Turning off thrusters forever after launch.' },
+      ],
+      explanation: 'Dense LEO needs continuous control so geometry and safety stay valid.',
+    },
+    {
+      id: 'o2',
+      prompt: 'Why are ion thrusters attractive for mega-constellation sats?',
+      options: [
+        { id: 'a', label: 'They deliver huge instantaneous thrust for launches from the ground.' },
+        { id: 'b', label: 'Efficient low thrust suits long-duration raise and station-keeping.', correct: true },
+        { id: 'c', label: 'They remove the need for any ground gateways.' },
+      ],
+      explanation: 'Electric propulsion trades low thrust for high efficiency over years.',
+    },
+  ]}
+/>
 
 <Advanced title="Optional: insertion vs final shell">
 Rockets often deliver satellites to a lower or intermediate orbit. The spacecraft then uses its own propulsion to reach the final shell. That splits responsibility: launcher gets you to space; satellite propulsion finishes the geometry. Waypoints add intermediate “parking lots” for traffic management during the climb.

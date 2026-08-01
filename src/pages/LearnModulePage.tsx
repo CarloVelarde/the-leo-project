@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, type ComponentType } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { getModuleBySlug, MODULES } from '@/content/modules'
+import { getModuleBySlug, MODULES, OPTIONAL_MODULES } from '@/content/modules'
 import { setLastModule } from '@/lib/progress'
 import { MdxContent } from '@/ui/MdxProvider'
 
@@ -13,6 +13,9 @@ const moduleLoaders: Record<string, () => Promise<{ default: ComponentType }>> =
   'user-terminal': () => import('@/content/modules/m6-user-terminal.mdx'),
   'space-network': () => import('@/content/modules/m7-space-network.mdx'),
   'end-to-end': () => import('@/content/modules/m8-end-to-end.mdx'),
+  'optional-orbit-math': () => import('@/content/modules/opt-orbit-math.mdx'),
+  'optional-space-safety': () => import('@/content/modules/opt-space-safety.mdx'),
+  'optional-direct-to-cell': () => import('@/content/modules/opt-direct-to-cell.mdx'),
 }
 
 export function LearnModulePage() {
@@ -36,9 +39,10 @@ export function LearnModulePage() {
   }
 
   const Content = lazy(loader)
-  const idx = MODULES.findIndex((m) => m.id === meta.id)
-  const prev = idx > 0 ? MODULES[idx - 1] : null
-  const next = idx >= 0 && idx < MODULES.length - 1 ? MODULES[idx + 1] : null
+  const path = meta.track === 'optional' ? OPTIONAL_MODULES : MODULES
+  const idx = path.findIndex((m) => m.id === meta.id)
+  const prev = idx > 0 ? path[idx - 1] : null
+  const next = idx >= 0 && idx < path.length - 1 ? path[idx + 1] : null
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-12">
@@ -47,7 +51,7 @@ export function LearnModulePage() {
           Learn
         </Link>
         <span className="mx-2">/</span>
-        Module {meta.order}
+        {meta.track === 'optional' ? 'Optional' : `Module ${meta.order}`}
         <span className="mx-2">·</span>
         ~{meta.minutes} min
       </p>
@@ -65,15 +69,21 @@ export function LearnModulePage() {
             ← {prev.title}
           </Link>
         ) : (
-          <span />
+          <Link to="/learn" className="text-slate-400 hover:text-white">
+            ← Learning path
+          </Link>
         )}
         {next ? (
           <Link to={`/learn/${next.slug}`} className="text-accent hover:text-white">
             {next.title} →
           </Link>
-        ) : (
+        ) : meta.track === 'core' ? (
           <Link to="/simulate" className="text-accent hover:text-white">
             Open the lab →
+          </Link>
+        ) : (
+          <Link to="/learn" className="text-accent hover:text-white">
+            Back to path →
           </Link>
         )}
       </nav>

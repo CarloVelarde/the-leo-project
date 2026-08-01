@@ -1,0 +1,92 @@
+import { Callout } from '@/ui/Callout'
+import { FurtherReading } from '@/ui/FurtherReading'
+import { InlineSource } from '@/ui/InlineSource'
+import { Objectives } from '@/ui/Objectives'
+import { OrbitAltitudeDiagram } from '@/ui/interactives/OrbitAltitudeDiagram'
+import { Quiz } from '@/ui/interactives/Quiz'
+import { getSources } from '@/content/sources'
+
+# Optional: Direct-to-cell and future evolution
+
+The core path focused on **broadband user terminals** (flat phased-array dishes). Starlink and others also pursue **direct-to-cell (DTC)**: connecting ordinary phones to satellites for messaging and eventually broader service. This track situates DTC in the same architecture language you already have.
+
+<Objectives
+  items={[
+    'Contrast dish broadband terminals vs direct-to-cell service goals',
+    'Relate DTC to lower shell altitudes in public planning docs',
+    'Explain why phone links are harder (power, antenna, spectrum)',
+    'See multi-shell evolution as ongoing design, not a finished static map',
+  ]}
+/>
+
+## Two different last hops
+
+| | Dish broadband | Direct-to-cell |
+|--|----------------|----------------|
+| User hardware | Dedicated terminal | Ordinary phone (partner networks) |
+| Antenna gain | High (phased array panel) | Low (phone antenna) |
+| Typical use | Home/business broadband | Emergency/messaging → expanding |
+| Link budget | Designed for high rate | Extremely constrained |
+
+Same constellation ideas (shells, planes, handovers) — **different RF and product constraints**.
+
+## Why lower shells show up in DTC plans
+
+Public Starlink constellation altitude documentation associates **direct-to-cell** variants with **lower altitude bands** (on the order of ~330–370 km in 2026 planning tables), while broadband shells occupy nearby but distinct bands during shell-lowering campaigns (<InlineSource id="starlinkAltitudes" />).
+
+Lower altitude can help the brutal **link budget** to a low-gain phone antenna (stronger signals, shorter range) — at the cost of more drag, more station-keeping, and different coverage geometry.
+
+<OrbitAltitudeDiagram />
+
+## Spectrum and partnerships
+
+DTC is not only a space problem. It depends on:
+
+- licensed spectrum and regulator approvals,  
+- partnerships with mobile network operators,  
+- protocols that tolerate high path loss and mobility,  
+- and realistic service expectations (start with SMS-class, grow carefully).
+
+Official technology pages frame the broader LEO product family; treat DTC timelines as evolving (<InlineSource id="starlinkTech" />).
+
+## Future evolution (what to watch)
+
+1. **Shell lowering / re-shelling** — safety and capacity driven.  
+2. **More optical mesh capability** — long-haul in space.  
+3. **Terminal generations** — performance, cost, power.  
+4. **DTC feature expansion** — rates, roaming, regions.  
+5. **Competition** — other LEO systems change the design environment.
+
+<Callout title="Stay calibrated" variant="note">
+When you read a press release, translate it into: which shell, which user antenna class, which link (user/gateway/ISL), and what independent tracking shows is actually on orbit.
+</Callout>
+
+<Quiz
+  title="DTC intuition"
+  questions={[
+    {
+      id: 'd1',
+      prompt: 'Direct-to-cell is harder than dish broadband mainly because…',
+      options: [
+        { id: 'a', label: 'Phone antennas have far less gain and power margin.', correct: true },
+        { id: 'b', label: 'Phones cannot use IP packets.' },
+        { id: 'c', label: 'LEO satellites cannot see phones below 60° latitude.' },
+      ],
+      explanation: 'Link budget and mobility dominate; the constellation still must provide geometry.',
+    },
+    {
+      id: 'd2',
+      prompt: 'Multi-shell designs exist partly to…',
+      options: [
+        { id: 'a', label: 'Serve different missions/constraints (e.g. broadband vs DTC) at appropriate altitudes.', correct: true },
+        { id: 'b', label: 'Eliminate handovers forever.' },
+        { id: 'c', label: 'Keep all satellites in GEO.' },
+      ],
+      explanation: 'Shells are architectural layers, not just decoration.',
+    },
+  ]}
+/>
+
+<FurtherReading
+  sources={getSources(['starlinkAltitudes', 'starlinkTech', 'mcdowellStarlink', 'esaOrbits'])}
+/>

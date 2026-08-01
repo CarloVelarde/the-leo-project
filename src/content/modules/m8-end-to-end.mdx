@@ -4,6 +4,10 @@ import { FurtherReading } from '@/ui/FurtherReading'
 import { InlineSource } from '@/ui/InlineSource'
 import { LabButton } from '@/ui/LabButton'
 import { Objectives } from '@/ui/Objectives'
+import { CoverageSandbox } from '@/ui/interactives/CoverageSandbox'
+import { HandoffDemo } from '@/ui/interactives/HandoffDemo'
+import { NetworkPathDiagram } from '@/ui/interactives/NetworkPathDiagram'
+import { Quiz } from '@/ui/interactives/Quiz'
 import { getSources } from '@/content/sources'
 
 # Putting It All Together
@@ -34,6 +38,8 @@ Suppose you are on a video call.
 7. Meanwhile, your serving satellite is racing toward the horizon; the system **hands over** to the next bird so the call continues (Module 6).
 
 That entire loop must usually complete fast enough that RTT stays in a comfortable interactive band — the design goal contrasting with GEO’s multi-hundred-millisecond light-time tax (Module 2; <InlineSource id="starlinkTech" />).
+
+<NetworkPathDiagram />
 
 ## Performance: what “latency” is made of
 
@@ -81,6 +87,10 @@ Try these and write one sentence for each:
 3. **User latitude** — does a mid-latitude shell leave high-latitude users unhappy?  
 4. **Min elevation** — raise the mask; watch coverage shrink (stricter geometry).
 
+<CoverageSandbox />
+
+<HandoffDemo />
+
 <LabButton
   label="Capstone: sparse"
   params={{ planes: 4, satsPerPlane: 8, altitudeKm: 550, timeScale: 100 }}
@@ -89,6 +99,41 @@ Try these and write one sentence for each:
 <LabButton
   label="Capstone: dense"
   params={{ planes: 30, satsPerPlane: 40, altitudeKm: 550, timeScale: 100 }}
+/>
+
+<Quiz
+  title="Capstone quiz — end-to-end"
+  questions={[
+    {
+      id: 'e1',
+      prompt: 'LEO primarily improves which GEO pain point?',
+      options: [
+        { id: 'a', label: 'Propagation delay on the space segment due to much shorter paths.', correct: true },
+        { id: 'b', label: 'The need for any routers on Earth.' },
+        { id: 'c', label: 'The existence of IP packets.' },
+      ],
+      explanation: 'Closer sats cut light-time; the rest of networking still applies.',
+    },
+    {
+      id: 'e2',
+      prompt: 'End-to-end latency is only light-time to the serving sat.',
+      options: [
+        { id: 'a', label: 'True — nothing else matters.' },
+        { id: 'b', label: 'False — processing, queueing, routing, handovers, and terrestrial tails add delay.', correct: true },
+      ],
+      explanation: 'Performance is a stack of ingredients, not a single hop.',
+    },
+    {
+      id: 'e3',
+      prompt: 'Which is a fair problem class for LEO networks (without proprietary claims)?',
+      options: [
+        { id: 'a', label: 'Routing on a time-varying graph of moving satellites.', correct: true },
+        { id: 'b', label: 'Keeping a single GEO satellite over every city simultaneously with one plane.' },
+        { id: 'c', label: 'Eliminating the speed of light.' },
+      ],
+      explanation: 'Dynamic topology is the defining algorithmic challenge of LEO meshes.',
+    },
+  ]}
 />
 
 ## Reality checks and humility

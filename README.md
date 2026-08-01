@@ -50,7 +50,10 @@ src/
 7. The Bigger Network: Lasers, Gateways, and Routing  
 8. Putting It All Together  
 
-Optional tracks (stubs): orbit math, space safety, direct-to-cell.
+Optional tracks: orbit math, space safety, direct-to-cell.
+
+Interactive lesson components live in `src/ui/interactives/` (quizzes, calculators,
+diagrams, handoff demos, coverage sandbox, mini-sims, video embeds).
 
 Sources are curated in `src/content/sources.ts` and linked from each module’s “Go deeper” section.  
 

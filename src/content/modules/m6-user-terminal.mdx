@@ -4,6 +4,9 @@ import { FurtherReading } from '@/ui/FurtherReading'
 import { InlineSource } from '@/ui/InlineSource'
 import { LabButton } from '@/ui/LabButton'
 import { Objectives } from '@/ui/Objectives'
+import { HandoffDemo } from '@/ui/interactives/HandoffDemo'
+import { PhasedArrayDiagram } from '@/ui/interactives/PhasedArrayDiagram'
+import { Quiz } from '@/ui/interactives/Quiz'
 import { getSources } from '@/content/sources'
 
 # Your Terminal Talking to a Fast-Moving Satellite
@@ -36,6 +39,8 @@ Intuition:
 
 That enables a low-profile “pizza box” terminal (often nicknamed “Dishy” in public discussion) to track LEO satellites across the sky.
 
+<PhasedArrayDiagram />
+
 <Callout title="What we are not claiming" variant="warning">
 Exact element counts, beam schedules, and proprietary tracking algorithms are not public in full. We teach the *engineering problem* and the public high-level solution class.
 </Callout>
@@ -67,6 +72,8 @@ In the lab:
 
 Real networks also juggle load, interference, and gateway/ISL path quality — geometry is necessary but not sufficient.
 
+<HandoffDemo />
+
 <LabButton
   label="Watch handoffs (default mid-latitude user)"
   params={{ planes: 12, satsPerPlane: 20, altitudeKm: 550, userLatDeg: 40, timeScale: 120 }}
@@ -88,6 +95,32 @@ Mobile phones hand over between towers as you drive. LEO handovers are similar *
 ## What to carry forward
 
 User experience = **constellation geometry** + **antenna agility** + **handover policy**. Module 7 zooms out: once packets leave your terminal, where do they go?
+
+<Quiz
+  title="Check your intuition — terminals & handovers"
+  questions={[
+    {
+      id: 't1',
+      prompt: 'A phased array steers its beam primarily by…',
+      options: [
+        { id: 'a', label: 'Electronically adjusting phases across many elements.', correct: true },
+        { id: 'b', label: 'Only by mechanically rotating a heavy dish at LEO rates.' },
+        { id: 'c', label: 'Turning off all elements except one fixed pointing.' },
+      ],
+      explanation: 'Electronic steering is the key idea enabling flat LEO user terminals.',
+    },
+    {
+      id: 't2',
+      prompt: 'A handoff in LEO broadband is…',
+      options: [
+        { id: 'a', label: 'Switching the serving satellite as geometry changes.', correct: true },
+        { id: 'b', label: 'Deleting the user’s IP address permanently.' },
+        { id: 'c', label: 'Moving the satellite from GEO to LEO mid-call.' },
+      ],
+      explanation: 'Sats rise and set; the network must re-attach users smoothly.',
+    },
+  ]}
+/>
 
 <Advanced title="Optional: Doppler and tracking">
 Relative motion creates Doppler shift in radio frequencies and requires continuous tracking updates. Phased arrays and modem design absorb this; it is one reason LEO user links are software-defined and compute-heavy compared with static GEO pointing.

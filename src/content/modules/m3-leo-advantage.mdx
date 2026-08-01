@@ -4,6 +4,9 @@ import { FurtherReading } from '@/ui/FurtherReading'
 import { InlineSource } from '@/ui/InlineSource'
 import { LabButton } from '@/ui/LabButton'
 import { Objectives } from '@/ui/Objectives'
+import { LatencyCompare } from '@/ui/interactives/LatencyCompare'
+import { LessonMiniSim } from '@/ui/interactives/LessonMiniSim'
+import { Quiz } from '@/ui/interactives/Quiz'
 import { getSources } from '@/content/sources'
 
 # Low Earth Orbit: Why Closer Changes Everything
@@ -34,6 +37,8 @@ You will also see **MEO** (medium Earth orbit) between LEO and GEO — navigatio
 Propagation delay scales with path length. If a satellite is ~50–100× closer than GEO, the pure light-time to the spacecraft drops from hundreds of milliseconds toward **a few milliseconds** on the space hop (exact numbers depend on elevation and routing through gateways or inter-satellite links).
 
 That is the core of LEO broadband’s pitch: interactive applications become plausible again. Official Starlink technology materials emphasize lower latency relative to traditional satellite Internet and the LEO architecture that enables it (<InlineSource id="starlinkTech" />).
+
+<LatencyCompare />
 
 <Callout title="Still not zero latency" variant="note">
 Even LEO must pay for: radio processing, queueing, path through gateways or space lasers, and the terrestrial Internet beyond. LEO removes the GEO *distance tax*; it does not repeal networking.
@@ -71,6 +76,12 @@ Even if a sat passes over you every 90 minutes, you are offline most of the orbi
 
 Raise and lower altitude in the lab. Watch how **orbital period** and **one-way light time** estimates move. Then drop plane/sat counts until the user goes offline — that is the coverage problem in miniature.
 
+<LessonMiniSim
+  title="Sparse LEO — coverage gaps"
+  caption="Few satellites: watch the link drop. Density is the product."
+  params={{ planes: 3, satsPerPlane: 5, altitudeKm: 550, timeScale: 100 }}
+/>
+
 <LabButton
   label="Open lab: altitude trade (~1100 km)"
   params={{ planes: 12, satsPerPlane: 20, altitudeKm: 1100 }}
@@ -79,6 +90,32 @@ Raise and lower altitude in the lab. Watch how **orbital period** and **one-way 
 <LabButton
   label="Open lab: denser shell at ~550 km"
   params={{ planes: 24, satsPerPlane: 40, altitudeKm: 550 }}
+/>
+
+<Quiz
+  title="Check your intuition — LEO"
+  questions={[
+    {
+      id: 'l1',
+      prompt: 'ESA-style LEO is roughly…',
+      options: [
+        { id: 'a', label: 'Under ~2,000 km altitude, often ~7.8 km/s and ~90 min periods.', correct: true },
+        { id: 'b', label: 'Fixed at 35,786 km over the equator.' },
+        { id: 'c', label: 'Only possible at the Moon’s distance.' },
+      ],
+      explanation: 'LEO is the near-Earth regime used by ISS and mega-constellations.',
+    },
+    {
+      id: 'l2',
+      prompt: 'Why isn’t one LEO satellite enough for always-on broadband at your house?',
+      options: [
+        { id: 'a', label: 'It moves quickly and only covers you for a short pass before setting.', correct: true },
+        { id: 'b', label: 'LEO satellites cannot carry radios.' },
+        { id: 'c', label: 'Light is slower in LEO than in GEO.' },
+      ],
+      explanation: 'Continuous service needs a constellation so another sat is rising as one sets.',
+    },
+  ]}
 />
 
 <Advanced title="Optional: period formula (circular orbit)">

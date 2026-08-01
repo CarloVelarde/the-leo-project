@@ -4,6 +4,9 @@ import { FurtherReading } from '@/ui/FurtherReading'
 import { InlineSource } from '@/ui/InlineSource'
 import { LabButton } from '@/ui/LabButton'
 import { Objectives } from '@/ui/Objectives'
+import { LatencyCompare } from '@/ui/interactives/LatencyCompare'
+import { OrbitAltitudeDiagram } from '@/ui/interactives/OrbitAltitudeDiagram'
+import { Quiz } from '@/ui/interactives/Quiz'
 import { getSources } from '@/content/sources'
 
 # Why Ordinary Satellite Internet Felt Slow
@@ -30,6 +33,8 @@ From the <InlineSource id="esaOrbits">ESA “Types of orbits”</InlineSource> p
 - From the ground, the satellite appears **fixed** in the sky — so a dish can stay pointed without tracking a racing target.
 
 That “fixed in the sky” property is GEO’s superpower for broadcast TV and for simple terminals: aim once, stay locked.
+
+<OrbitAltitudeDiagram />
 
 ## Coverage geometry: few satellites, huge footprints
 
@@ -58,6 +63,8 @@ That ~**240 ms** figure is the classic pure-propagation estimate for a nadir GEO
 
 Industry and educational comparisons commonly place **GEO broadband RTT in the ~500–700+ ms** experience band for interactive traffic. Starlink’s technology messaging contrasts LEO service with traditional satellite Internet on latency grounds (<InlineSource id="starlinkTech" />).
 
+<LatencyCompare />
+
 <Callout title="Connect to Module 1" variant="key">
 If a video call needs frequent back-and-forth, a half-second RTT means every “your turn / my turn” moment is padded by physics. Bandwidth can still be high (you can download large files), but **conversation and competitive gaming feel the RTT**.
 </Callout>
@@ -83,6 +90,44 @@ If delay is mostly distance, the engineering temptation is obvious: **fly lower*
 <LabButton
   label="Open lab: sparse LEO (coverage gaps preview)"
   params={{ planes: 4, satsPerPlane: 6, altitudeKm: 550 }}
+/>
+
+<Quiz
+  title="Check your intuition — GEO"
+  questions={[
+    {
+      id: 'g1',
+      prompt: 'Why does a GEO satellite appear fixed in the sky?',
+      options: [
+        { id: 'a', label: 'It is not moving at all relative to the stars.' },
+        { id: 'b', label: 'Its orbit period matches Earth’s rotation over the equator.', correct: true },
+        { id: 'c', label: 'It uses ion thrusters to hover with zero orbital speed.' },
+      ],
+      explanation:
+        'GEO matches sidereal day period above the equator, so ground track stays fixed.',
+    },
+    {
+      id: 'g2',
+      prompt: 'Rough pure light-time for up+down to a GEO sat overhead is about…',
+      options: [
+        { id: 'a', label: '2 ms' },
+        { id: 'b', label: '24 ms' },
+        { id: 'c', label: '240 ms', correct: true },
+      ],
+      explanation:
+        '2 × ~36,000 km / c ≈ 0.24 s. Real user RTT is often higher once gateways and processing are included.',
+    },
+    {
+      id: 'g3',
+      prompt: 'Buying more bandwidth from a GEO provider primarily fixes…',
+      options: [
+        { id: 'a', label: 'How much data you can move per second, not the light-time delay.', correct: true },
+        { id: 'b', label: 'The speed of light in vacuum.' },
+        { id: 'c', label: 'The need for any ground gateway.' },
+      ],
+      explanation: 'Bandwidth ≠ latency. Distance still sets a propagation floor.',
+    },
+  ]}
 />
 
 <Advanced title="Optional: double-hop mental model">

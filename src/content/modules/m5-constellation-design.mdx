@@ -4,6 +4,9 @@ import { FurtherReading } from '@/ui/FurtherReading'
 import { InlineSource } from '@/ui/InlineSource'
 import { LabButton } from '@/ui/LabButton'
 import { Objectives } from '@/ui/Objectives'
+import { CoverageSandbox } from '@/ui/interactives/CoverageSandbox'
+import { LessonMiniSim } from '@/ui/interactives/LessonMiniSim'
+import { Quiz } from '@/ui/interactives/Quiz'
 import { getSources } from '@/content/sources'
 
 # What a Constellation Actually Is
@@ -86,6 +89,14 @@ In the lab:
 - Higher density → fewer gaps, **more handovers**.  
 - Inclination and user latitude interact (high-latitude users care about polar-ish planes).
 
+<CoverageSandbox />
+
+<LessonMiniSim
+  title="Dense shell preview"
+  caption="Many planes × sats — continuous service is a geometry product."
+  params={{ planes: 20, satsPerPlane: 30, altitudeKm: 550, timeScale: 70 }}
+/>
+
 <LabButton
   label="Sparse constellation (expect gaps)"
   params={{ planes: 4, satsPerPlane: 6, altitudeKm: 550, inclinationDeg: 53 }}
@@ -112,6 +123,42 @@ You can now read a constellation as:
 **shells × planes × sats/plane × inclination × phasing → coverage map over time**
 
 Module 6 asks how a **single user terminal** attaches to that moving geometry.
+
+<Quiz
+  title="Check your intuition — constellations"
+  questions={[
+    {
+      id: 'c1',
+      prompt: 'An orbital plane is best described as…',
+      options: [
+        { id: 'a', label: 'A flat slice of space containing a ring of satellite paths.', correct: true },
+        { id: 'b', label: 'The brand name of a ground gateway.' },
+        { id: 'c', label: 'The speed of light in fiber.' },
+      ],
+      explanation: 'Planes are geometric rings; many planes wrap the Earth.',
+    },
+    {
+      id: 'c2',
+      prompt: 'If you only increase sats per plane but keep one plane, what still fails?',
+      options: [
+        { id: 'a', label: 'Nothing — one plane always covers the whole Earth continuously.' },
+        { id: 'b', label: 'Global continuous coverage, because longitude/latitude regions still miss the single ring much of the time.', correct: true },
+        { id: 'c', label: 'Ion thrusters stop working.' },
+      ],
+      explanation: 'You need multiple planes (and enough density) to tile coverage in space and time.',
+    },
+    {
+      id: 'c3',
+      prompt: 'For “what is actually flying this month,” a strong independent check is…',
+      options: [
+        { id: 'a', label: 'Jonathan McDowell’s Starlink catalogs.', correct: true },
+        { id: 'b', label: 'A random social media meme.' },
+        { id: 'c', label: 'Assuming the first FCC filing never changed.' },
+      ],
+      explanation: 'Operational reality evolves; independent tracking complements official docs.',
+    },
+  ]}
+/>
 
 <Advanced title="Optional: why multiple shells?">
 Different altitudes trade latency, footprint size, debris decay time, and capacity density. Different inclinations target different latitude bands. Separating missions (broadband vs direct-to-cell) into bands can also reduce operational coupling. Multi-shell design is product architecture, not just “more dots.”

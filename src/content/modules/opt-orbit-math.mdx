@@ -1,0 +1,124 @@
+import { Advanced } from '@/ui/Advanced'
+import { Callout } from '@/ui/Callout'
+import { FurtherReading } from '@/ui/FurtherReading'
+import { InlineSource } from '@/ui/InlineSource'
+import { LabButton } from '@/ui/LabButton'
+import { Objectives } from '@/ui/Objectives'
+import { LatencyCompare } from '@/ui/interactives/LatencyCompare'
+import { Quiz } from '@/ui/interactives/Quiz'
+import { getSources } from '@/content/sources'
+
+# Optional: Orbit math that actually helps
+
+This track is for learners who want the **equations behind the lab**. You still only need algebra and a little comfort with roots and π. We stay practical: every formula maps to a slider or insight panel number.
+
+<Objectives
+  items={[
+    'Compute circular-orbit period from altitude',
+    'Compute pure light-time delay from distance',
+    'Relate footprint size to altitude and min elevation conceptually',
+    'Connect formulas to lab assumptions',
+  ]}
+/>
+
+## Constants we use
+
+| Symbol | Meaning | Approx. value |
+|--------|---------|----------------|
+| $R_E$ | Earth mean radius | 6371 km |
+| $\mu$ | Earth gravitational parameter | $3.986004418 \times 10^5$ km³/s² |
+| $c$ | Speed of light | $2.99792458 \times 10^5$ km/s |
+
+These match `src/sim/constants.ts` so lesson math and lab math stay honest.
+
+## Circular orbit period
+
+Semi-major axis for a circular orbit at altitude $h$:
+
+$$
+a = R_E + h
+$$
+
+Period (Kepler, circular):
+
+$$
+T = 2\pi \sqrt{\frac{a^3}{\mu}}
+$$
+
+Orbital speed:
+
+$$
+v = \sqrt{\frac{\mu}{a}}
+$$
+
+**Try it:** At $h = 550$ km, $a = 6921$ km, $T$ is roughly **95 minutes**, $v$ about **7.6 km/s**. Use the interactive below and the lab insight panel to confirm the same trends.
+
+<LatencyCompare />
+
+<LabButton label="Open lab at 550 km" params={{ altitudeKm: 550, planes: 12, satsPerPlane: 20 }} />
+
+## Light-time
+
+One-way vacuum propagation over distance $d$:
+
+$$
+t = \frac{d}{c}
+$$
+
+Round-trip on the same path ≈ $2d/c$. For a satellite nearly overhead, $d \approx h$ is a lower bound (real slant ranges are longer when elevation is low).
+
+GEO check: $h \approx 35786$ km → one-way ≈ $119$ ms → up+down ≈ **238 ms**.
+
+<Callout title="Model honesty" variant="warning">
+The lab ignores atmospheric refraction, processing delay, and multi-hop routing. Numbers are geometric floors and Kepler periods — teaching tools, not RF link budgets.
+</Callout>
+
+## Footprint half-angle (geometry)
+
+With Earth radius $R_E$, orbit radius $a$, and minimum elevation $\varepsilon$:
+
+$$
+\lambda = \arccos\!\left(\frac{R_E}{a}\cos\varepsilon\right) - \varepsilon
+$$
+
+Here $\lambda$ is the Earth-central angle from the sub-satellite point to the edge of geometric visibility. Higher $h$ (larger $a$) tends to enlarge the footprint; higher $\varepsilon$ shrinks usable coverage.
+
+The 3D lab draws this footprint for the serving sat when the overlay is enabled.
+
+## Why J2 / drag are omitted (for now)
+
+Real LEO orbits precess and decay. Station-keeping fights that (core Module 4). For intuition about coverage density and latency trends, **circular Kepler** is the right first model — the same philosophy ESA’s qualitative orbit pages use before diving into perturbations (<InlineSource id="esaOrbits" />).
+
+<Quiz
+  title="Math track check"
+  questions={[
+    {
+      id: 'm1',
+      prompt: 'If altitude increases, circular-orbit period…',
+      options: [
+        { id: 'a', label: 'Increases (you take longer to go around).', correct: true },
+        { id: 'b', label: 'Always decreases.' },
+        { id: 'c', label: 'Is fixed at 90 minutes for all altitudes.' },
+      ],
+      explanation: 'T grows with a^{3/2}; higher shells are slower angularly.',
+    },
+    {
+      id: 'm2',
+      prompt: 'Doubling path length at fixed c…',
+      options: [
+        { id: 'a', label: 'Doubles pure light-time.', correct: true },
+        { id: 'b', label: 'Halves light-time.' },
+        { id: 'c', label: 'Does not affect propagation delay.' },
+      ],
+      explanation: 't = d/c is linear in distance.',
+    },
+  ]}
+/>
+
+<Advanced title="Optional derivation sketch: period">
+Newton + centripetal: $\frac{GM}{a^2} = \frac{v^2}{a}$ with $v = \frac{2\pi a}{T}$ yields $T^2 \propto a^3$ — Kepler’s third law for circular orbits. $\mu = GM$ packs the constants.
+</Advanced>
+
+<FurtherReading
+  sources={getSources(['esaOrbits', 'nasaOrbits', 'hpbnLatency', 'satsigLatency'])}
+/>
