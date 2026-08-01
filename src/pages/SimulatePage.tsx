@@ -1,13 +1,21 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { LAB_PARAM_RANGES } from '@/sim/constants'
 import { computeInsights } from '@/sim/insights'
 import { SCENARIOS } from '@/sim/scenarios'
-import type { LabParams } from '@/sim/types'
+import type { LabParams, LiveSimStats, SceneDisplayOptions } from '@/sim/types'
 import { labParamsFromSearch, labParamsToSearch } from '@/lib/labParams'
 import { ConstellationScene } from '@/three/ConstellationScene'
 import { AssumptionsDrawer } from '@/ui/AssumptionsDrawer'
 import { InsightPanel } from '@/ui/InsightPanel'
+import { SceneLegend } from '@/ui/SceneLegend'
+
+const DEFAULT_DISPLAY: SceneDisplayOptions = {
+  showOrbitRings: true,
+  showFootprint: true,
+  showLink: true,
+  showInViewHighlight: true,
+}
 
 export function SimulatePage() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -15,21 +23,47 @@ export function SimulatePage() {
     () => labParamsFromSearch(searchParams.toString()),
     [searchParams],
   )
-  const insights = useMemo(() => computeInsights(params, 0), [params])
+
+  const [stats, setStats] = useState<LiveSimStats | null>(() => ({
+    ...computeInsights(params, 0),
+    simTimeSeconds: 0,
+    handoffCount: 0,
+    handoffsPerSimMinute: null,
+    paused: false,
+  }))
+  const [paused, setPaused] = useState(false)
+  const [display, setDisplay] = useState<SceneDisplayOptions>(DEFAULT_DISPLAY)
+
+  const onStats = useCallback((next: LiveSimStats) => {
+    setStats(next)
+  }, [])
 
   function update(partial: Partial<LabParams>) {
     const next = { ...params, ...partial }
     setSearchParams(labParamsToSearch(next), { replace: true })
   }
 
+  function toggleDisplay(key: keyof SceneDisplayOptions) {
+    setDisplay((d) => ({ ...d, [key]: !d[key] }))
+  }
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
-      <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-3xl font-semibold text-white">Constellation lab</h1>
           <p className="text-slate-400">
-            Change density and altitude. Watch coverage and latency estimates update.
+            Change density and altitude. Watch coverage, the user link, and handoffs update live.
           </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => setPaused((p) => !p)}
+            className="rounded-lg border border-space-600 px-3 py-1.5 text-xs font-medium text-slate-200 hover:border-accent hover:text-white"
+          >
+            {paused ? 'Resume' : 'Pause'}
+          </button>
         </div>
       </div>
 
@@ -48,17 +82,65 @@ export function SimulatePage() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
-        <div className="overflow-hidden rounded-2xl border border-space-700 bg-space-900">
-          <div className="h-[min(60vh,520px)]">
-            <ConstellationScene params={params} />
+        <div className="relative overflow-hidden rounded-2xl border border-space-700 bg-space-900">
+          <div className="h-[min(62vh,560px)]">
+            <ConstellationScene
+              params={params}
+              mode="lab"
+              paused={paused}
+              display={display}
+              onStats={onStats}
+            />
           </div>
+          <SceneLegend />
+          <p className="border-t border-space-800 px-4 py-2 text-xs text-slate-500">
+            Drag to orbit · scroll to zoom · green line is the active user↔sat link · ring is the
+            geometric coverage footprint
+          </p>
         </div>
 
         <div className="flex flex-col gap-4">
-          <InsightPanel params={params} insights={insights} />
+          <InsightPanel params={params} stats={stats} />
+          <DisplayToggles display={display} onToggle={toggleDisplay} />
           <Controls params={params} onChange={update} />
           <AssumptionsDrawer />
         </div>
+      </div>
+    </div>
+  )
+}
+
+function DisplayToggles({
+  display,
+  onToggle,
+}: {
+  display: SceneDisplayOptions
+  onToggle: (key: keyof SceneDisplayOptions) => void
+}) {
+  const items: { key: keyof SceneDisplayOptions; label: string }[] = [
+    { key: 'showOrbitRings', label: 'Orbit rings' },
+    { key: 'showFootprint', label: 'Coverage footprint' },
+    { key: 'showLink', label: 'User link' },
+    { key: 'showInViewHighlight', label: 'Highlight in-view' },
+  ]
+
+  return (
+    <div className="rounded-xl border border-space-700 bg-space-900/90 p-4">
+      <h2 className="mb-3 text-xs font-semibold tracking-widest text-slate-400 uppercase">
+        Display
+      </h2>
+      <div className="flex flex-col gap-2">
+        {items.map(({ key, label }) => (
+          <label key={key} className="flex cursor-pointer items-center gap-2 text-xs text-slate-300">
+            <input
+              type="checkbox"
+              className="accent-accent"
+              checked={display[key]}
+              onChange={() => onToggle(key)}
+            />
+            {label}
+          </label>
+        ))}
       </div>
     </div>
   )
@@ -112,6 +194,12 @@ function Controls({
           value={params.userLatDeg}
           {...LAB_PARAM_RANGES.userLatDeg}
           onChange={(userLatDeg) => onChange({ userLatDeg })}
+        />
+        <Slider
+          label="User longitude (°)"
+          value={params.userLonDeg}
+          {...LAB_PARAM_RANGES.userLonDeg}
+          onChange={(userLonDeg) => onChange({ userLonDeg })}
         />
         <Slider
           label="Time scale"

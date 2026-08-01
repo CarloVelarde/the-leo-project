@@ -1,4 +1,5 @@
 export { ConstellationScene } from './ConstellationScene'
 export { Earth } from './Earth'
-export { Satellites } from './Satellites'
+export { LabCore } from './LabCore'
+export { OrbitRings } from './OrbitRings'
 export { UserMarker } from './UserMarker'

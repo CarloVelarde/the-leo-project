@@ -34,10 +34,13 @@ export function HomePage() {
         </div>
         <div className="overflow-hidden rounded-2xl border border-space-700 bg-space-900 shadow-2xl shadow-black/40">
           <div className="h-[320px] sm:h-[400px]">
-            <ConstellationScene params={{ ...DEFAULT_LAB_PARAMS, timeScale: 80 }} />
+            <ConstellationScene
+              mode="hero"
+              params={{ ...DEFAULT_LAB_PARAMS, timeScale: 90 }}
+            />
           </div>
           <p className="border-t border-space-800 px-4 py-2 text-xs text-slate-500">
-            Live mini-sim — drag to orbit. Full controls in the lab.
+            Live mini-sim — drag to orbit. Green link shows the active user connection.
           </p>
         </div>
       </section>
