@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { EditorState } from '@codemirror/state'
+import { EditorState, EditorSelection, Prec } from '@codemirror/state'
 import {
   EditorView,
   keymap,
@@ -10,21 +10,26 @@ import {
   dropCursor,
   rectangularSelection,
   crosshairCursor,
+  type Command,
 } from '@codemirror/view'
 import {
   defaultKeymap,
   history,
   historyKeymap,
   indentWithTab,
+  insertNewlineAndIndent,
 } from '@codemirror/commands'
 import {
   foldGutter,
   foldKeymap,
   bracketMatching,
   indentOnInput,
+  indentUnit,
   syntaxHighlighting,
   defaultHighlightStyle,
   HighlightStyle,
+  getIndentation,
+  indentString,
 } from '@codemirror/language'
 import { python } from '@codemirror/lang-python'
 import { oneDark } from '@codemirror/theme-one-dark'
@@ -34,7 +39,6 @@ import { tags } from '@lezer/highlight'
 type PythonCodeEditorProps = {
   value: string
   onChange: (value: string) => void
-  /** App theme: light uses a soft light editor; dark uses oneDark */
   theme?: 'light' | 'dark'
   className?: string
   minHeight?: string
@@ -102,9 +106,58 @@ const darkThemeExtras = EditorView.theme(
   { dark: true },
 )
 
+function leadingWs(lineText: string): string {
+  const m = lineText.match(/^[ \t]*/)
+  return m ? m[0] : ''
+}
+
 /**
- * CodeMirror-based Python editor: syntax highlighting, indent-on-Enter,
- * Tab indent, bracket matching/closing, line numbers, undo/redo.
+ * Enter indent for Python with 4-space units.
+ * After a line ending in `:`, indent one level past the current line.
+ * Otherwise keep at least the current line's indent (so you stay in the block).
+ */
+const pythonNewlineAndIndent: Command = (view) => {
+  if (view.state.readOnly) return false
+
+  // Multi-cursor / selection → default behavior
+  if (view.state.selection.ranges.some((r) => !r.empty) || view.state.selection.ranges.length > 1) {
+    return insertNewlineAndIndent(view)
+  }
+
+  const { state } = view
+  const pos = state.selection.main.head
+  const line = state.doc.lineAt(pos)
+  const beforeCursor = line.text.slice(0, pos - line.from)
+  const prevIndent = leadingWs(line.text)
+  const unit = state.facet(indentUnit)
+
+  let indent = prevIndent
+
+  // Prefer language service when it suggests a deeper indent
+  const langCols = getIndentation(state, pos)
+  if (langCols != null) {
+    const langIndent = indentString(state, langCols)
+    if (langIndent.length > indent.length) indent = langIndent
+  }
+
+  // After `def ...:` / `if ...:` always nest at least one unit
+  if (beforeCursor.replace(/\s+$/, '').endsWith(':')) {
+    const nested = prevIndent + unit
+    if (indent.length < nested.length) indent = nested
+  }
+
+  const insert = '\n' + indent
+  view.dispatch({
+    changes: { from: pos, to: pos, insert },
+    selection: EditorSelection.cursor(pos + insert.length),
+    scrollIntoView: true,
+    userEvent: 'input',
+  })
+  return true
+}
+
+/**
+ * CodeMirror Python editor: highlighting + 4-space indent aligned with starter code.
  */
 export function PythonCodeEditor({
   value,
@@ -121,7 +174,6 @@ export function PythonCodeEditor({
   const valueRef = useRef(value)
   valueRef.current = value
 
-  // Create editor; recreate when theme flips
   useEffect(() => {
     if (!parentRef.current) return
 
@@ -141,11 +193,16 @@ export function PythonCodeEditor({
       crosshairCursor(),
       history(),
       foldGutter(),
+      // Must match starter code (4 spaces). CM default is 2.
+      indentUnit.of('    '),
+      EditorState.tabSize.of(4),
       indentOnInput(),
       bracketMatching(),
       closeBrackets(),
       python(),
-      EditorState.tabSize.of(4),
+      Prec.highest(
+        keymap.of([{ key: 'Enter', run: pythonNewlineAndIndent }]),
+      ),
       keymap.of([
         indentWithTab,
         ...closeBracketsKeymap,
@@ -183,7 +240,6 @@ export function PythonCodeEditor({
     }
   }, [theme])
 
-  // Sync external value changes (reset / show solution) without resetting cursor every keystroke
   useEffect(() => {
     const view = viewRef.current
     if (!view) return
