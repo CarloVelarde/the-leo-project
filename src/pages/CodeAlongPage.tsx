@@ -64,7 +64,7 @@ export function CodeAlongPage() {
   return (
     <div className="min-h-screen bg-paper">
       <header className="sticky top-0 z-20 border-b border-line bg-paper/95 backdrop-blur-md">
-        <div className="mx-auto flex h-14 max-w-5xl items-center justify-between gap-3 px-4 sm:px-6">
+        <div className="mx-auto flex h-14 max-w-3xl items-center justify-between gap-3 px-4 sm:max-w-5xl sm:px-6">
           <div className="flex min-w-0 items-center gap-3 text-sm">
             <Link to="/code" className="text-ink-muted no-underline hover:text-ink">
               Code
@@ -90,39 +90,67 @@ export function CodeAlongPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
-        <p className="text-[10px] font-semibold tracking-[0.2em] text-ink-faint uppercase">
-          Optional code-along · Python · ~{ex.minutes} min
+      <main className="mx-auto max-w-3xl px-4 py-8 sm:max-w-5xl sm:px-6">
+        {/* Title block */}
+        <p className="text-xs font-medium tracking-wide text-ink-faint">
+          Optional · Python · about {ex.minutes} minutes
         </p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-ink">{ex.title}</h1>
-        <p className="mt-2 max-w-2xl text-ink-muted">{ex.goal}</p>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+          {ex.title}
+        </h1>
+        <p className="mt-3 max-w-2xl text-base leading-relaxed text-ink-muted">{ex.goal}</p>
 
-        <div className="mt-6 grid gap-4 rounded-xl border border-line bg-paper-elevated p-4 text-sm text-ink-muted sm:grid-cols-2">
-          <div>
-            <p className="text-[10px] font-semibold tracking-wide text-ink-faint uppercase">
-              Task
+        {/* Instructions — clear hierarchy, readable type */}
+        <section className="mt-8 rounded-2xl border border-line bg-paper shadow-sm">
+          <div className="border-b border-line px-5 py-4 sm:px-6">
+            <h2 className="text-sm font-semibold tracking-tight text-ink">What to do</h2>
+            <p className="mt-1 text-sm leading-relaxed text-ink-muted">
+              Complete the functions in the editor below, then use <strong className="font-medium text-ink">Run checks</strong>.
             </p>
-            <p className="mt-1 text-ink">{ex.prompt}</p>
           </div>
-          <div>
-            <p className="text-[10px] font-semibold tracking-wide text-ink-faint uppercase">
-              Model
-            </p>
-            <p className="mt-1">
-              Same simplified lab model: circular orbits, geometric ideas, vacuum light-time. Not
-              full RF.
-            </p>
-            {ex.predict ? (
-              <p className="mt-2 text-ink">
-                <span className="font-medium">Before you run: </span>
-                {ex.predict}
+
+          <ol className="space-y-0 px-5 py-2 sm:px-6">
+            {ex.steps.map((step, i) => (
+              <li
+                key={i}
+                className="flex gap-4 border-b border-line py-4 last:border-b-0"
+              >
+                <span
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-ink text-xs font-semibold text-paper"
+                  aria-hidden
+                >
+                  {i + 1}
+                </span>
+                <p className="pt-0.5 text-[15px] leading-relaxed text-ink">{step}</p>
+              </li>
+            ))}
+          </ol>
+
+          <div className="space-y-3 border-t border-line bg-paper-elevated/80 px-5 py-4 sm:px-6">
+            <div>
+              <p className="text-xs font-semibold tracking-wide text-ink-faint uppercase">
+                When checks pass
               </p>
+              <p className="mt-1 text-sm leading-relaxed text-ink">{ex.success}</p>
+            </div>
+            {ex.predict ? (
+              <div className="rounded-lg border border-line bg-paper px-4 py-3">
+                <p className="text-xs font-semibold tracking-wide text-ink-faint uppercase">
+                  Think first
+                </p>
+                <p className="mt-1 text-sm leading-relaxed text-ink">{ex.predict}</p>
+              </div>
             ) : null}
+            <p className="text-xs leading-relaxed text-ink-faint">
+              Uses the same simplified lab model (circular orbits, vacuum light-time where relevant).
+              Not a full RF simulation.
+            </p>
           </div>
-        </div>
+        </section>
 
-        <div className="mt-6 overflow-hidden rounded-xl border border-line">
-          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line bg-paper-elevated px-4 py-2">
+        {/* Editor */}
+        <div className="mt-8 overflow-hidden rounded-2xl border border-line">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line bg-paper-elevated px-4 py-2.5">
             <span className="font-mono text-xs text-ink-faint">main.py</span>
             <div className="flex flex-wrap gap-2">
               <ActionBtn
@@ -140,6 +168,7 @@ export function CodeAlongPage() {
                 onClick={() => {
                   setCode(ex.starterCode)
                   setResult(null)
+                  setShowSolution(false)
                 }}
               >
                 Reset
@@ -159,43 +188,46 @@ export function CodeAlongPage() {
             value={code}
             onChange={(e) => setCode(e.target.value)}
             spellCheck={false}
-            className="min-h-[320px] w-full resize-y bg-[#0d0d0d] p-4 font-mono text-[13px] leading-relaxed text-[#e8e8e8] outline-none"
+            className="min-h-[340px] w-full resize-y bg-[#111111] p-4 font-mono text-sm leading-relaxed text-[#f0f0f0] outline-none"
             style={{ tabSize: 4 }}
             aria-label="Python editor"
           />
         </div>
 
-        <div className="mt-4 overflow-hidden rounded-xl border border-line">
-          <div className="border-b border-line bg-paper-elevated px-4 py-2 font-mono text-xs text-ink-faint">
-            Output
+        {/* Output */}
+        <div className="mt-4 overflow-hidden rounded-2xl border border-line">
+          <div className="flex flex-wrap items-center gap-2 border-b border-line bg-paper-elevated px-4 py-2.5">
+            <span className="text-xs font-medium text-ink-faint">Output</span>
             {result?.checked ? (
               <span
                 className={[
-                  'ml-2 rounded-full px-2 py-0.5 text-[10px] font-semibold tracking-wide uppercase',
-                  result.ok ? 'bg-ink text-paper' : 'border border-line text-ink-muted',
+                  'rounded-full px-2.5 py-0.5 text-[11px] font-semibold',
+                  result.ok
+                    ? 'bg-ink text-paper'
+                    : 'border border-line text-ink-muted',
                 ].join(' ')}
               >
                 {result.ok ? 'Checks passed' : 'Checks failed'}
               </span>
             ) : null}
           </div>
-          <pre className="max-h-64 overflow-auto whitespace-pre-wrap bg-paper p-4 font-mono text-xs text-ink-muted">
+          <pre className="max-h-64 overflow-auto whitespace-pre-wrap bg-paper p-4 font-mono text-[13px] leading-relaxed text-ink-muted">
             {busy || loadingRuntime
               ? loadingRuntime
                 ? 'Downloading Python runtime (first time only)…'
                 : 'Running…'
               : result
                 ? [result.output, result.error].filter(Boolean).join('\n') || '(no output)'
-                : 'Run your code or run checks when ready.'}
+                : 'Run your code, or Run checks when you are ready.'}
           </pre>
         </div>
 
-        <p className="mt-6 text-sm text-ink-muted">
+        <p className="mt-8 text-sm text-ink-muted">
           Done exploring?{' '}
           <Link to={lessonHref} className="font-medium text-ink underline-offset-2 hover:underline">
             Return to the lesson
-          </Link>{' '}
-          — the next page is never blocked by coding.
+          </Link>
+          . Coding never blocks Next.
         </p>
       </main>
     </div>
@@ -219,7 +251,7 @@ function ActionBtn({
       disabled={disabled}
       onClick={onClick}
       className={[
-        'rounded-full px-3 py-1 text-xs font-medium disabled:opacity-50',
+        'rounded-full px-3.5 py-1.5 text-xs font-medium disabled:opacity-50',
         secondary
           ? 'border border-line text-ink hover:border-ink'
           : 'bg-inverse text-paper hover:opacity-90',

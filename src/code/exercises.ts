@@ -1,25 +1,25 @@
 /**
- * Optional Python code-alongs — only high-signal concepts.
- * Isolated per exercise; shared constants match src/sim.
+ * Optional Python code-alongs — high-signal concepts only.
  */
 
 export type CodeExercise = {
   id: string
   title: string
-  /** Lesson module slug */
   moduleSlug: string
-  /** Lesson page that shows the optional card */
   pageId: string
   minutes: number
   summary: string
+  /** One-line outcome */
   goal: string
-  /** Shown above editor */
-  prompt: string
+  /** Numbered requirements shown in the task panel */
+  steps: string[]
+  /** What “Run checks” expects, in plain language */
+  success: string
+  /** Optional think-first question */
+  predict?: string
   starterCode: string
   solutionCode: string
-  /** Appended after user code; print CHECK_OK on success */
   testCode: string
-  predict?: string
 }
 
 const PRELUDE = `# Shared constants (same model as the 3D lab)
@@ -38,10 +38,15 @@ export const CODE_EXERCISES: CodeExercise[] = [
     pageId: 'delay',
     minutes: 12,
     summary: 'Compute pure propagation delay from distance — why GEO feels slow.',
-    goal: 'Implement one-way light time and compare GEO (~36,000 km) to LEO (550 km).',
-    prompt:
-      'Fill in one_way_ms(distance_km). Use C_KM_S (km/s). Return milliseconds. Then complete geo_vs_leo() to return (geo_ms, leo_ms) for GEO altitude and 550 km (one-way).',
-    predict: 'Before running: is GEO one-way delay closer to 10 ms, 100 ms, or 1000 ms?',
+    goal: 'Compare one-way light time for GEO vs a 550 km LEO hop.',
+    steps: [
+      'Implement one_way_ms(distance_km) — convert distance (km) to milliseconds using C_KM_S.',
+      'Formula: time_ms = distance_km / C_KM_S × 1000.',
+      'Implement geo_vs_leo() — return (geo_ms, leo_ms) using GEO_ALTITUDE_KM and 550 km (one-way only).',
+      'Click Run checks when both functions are done.',
+    ],
+    success: 'Checks pass when GEO one-way is ~119 ms and LEO 550 km is ~1.8 ms.',
+    predict: 'Is GEO one-way delay closer to 10 ms, 100 ms, or 1000 ms?',
     starterCode: `${PRELUDE}
 def one_way_ms(distance_km: float) -> float:
     """One-way light time in milliseconds for distance in km."""
@@ -78,10 +83,15 @@ print(f"GEO one-way ≈ {g:.2f} ms · LEO 550 km ≈ {l:.2f} ms · ratio ≈ {g/
     pageId: 'latency',
     minutes: 12,
     summary: 'Kepler period for circular orbits — what the lab period readout uses.',
-    goal: 'Implement period_minutes(altitude_km) and compare 550 km vs 1100 km.',
-    prompt:
-      'Circular orbit: a = EARTH_RADIUS_KM + h, T = 2π √(a³/μ) seconds. Implement period_minutes(h).',
-    predict: 'If you double altitude from 550→1100 km, does period increase or decrease?',
+    goal: 'Compute circular-orbit period and see how it grows with altitude.',
+    steps: [
+      'Implement period_minutes(altitude_km).',
+      'Use a = EARTH_RADIUS_KM + altitude_km and T = 2π √(a³ / MU_EARTH) in seconds, then convert to minutes.',
+      'Implement compare_altitudes() — return periods at 550 km and 1100 km.',
+      'Run checks to verify both values.',
+    ],
+    success: 'Period at 550 km ≈ 96 min; at 1100 km ≈ 107 min (higher → longer).',
+    predict: 'If altitude goes from 550 → 1100 km, does period increase or decrease?',
     starterCode: `${PRELUDE}
 def period_minutes(altitude_km: float) -> float:
     """Orbital period in minutes for a circular orbit at altitude_km."""
@@ -120,10 +130,15 @@ print(f"550 km → {p550:.1f} min · 1100 km → {p1100:.1f} min")
     pageId: 'density',
     minutes: 15,
     summary: 'Estimate how often a user is “online” — same geometric idea as the lab.',
-    goal: 'Given elevation samples over time, compute online fraction and compare sparse vs dense.',
-    prompt:
-      'online_fraction(elevations_deg, min_elev) = share of samples with elevation ≥ min_elev. Then compare two pre-built sample lists.',
-    predict: 'Will dense_elevations have a higher online_fraction than sparse_elevations at min_elev=25°?',
+    goal: 'Measure online fraction from elevation samples for sparse vs dense skies.',
+    steps: [
+      'Implement online_fraction(elevations_deg, min_elev) — fraction of samples with elevation ≥ min_elev (return 0..1).',
+      'Use the lists sparse_elevations and dense_elevations already in the starter.',
+      'Implement sparse_vs_dense(min_elev=25) — return (sparse_fraction, dense_fraction).',
+      'Run checks at min elevation 25°.',
+    ],
+    success: 'Dense should be fully online at 25°; sparse only a small share of samples.',
+    predict: 'At 25° min elevation, is dense online more often than sparse?',
     starterCode: `${PRELUDE}
 # Synthetic elevation samples (deg) over time — stand-ins for lab geometry
 sparse_elevations = [-10, -5, 5, 12, 20, 28, 15, 8, -2, -8, 3, 18, 30, 22, 10]
@@ -170,10 +185,15 @@ print(f"Online fraction @25° — sparse {s*100:.0f}% · dense {d*100:.0f}%")
     pageId: 'handoff',
     minutes: 12,
     summary: 'Detect serving-satellite switches — the same idea as the lab handoff counter.',
-    goal: 'Count how many times the serving sat id changes (ignoring None gaps for drops).',
-    prompt:
-      'count_handoffs(sequence) counts times consecutive non-None serving ids differ. Going offline (None) does not count; coming back to a new sat does.',
-    predict: 'In [A, A, B, B, None, C], how many handoffs?',
+    goal: 'Count how many times the serving satellite changes over a sequence.',
+    steps: [
+      'Implement count_handoffs(serving_ids) where each entry is a sat id string or None (offline).',
+      'Count a handoff when the serving id changes from one non-None sat to a different non-None sat.',
+      'Going offline (A → None) does not count. Coming back to a new sat (None → B) counts if there was a previous sat.',
+      'Repeated same id does not count.',
+    ],
+    success: 'Examples: [A,B,C] → 2 handoffs; [A,A,B,None,C] → 2 handoffs.',
+    predict: 'For [A, A, B, B, None, C], how many handoffs?',
     starterCode: `${PRELUDE}
 def count_handoffs(serving_ids: list[str | None]) -> int:
     """
@@ -215,11 +235,16 @@ print("handoffs(['A','B',None,'C']) =", count_handoffs(["A", "B", None, "C"]))
     moduleSlug: 'space-network',
     pageId: 'mesh',
     minutes: 15,
-    summary: 'Shortest hop count on a small graph — intuition for ISL routing as a graph problem.',
-    goal: 'BFS hop distance between nodes (unweighted).',
-    prompt:
-      'Given adj adjacency list, hops(start, goal) returns fewest edges or -1 if unreachable. Graph is undirected in the tests.',
-    predict: 'On a line A-B-C-D, hops(A,D) is?',
+    summary: 'Shortest hop count on a small graph — intuition for ISL routing.',
+    goal: 'Find the fewest hops between two nodes on an unweighted graph (BFS).',
+    steps: [
+      'Implement hops(adj, start, goal) where adj maps node → list of neighbors.',
+      'Return the number of edges on the shortest path (0 if start == goal).',
+      'Return -1 if goal is unreachable.',
+      'Use BFS (deque is imported in the starter).',
+    ],
+    success: 'On line A–B–C–D, hops(A, D) is 3. On the sample mesh, U → GW is 2 hops.',
+    predict: 'On a line A–B–C–D, what is hops(A, D)?',
     starterCode: `${PRELUDE}
 from collections import deque
 
