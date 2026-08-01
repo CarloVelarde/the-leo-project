@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { getExercise } from '@/code/exercises'
 import { getPyodide, runPython, type RunResult } from '@/code/pyodideRunner'
+import { getCurriculumModule } from '@/content/curriculum'
 import { useTheme } from '@/lib/theme'
 import { PythonCodeEditor } from '@/ui/PythonCodeEditor'
 
@@ -60,13 +61,25 @@ export function CodeAlongPage() {
     return <Navigate to="/code" replace />
   }
 
+  const mod = getCurriculumModule(ex.moduleSlug)
+  const lessonPage = mod?.pages.find((p) => p.id === ex.pageId)
   const lessonHref = `/learn/${ex.moduleSlug}/${ex.pageId}`
+  const moduleStartHref = mod
+    ? `/learn/${mod.slug}/${mod.pages[0]!.id}`
+    : `/learn/${ex.moduleSlug}`
 
   return (
     <div className="min-h-screen bg-paper">
       <header className="sticky top-0 z-20 border-b border-line bg-paper/95 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-3xl items-center justify-between gap-3 px-4 sm:max-w-5xl sm:px-6">
           <div className="flex min-w-0 items-center gap-3 text-sm">
+            <Link
+              to="/"
+              className="shrink-0 font-semibold tracking-[0.12em] text-ink uppercase no-underline hover:opacity-70"
+            >
+              Home
+            </Link>
+            <span className="text-ink-faint">/</span>
             <Link to="/code" className="text-ink-muted no-underline hover:text-ink">
               Code
             </Link>
@@ -85,7 +98,7 @@ export function CodeAlongPage() {
               to={lessonHref}
               className="rounded-full border border-line px-3 py-1 text-xs text-ink-muted no-underline hover:border-ink hover:text-ink"
             >
-              Back to lesson
+              Lesson
             </Link>
           </div>
         </div>
@@ -100,6 +113,86 @@ export function CodeAlongPage() {
           {ex.title}
         </h1>
         <p className="mt-3 max-w-2xl text-base leading-relaxed text-ink-muted">{ex.goal}</p>
+
+        {/* Related lessons — refer back if stuck */}
+        <aside className="mt-6 rounded-2xl border border-line bg-paper-elevated px-5 py-4 sm:px-6">
+          <h2 className="text-sm font-semibold tracking-tight text-ink">
+            Related lessons
+          </h2>
+          <p className="mt-1 text-sm leading-relaxed text-ink-muted">
+            Stuck or need more context? Open the lesson that introduces this idea, then come back
+            here anytime.
+          </p>
+          <ul className="mt-4 space-y-2">
+            <li>
+              <Link
+                to={lessonHref}
+                className="group flex items-start justify-between gap-3 rounded-lg border border-line bg-paper px-4 py-3 no-underline transition-colors hover:border-ink"
+              >
+                <div className="min-w-0">
+                  <p className="text-xs font-medium tracking-wide text-ink-faint uppercase">
+                    Primary lesson
+                  </p>
+                  <p className="mt-0.5 font-medium text-ink group-hover:opacity-80">
+                    {lessonPage?.title ?? 'Open related page'}
+                  </p>
+                  {mod ? (
+                    <p className="mt-0.5 text-sm text-ink-muted">
+                      {mod.track === 'core' ? `Module ${mod.order}` : 'Optional'} · {mod.title}
+                    </p>
+                  ) : null}
+                </div>
+                <span className="shrink-0 text-ink-faint" aria-hidden>
+                  →
+                </span>
+              </Link>
+            </li>
+            {mod && mod.pages[0]!.id !== ex.pageId ? (
+              <li>
+                <Link
+                  to={moduleStartHref}
+                  className="group flex items-start justify-between gap-3 rounded-lg border border-line bg-paper px-4 py-3 no-underline transition-colors hover:border-ink"
+                >
+                  <div className="min-w-0">
+                    <p className="text-xs font-medium tracking-wide text-ink-faint uppercase">
+                      Full module
+                    </p>
+                    <p className="mt-0.5 font-medium text-ink group-hover:opacity-80">
+                      Start of {mod.title}
+                    </p>
+                    <p className="mt-0.5 text-sm text-ink-muted">
+                      Begin at “{mod.pages[0]!.navLabel}” and work through the pages
+                    </p>
+                  </div>
+                  <span className="shrink-0 text-ink-faint" aria-hidden>
+                    →
+                  </span>
+                </Link>
+              </li>
+            ) : null}
+            <li>
+              <Link
+                to="/simulate"
+                className="group flex items-start justify-between gap-3 rounded-lg border border-line bg-paper px-4 py-3 no-underline transition-colors hover:border-ink"
+              >
+                <div className="min-w-0">
+                  <p className="text-xs font-medium tracking-wide text-ink-faint uppercase">
+                    3D lab
+                  </p>
+                  <p className="mt-0.5 font-medium text-ink group-hover:opacity-80">
+                    Constellation lab
+                  </p>
+                  <p className="mt-0.5 text-sm text-ink-muted">
+                    See the same models spatially if numbers feel abstract
+                  </p>
+                </div>
+                <span className="shrink-0 text-ink-faint" aria-hidden>
+                  →
+                </span>
+              </Link>
+            </li>
+          </ul>
+        </aside>
 
         {/* Instructions — clear hierarchy, readable type */}
         <section className="mt-8 rounded-2xl border border-line bg-paper shadow-sm">
