@@ -20,6 +20,16 @@ npm run build    # production build
 npm run preview  # preview the build
 ```
 
+## Deploy (Vercel)
+
+1. Push to GitHub (already done for this repo).
+2. At [vercel.com](https://vercel.com) → **Add New…** → **Project**.
+3. Import `starlink-edu` (connect GitHub if prompted).
+4. Leave defaults: Framework **Vite**, Build `npm run build`, Output `dist`.
+5. **Deploy**. You get a `*.vercel.app` URL with HTTPS.
+
+SPA routing is handled by `vercel.json`. Later pushes to `main` redeploy automatically.
+
 ## Stack
 
 Vite · React · TypeScript · React Router · R3F · Tailwind
