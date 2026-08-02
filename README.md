@@ -2,7 +2,7 @@
 
 [Live demo](https://starlink-edu.vercel.app/) · [Source](https://github.com/CarloVelarde/starlink-edu)
 
-Public education site for **Starlink-style LEO constellations**: page-by-page lessons, a guided 3D lab, and optional in-browser Python code-alongs.
+Public education site for **Starlink style LEO constellations**: page by page lessons, a guided 3D lab, and optional in browser Python code alongs.
 
 Not affiliated with SpaceX. Pedagogical models only (circular Kepler, geometric elevation).
 
@@ -39,6 +39,8 @@ npm run dev      # local
 npm test         # unit + bdd
 npm run build    # production
 ```
+
+CI (GitHub Actions) runs lint, test, and build on every push and PR to `main`.
 
 ## License
 

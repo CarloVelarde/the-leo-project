@@ -5,8 +5,10 @@
 Vite · React 19 · TypeScript · React Router · R3F/Drei · Tailwind v4 · no backend · Vitest.
 
 ```bash
-npm run dev | build | preview | test | test:coverage
+npm run dev | build | preview | lint | test | test:coverage
 ```
+
+CI: `.github/workflows/ci.yml` — `npm ci` → lint → test → build (Node 22).
 
 Frontend-only long-term: static SPA; domain math and lab run in the browser.
 

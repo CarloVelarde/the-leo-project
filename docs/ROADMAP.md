@@ -15,7 +15,7 @@ Sources/glossary, page reader, lab coach, code-alongs (14 exercises).
 
 ## Next
 
-1. **Polish** — CI on GitHub Actions, a11y/perf, optional code-splitting  
+1. **Polish** — a11y/perf, optional code-splitting  
 2. **Content refresh** — re-check Space Safety altitudes and McDowell counts on a schedule  
 3. **Lab extras** — optional ISL overlay; more scenario presets  
 
@@ -25,6 +25,7 @@ Sources/glossary, page reader, lab coach, code-alongs (14 exercises).
 - Vitest unit + BDD under `tests/` with shared support fixtures  
 - Domain coverage: orbit, coverage, constellation, handoff, geometry, insights, lab URL, progress  
 - `computeLabFrame` pure display snapshot + rigorous constellation/lab accuracy suites  
+- GitHub Actions CI: lint → test → build on `main` / PRs  
 
 
 ## Later

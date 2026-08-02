@@ -24,8 +24,11 @@ Docs are **lanes**: follow them by default; cross them when a better path is cle
 ## Verify
 
 ```bash
-npm run build
+npm run lint
 npm test
+npm run build
 ```
+
+CI runs the same three steps on push/PR to `main` (`.github/workflows/ci.yml`).
 
 Index: [docs/README.md](docs/README.md).
