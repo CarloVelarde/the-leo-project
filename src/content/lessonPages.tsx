@@ -159,16 +159,18 @@ const PAGES: Record<string, ReactNode> = {
       </p>
       <KeyNumbers
         items={[
-          { label: 'Latency', value: 'delay', hint: 'How long you wait' },
-          { label: 'Bandwidth', value: 'capacity', hint: 'How wide the pipe is' },
-          { label: 'RTT', value: 'there and back', hint: 'What many apps pay' },
+          { label: 'Latency', value: 'ms', hint: 'Milliseconds of waiting (1,000 ms = 1 s)' },
+          { label: 'Bandwidth', value: 'Mbps', hint: 'Megabits per second of capacity' },
+          { label: 'RTT', value: 'ms', hint: 'Round trip: there and back' },
         ]}
+        caption="Practical units: delay in ms, capacity in Mbps or Gbps (bits, not bytes)."
       />
       <p>
         <strong>RTT</strong> means <strong>round trip time</strong>: the time for a request to go
-        out and a reply to come back. Video calls, games, and many web apps wait on RTTs. Rough
-        human feel: about 20 to 40 milliseconds feels snappy. Around 500 milliseconds and higher
-        makes conversation feel awkward. More detail: <InlineSource id="mdnLatency" />,{' '}
+        out and a reply to come back, almost always measured in <strong>milliseconds (ms)</strong>.
+        Video calls, games, and many web apps wait on RTTs. Rough human feel: about 20 to 40 ms
+        feels snappy. Around 100 to 200 ms is noticeable. Around 500 ms and higher makes
+        conversation feel awkward. More detail: <InlineSource id="mdnLatency" />,{' '}
         <InlineSource id="hpbnLatency" />.
       </p>
       <p>
