@@ -15,9 +15,17 @@ Sources/glossary, page reader, lab coach, code-alongs (14 exercises).
 
 ## Next
 
-1. **Polish** — sim unit tests, a11y/perf, deploy when ready  
+1. **Polish** — CI on GitHub Actions, a11y/perf, optional code-splitting  
 2. **Content refresh** — re-check Space Safety altitudes and McDowell counts on a schedule  
 3. **Lab extras** — optional ISL overlay; more scenario presets  
+
+## Done (infra)
+
+- Deployed static SPA on Vercel  
+- Vitest unit + BDD under `tests/` with shared support fixtures  
+- Domain coverage: orbit, coverage, constellation, handoff, geometry, insights, lab URL, progress  
+- `computeLabFrame` pure display snapshot + rigorous constellation/lab accuracy suites  
+
 
 ## Later
 

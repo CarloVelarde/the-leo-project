@@ -16,19 +16,14 @@ import {
   Vector3,
   type InstancedMesh,
 } from 'three'
-import {
-  evaluateCoverage,
-  footprintHalfAngleRad,
-  userPositionKm,
-} from '@/sim/coverage'
-import { generateConstellation, toRenderPosition, totalSatellites } from '@/sim/constellation'
+import { toRenderPosition } from '@/sim/constellation'
 import { HandoffTracker } from '@/sim/handoff'
+import { buildFootprintDisc } from '@/sim/orbitGeometry'
 import {
-  buildFootprintDisc,
-  groundTrackPoint,
-  sampleFootprintOnUnitSphere,
-} from '@/sim/orbitGeometry'
-import { orbitalPeriodMinutes, orbitalSpeedKms } from '@/sim/orbit'
+  computeLabFrame,
+  LAB_FOOTPRINT_SAMPLES,
+  labInstanceCount,
+} from '@/sim/labFrame'
 import type { LabParams, LiveSimStats, SceneDisplayOptions, SimFocusState } from '@/sim/types'
 
 const temp = new Object3D()
@@ -45,7 +40,6 @@ const _vY = new Vector3(0, 1, 0)
 const _q = new Quaternion()
 
 const TRACK_CAPACITY = 180
-const FOOTPRINT_SAMPLES = 64
 
 type LabCoreProps = {
   params: LabParams
@@ -82,7 +76,7 @@ export function LabCore({
   const trackBuf = useRef(new Float32Array(TRACK_CAPACITY * 3))
   const trackSampleAcc = useRef(0)
 
-  const count = Math.max(1, totalSatellites(params))
+  const count = labInstanceCount(params)
 
   const linkLine = useMemo(() => {
     const geo = makeLineGeo(2)
@@ -114,7 +108,7 @@ export function LabCore({
   }, [])
 
   const footprintLine = useMemo(() => {
-    const geo = makeLineGeo(FOOTPRINT_SAMPLES + 1)
+    const geo = makeLineGeo(LAB_FOOTPRINT_SAMPLES + 1)
     const mat = new LineBasicMaterial({
       color: colorServing,
       transparent: true,
@@ -131,7 +125,7 @@ export function LabCore({
     const { positions, indices } = buildFootprintDisc(
       [0, 0, EARTH_PLACEHOLDER],
       0.2,
-      FOOTPRINT_SAMPLES,
+      LAB_FOOTPRINT_SAMPLES,
     )
     const geo = new BufferGeometry()
     geo.setAttribute('position', new Float32BufferAttribute(positions, 3))
@@ -206,8 +200,9 @@ export function LabCore({
 
     const t = simTime.current
     const wall = clock.elapsedTime
-    const sats = generateConstellation(params, t)
-    const coverage = evaluateCoverage(params, sats)
+    // Pure frame: constellation, coverage, footprints — same as tests.
+    const frame = computeLabFrame(params, t)
+    const { satellites: sats, coverage, renderPositions, userRender } = frame
     const prevHandoffs = handoffs.current.count
     handoffs.current.observe(coverage.servingSatId, t)
     if (handoffs.current.count > prevHandoffs) {
@@ -222,7 +217,7 @@ export function LabCore({
 
     for (let i = 0; i < sats.length; i++) {
       const sat = sats[i]!
-      const [x, y, z] = toRenderPosition(sat.position)
+      const [x, y, z] = renderPositions[i]!
       const isServing = sat.id === coverage.servingSatId
       const inView = inViewSet?.has(sat.id) ?? false
 
@@ -248,10 +243,9 @@ export function LabCore({
     mesh.instanceMatrix.needsUpdate = true
     if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true
 
-    const userRender = toRenderPosition(userPositionKm(params.userLatDeg, params.userLonDeg))
     _vUser.set(userRender[0], userRender[1], userRender[2])
 
-    // Link beam + line
+    // Link beam + line (endpoints = user + serving render positions)
     if (display.showLink && coverage.online && coverage.servingPositionKm) {
       const satR = toRenderPosition(coverage.servingPositionKm)
       _vSat.set(satR[0], satR[1], satR[2])
@@ -283,14 +277,9 @@ export function LabCore({
       linkBeam.visible = false
     }
 
-    // Footprint outline + filled disc
-    if (display.showFootprint && coverage.online && coverage.servingPositionKm) {
-      const half = footprintHalfAngleRad(params.altitudeKm, params.minElevationDeg)
-      const ring = sampleFootprintOnUnitSphere(
-        coverage.servingPositionKm,
-        half,
-        FOOTPRINT_SAMPLES,
-      )
+    // Footprint outline + filled disc from pure frame geometry
+    if (display.showFootprint && frame.footprintRingUnit && frame.footprintDisc) {
+      const ring = frame.footprintRingUnit
       const posAttr = footprintLine.geometry.getAttribute('position') as Float32BufferAttribute
       const arr = posAttr.array as Float32Array
       for (let i = 0; i < ring.length; i++) {
@@ -302,9 +291,8 @@ export function LabCore({
       footprintLine.geometry.computeBoundingSphere()
       footprintLine.visible = true
 
-      const disc = buildFootprintDisc(coverage.servingPositionKm, half, FOOTPRINT_SAMPLES)
       const discPos = footprintDisc.geometry.getAttribute('position') as Float32BufferAttribute
-      ;(discPos.array as Float32Array).set(disc.positions)
+      ;(discPos.array as Float32Array).set(frame.footprintDisc.positions)
       discPos.needsUpdate = true
       footprintDisc.geometry.computeBoundingSphere()
       footprintDisc.visible = true
@@ -315,11 +303,11 @@ export function LabCore({
     }
 
     // Ground track of serving sat (sub-satellite path)
-    if (display.showGroundTrack && coverage.online && coverage.servingPositionKm) {
+    if (display.showGroundTrack && frame.groundTrackSample) {
       trackSampleAcc.current += delta * Math.max(1, params.timeScale / 40)
       if (trackSampleAcc.current >= 1 || trackCount.current === 0) {
         trackSampleAcc.current = 0
-        const pt = groundTrackPoint(coverage.servingPositionKm)
+        const pt = frame.groundTrackSample
         const w = trackWrite.current % TRACK_CAPACITY
         trackBuf.current[w * 3] = pt[0]
         trackBuf.current[w * 3 + 1] = pt[1]
@@ -376,9 +364,9 @@ export function LabCore({
       if (now - lastStatsPush.current >= statsIntervalMs) {
         lastStatsPush.current = now
         onStats({
-          orbitalPeriodMin: orbitalPeriodMinutes(params.altitudeKm),
-          orbitalSpeedKms: orbitalSpeedKms(params.altitudeKm),
-          totalSatellites: sats.length,
+          orbitalPeriodMin: frame.orbitalPeriodMin,
+          orbitalSpeedKms: frame.orbitalSpeedKms,
+          totalSatellites: frame.totalSatellites,
           coverage,
           simTimeSeconds: t,
           handoffCount: handoffs.current.count,

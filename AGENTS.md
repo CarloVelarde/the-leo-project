@@ -25,6 +25,7 @@ Docs are **lanes**: follow them by default; cross them when a better path is cle
 
 ```bash
 npm run build
+npm test
 ```
 
 Index: [docs/README.md](docs/README.md).
