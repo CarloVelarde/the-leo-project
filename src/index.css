@@ -80,10 +80,23 @@
   }
 }
 
-/* Lesson prose — tight, readable, Tesla-like */
+/* Lesson prose — tight, readable, Tesla-like; mobile-safe overflow */
 .lesson-prose {
-  @apply text-base leading-relaxed text-ink;
+  @apply min-w-0 overflow-x-auto text-base leading-relaxed text-ink;
+  -webkit-overflow-scrolling: touch;
 }
+
+.lesson-prose img,
+.lesson-prose video,
+.lesson-prose svg,
+.lesson-prose canvas {
+  @apply max-w-full h-auto;
+}
+
+.lesson-prose pre {
+  @apply mb-4 max-w-full overflow-x-auto rounded-lg bg-paper-elevated p-3 text-sm;
+}
+
 
 .lesson-prose h1 {
   @apply mb-4 text-3xl font-semibold tracking-tight text-ink sm:text-4xl;
@@ -131,8 +144,9 @@
 }
 
 .lesson-prose table {
-  @apply mb-4 w-full border-collapse text-left text-sm;
+  @apply mb-4 w-full min-w-[16rem] border-collapse text-left text-sm;
 }
+
 
 .lesson-prose th {
   @apply border border-line bg-paper-elevated px-3 py-2 font-semibold text-ink;

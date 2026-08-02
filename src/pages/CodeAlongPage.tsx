@@ -71,29 +71,35 @@ export function CodeAlongPage() {
   return (
     <div className="min-h-screen bg-paper">
       <header className="sticky top-0 z-20 border-b border-line bg-paper/95 backdrop-blur-md">
-        <div className="mx-auto flex h-12 max-w-5xl items-center justify-between gap-3 px-4 sm:px-6">
-          <nav className="flex min-w-0 items-center gap-2 text-sm">
-            <Link to="/" className="font-medium text-ink no-underline hover:opacity-70">
+        <div className="mx-auto flex h-12 max-w-5xl items-center justify-between gap-2 px-3 sm:gap-3 sm:px-6">
+          <nav className="flex min-w-0 items-center gap-1.5 text-sm sm:gap-2">
+            <Link
+              to="/"
+              className="shrink-0 font-medium text-ink no-underline hover:opacity-70"
+            >
               Home
             </Link>
-            <span className="text-ink-faint">/</span>
-            <Link to="/code" className="text-ink-muted no-underline hover:text-ink">
+            <span className="hidden text-ink-faint sm:inline">/</span>
+            <Link
+              to="/code"
+              className="hidden text-ink-muted no-underline hover:text-ink sm:inline"
+            >
               Code
             </Link>
             <span className="text-ink-faint">/</span>
-            <span className="truncate text-ink-muted">{ex.title}</span>
+            <span className="min-w-0 truncate text-ink-muted">{ex.title}</span>
           </nav>
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
             <button
               type="button"
               onClick={toggle}
-              className="rounded-full border border-line px-3 py-1 text-xs text-ink-muted hover:border-ink hover:text-ink"
+              className="rounded-full border border-line px-2.5 py-1 text-xs text-ink-muted hover:border-ink hover:text-ink sm:px-3"
             >
               {theme === 'light' ? 'Dark' : 'Light'}
             </button>
             <Link
               to={lessonHref}
-              className="rounded-full border border-line px-3 py-1 text-xs text-ink-muted no-underline hover:border-ink hover:text-ink"
+              className="rounded-full border border-line px-2.5 py-1 text-xs text-ink-muted no-underline hover:border-ink hover:text-ink sm:px-3"
             >
               Lesson
             </Link>
@@ -101,7 +107,7 @@ export function CodeAlongPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-4 py-5 sm:px-6 sm:py-6">
+      <main className="mx-auto max-w-5xl px-3 py-4 sm:px-6 sm:py-6">
         {/* Compact assignment header */}
         <div className="mb-4 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
           <h1 className="text-xl font-semibold tracking-tight text-ink sm:text-2xl">

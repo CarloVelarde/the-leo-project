@@ -7,26 +7,26 @@ export function LearnIndexPage() {
 
   return (
     <div className="bg-paper">
-      <section className="border-b border-line px-6 py-16 sm:py-20">
+      <section className="border-b border-line px-4 py-12 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-xs font-medium tracking-[0.3em] text-ink-faint uppercase">
             Curriculum
           </p>
-          <h1 className="mt-3 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
+          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-ink sm:text-5xl">
             Learning path
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-lg text-ink-muted">
+          <p className="mx-auto mt-4 max-w-xl text-base text-ink-muted sm:mt-5 sm:text-lg">
             Built for curious beginners with no space background. Friendly explanations, short
             pages, quizzes, and a 3D lab. Sources and a glossary stay one click away.
           </p>
-          <p className="mx-auto mt-4 max-w-lg text-sm text-ink-faint">
+          <p className="mx-auto mt-3 max-w-lg text-sm text-ink-faint sm:mt-4">
             Path: Internet basics → why tall satellites felt slow → low orbits → fleet ops →
             constellation geometry → your dish → space network → full story.
           </p>
         </div>
       </section>
 
-      <section className="mx-auto max-w-3xl px-6 py-12">
+      <section className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-12">
         <h2 className="text-sm font-semibold tracking-[0.2em] text-ink-faint uppercase">
           Core path
         </h2>

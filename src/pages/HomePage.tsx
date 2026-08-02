@@ -25,33 +25,30 @@ export function HomePage() {
           <p className="mb-4 text-xs font-medium tracking-[0.35em] text-white/80 uppercase">
             Public education
           </p>
-          <h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-6xl sm:leading-[1.05]">
+          <h1 className="text-3xl font-semibold tracking-tight text-balance sm:text-6xl sm:leading-[1.05]">
             How Starlink-style
             <br />
             LEO satellites work
           </h1>
-          <p className="mx-auto mt-6 max-w-xl text-base text-white/85 sm:text-lg">
+          <p className="mx-auto mt-5 max-w-xl text-sm text-white/85 sm:mt-6 sm:text-lg">
             Zero space background required. Clear lessons, real sources, and a live constellation
             lab — from Internet packets to mega-constellations.
           </p>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:mt-10 sm:gap-4">
             <Link
               to="/learn"
-              className="rounded-full bg-white px-8 py-3 text-sm font-medium text-black no-underline transition-opacity hover:opacity-90"
+              className="rounded-full bg-white px-6 py-3 text-sm font-medium text-black no-underline transition-opacity hover:opacity-90 sm:px-8"
             >
               Start learning
             </Link>
             <Link
               to="/simulate"
-              className="rounded-full border border-white/70 px-8 py-3 text-sm font-medium text-white no-underline transition-colors hover:bg-white/10"
+              className="rounded-full border border-white/70 px-6 py-3 text-sm font-medium text-white no-underline transition-colors hover:bg-white/10 sm:px-8"
             >
               Open the lab
             </Link>
           </div>
         </div>
-        <p className="absolute bottom-8 z-10 text-[11px] tracking-wide text-white/50">
-          Scroll
-        </p>
       </section>
 
       {/* White band — Tesla-like product copy */}
