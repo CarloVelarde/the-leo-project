@@ -1,6 +1,7 @@
 # Starlink Edu
 
 [![CI](https://github.com/CarloVelarde/starlink-edu/actions/workflows/ci.yml/badge.svg)](https://github.com/CarloVelarde/starlink-edu/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 [Live demo](https://starlink-edu.vercel.app/) · [Source](https://github.com/CarloVelarde/starlink-edu)
 
