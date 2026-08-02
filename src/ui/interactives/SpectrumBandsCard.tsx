@@ -27,7 +27,7 @@ const ROWS = [
 export function SpectrumBandsCard() {
   return (
     <Figure
-      caption="Higher frequency → more bandwidth potential, more rain fade. Exact operator channel plans are regulatory detail — learn the pattern."
+      caption="Frequency is in GHz (billions of cycles per second). Higher GHz often means more capacity potential and more rain fade. Exact operator channel plans are regulatory detail; learn the pattern."
       credit="ESA satellite frequency bands · public architecture pattern only"
     >
       <div className="overflow-x-auto">
@@ -35,7 +35,7 @@ export function SpectrumBandsCard() {
           <thead>
             <tr className="border-b border-line text-xs tracking-wide text-ink-faint uppercase">
               <th className="py-2 pr-3 font-medium">Band class</th>
-              <th className="py-2 pr-3 font-medium">Approx.</th>
+              <th className="py-2 pr-3 font-medium">Approx. GHz</th>
               <th className="py-2 pr-3 font-medium">Typical role</th>
               <th className="py-2 font-medium">Weather</th>
             </tr>

@@ -36,8 +36,8 @@ const ROWS: Row[] = [
 export function OrbitRegimesTable() {
   return (
     <Figure
-      caption="Orbit regimes at a glance. Altitude bounds are conventions (ESA/NASA), not sharp physical walls."
-      credit="ESA Types of orbits · light-time from d/c with c ≈ 3×10⁵ km/s"
+      caption="Orbit regimes at a glance. Altitude in km above Earth; periods in minutes or hours; light time floors in ms. Bounds are conventions (ESA/NASA), not sharp physical walls."
+      credit="ESA Types of orbits · light time from d/c with c ≈ 3×10⁵ km/s"
     >
       <div className="overflow-x-auto">
         <table className="w-full min-w-[32rem] border-collapse text-left text-sm">

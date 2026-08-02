@@ -1471,12 +1471,12 @@ const PAGES: Record<string, ReactNode> = {
       <LatencyStack />
       <KeyNumbers
         items={[
-          { label: 'Floor', value: 'd / c', hint: 'Travel time only' },
-          { label: 'Mean RTT', value: 'stack sum', hint: 'Typical round trip' },
-          { label: 'Jitter', value: 'wobble', hint: 'How RTT varies' },
-          { label: 'Outage', value: 'no path', hint: 'Trees, rain, gaps' },
+          { label: 'Floor', value: 'ms', hint: 'Travel time only (distance / speed of light)' },
+          { label: 'Mean RTT', value: 'ms', hint: 'Typical round trip users measure' },
+          { label: 'Jitter', value: 'ms', hint: 'How much RTT wobbles over time' },
+          { label: 'Throughput', value: 'Mbps', hint: 'Shared capacity you feel as speed' },
         ]}
-        caption="A low marketing delay and a choppy call can both be true in different conditions."
+        caption="Delay and jitter in milliseconds; speed in megabits per second. A low marketing delay and a choppy call can both be true."
       />
       <p>
         Open problem classes (no vendor claims): which satellite to pick, how to schedule beams,

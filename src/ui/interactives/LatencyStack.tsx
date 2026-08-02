@@ -26,57 +26,57 @@ const FACTORS: Factor[] = [
     label: 'Propagation',
     short: 'd / c',
     detail:
-      'Light-time along the actual path (slant range, not just altitude). LEO cuts this vs GEO; it is a floor, not the full user RTT.',
+      'Light time along the actual path (slant range in km, not just altitude). Free space is about 3.3 ms per 1,000 km one way. LEO cuts this vs GEO; it is a floor, not the full user RTT in ms.',
     floor: true,
   },
   {
     id: 'processing',
     label: 'Processing',
-    short: 'modems & nodes',
+    short: 'modems and nodes',
     detail:
-      'Encoding, decoding, and software on terminal, satellite, and ground equipment add small delays on every hop.',
+      'Encoding, decoding, and software on terminal, satellite, and ground equipment add small delays on every hop, often fractions of a ms to a few ms each, depending on design.',
   },
   {
     id: 'queue',
     label: 'Queueing',
     short: 'shared load',
     detail:
-      'When many users share beams or gateways, packets wait. Coverage can stay “up” while queues grow — capacity, not geometry.',
+      'When many users share beams or gateways, packets wait in line. Coverage can stay “up” while queues grow. That is capacity, not geometry. Busy hours can add tens of ms or more.',
   },
   {
     id: 'path',
     label: 'Routing path',
-    short: 'hops & ISLs',
+    short: 'hops and ISLs',
     detail:
-      'User → sat → (optional laser mesh) → gateway → fiber. Extra hops and longer terrestrial tails add delay even when the serving sat is nearby.',
+      'User → sat → (optional laser mesh) → gateway → fiber. Extra hops and longer terrestrial tails add delay even when the serving sat is nearby. Count hops first; better toys sum delay in ms.',
   },
   {
     id: 'handoff',
     label: 'Handoffs',
     short: 'mobility',
     detail:
-      'Serving satellite changes. Good systems aim for smooth make-before-break; users may still see brief blips or jitter spikes.',
+      'Serving satellite changes (often many times per hour in LEO). Good systems aim for smooth overlap; users may still see brief blips or jitter spikes measured in ms.',
   },
   {
     id: 'obstruction',
     label: 'Obstruction',
     short: 'clear sky',
     detail:
-      'Trees and roofs break the link even when a map shows a sat “above” min elevation. Outage feels like latency infinity.',
+      'Trees and roofs break the link even when a map shows a sat above min elevation in degrees. Outage is not a high ms number; it is no usable path.',
   },
   {
     id: 'weather',
     label: 'Weather',
     short: 'rain fade',
     detail:
-      'Higher bands (Ka-class and above) lose margin in heavy rain. Links may slow or drop — physics, not a software bug.',
+      'Higher bands (Ka class and above, tens of GHz) lose margin in heavy rain. Links may drop rate (fewer Mbps) or disconnect. Physics, not a software bug.',
   },
   {
     id: 'ground',
     label: 'Terrestrial tail',
     short: 'fiber Internet',
     detail:
-      'After the gateway, ordinary Internet path to the server still applies. CDN distance and peering matter for the full RTT.',
+      'After the gateway, the ordinary Internet path to the server still applies. Cross country fiber RTT can be tens of ms; intercontinental can be over 100 ms. CDN distance and peering matter.',
   },
 ]
 
@@ -89,8 +89,8 @@ export function LatencyStack() {
 
   return (
     <Figure
-      caption="Tap a factor. Light-time is only the propagation floor — real experience stacks many ingredients."
-      credit="Systems model for this course — not a measured product RTT"
+      caption="Tap a factor. Light time is only the propagation floor in ms. Real experience stacks many ingredients (still often discussed in ms for delay, Mbps for speed)."
+      credit="Systems model for this course, not a measured product RTT"
     >
       <div className="flex flex-wrap gap-2">
         {FACTORS.map((f) => (

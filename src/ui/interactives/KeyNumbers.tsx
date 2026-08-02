@@ -25,7 +25,9 @@ export function KeyNumbers({ items, caption }: KeyNumbersProps) {
               {it.label}
             </p>
             <p className="mt-1 font-mono text-lg font-medium tabular-nums text-ink">{it.value}</p>
-            {it.hint ? <p className="mt-1 text-xs text-ink-muted">{it.hint}</p> : null}
+            {it.hint ? (
+              <p className="mt-1 text-xs leading-snug text-ink-muted">{it.hint}</p>
+            ) : null}
           </div>
         ))}
       </div>
