@@ -181,7 +181,7 @@ assert d > s, f"dense should beat sparse, got sparse={s}, dense={d}"
 assert abs(s - 2/15) < 1e-9, f"sparse expected 2/15, got {s}"
 assert d == 1.0, f"dense expected 1.0 at 25°, got {d}"
 print("CHECK_OK")
-print(f"Online fraction @25° — sparse {s*100:.0f}% · dense {d*100:.0f}%")
+print(f"Online fraction @25°: sparse {s*100:.0f}% · dense {d*100:.0f}%")
 `,
   },
   {
@@ -467,7 +467,7 @@ assert d > s, f"dense should beat sparse, got sparse={s}, dense={d}"
 s2 = mc_coverage(1, 50, "sparse", 25.0)
 assert 0.0 <= s2 <= 1.0
 print("CHECK_OK")
-print(f"MC @25° — sparse {s*100:.0f}% · dense {d*100:.0f}% (n=200)")
+print(f"MC @25°: sparse {s*100:.0f}% · dense {d*100:.0f}% (n=200)")
 `,
   },
   {
@@ -859,7 +859,7 @@ assert abs(path_delay_ms(550.0, 3) - leo) < 1e-9
 assert abs(geo - 2 * one_way_ms(GEO_ALTITUDE_KM)) < 1e-9
 assert leo < 10 and geo > 200
 print("CHECK_OK")
-print(f"Toy path delay — LEO×3 ≈ {leo:.2f} ms · GEO×2 ≈ {geo:.2f} ms")
+print(f"Toy path delay: LEO×3 ≈ {leo:.2f} ms · GEO×2 ≈ {geo:.2f} ms")
 `,
   },
 ]
