@@ -1,5 +1,7 @@
 # Starlink Edu
 
+[![CI](https://github.com/CarloVelarde/starlink-edu/actions/workflows/ci.yml/badge.svg)](https://github.com/CarloVelarde/starlink-edu/actions/workflows/ci.yml)
+
 [Live demo](https://starlink-edu.vercel.app/) · [Source](https://github.com/CarloVelarde/starlink-edu)
 
 Public education site for **Starlink style LEO constellations**: page by page lessons, a guided 3D lab, and optional in browser Python code alongs.
