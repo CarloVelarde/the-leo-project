@@ -1,9 +1,9 @@
 # The Leo Project
 
-[![CI](https://github.com/CarloVelarde/starlink-edu/actions/workflows/ci.yml/badge.svg)](https://github.com/CarloVelarde/starlink-edu/actions/workflows/ci.yml)
+[![CI](https://github.com/CarloVelarde/the-leo-project/actions/workflows/ci.yml/badge.svg)](https://github.com/CarloVelarde/the-leo-project/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-[Live demo](https://theleoproject.app/) · [Source](https://github.com/CarloVelarde/starlink-edu)
+[Live demo](https://theleoproject.app/) · [Source](https://github.com/CarloVelarde/the-leo-project)
 
 Public education site for **Starlink-style LEO constellations**: page-by-page lessons, a guided 3D lab, and optional in-browser Python code-alongs.
 
