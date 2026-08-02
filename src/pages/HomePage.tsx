@@ -60,8 +60,9 @@ export function HomePage() {
           Built like a course. Backed like a reference.
         </h2>
         <p className="mt-6 text-lg leading-relaxed text-ink-muted">
-          Eight short modules. Each module is split into pages so you focus on one idea at a time —
-          then go deeper with quizzes, diagrams, and the 3D lab.
+          Eight core modules in beginner friendly order: Internet first, then tall orbit delay,
+          low orbits, fleet ops, constellation geometry, your dish, the space network, and a full
+          synthesis. Optional tracks and Python go deeper when you want.
         </p>
         <div className="mt-12 grid gap-8 text-left sm:grid-cols-3">
           {[

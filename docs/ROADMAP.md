@@ -4,16 +4,24 @@ Lanes for priority—not a contract. Reorder when reality demands; update this f
 
 ## Done
 
-Scaffold, sim core, 3D lab, M1–M8 + optional tracks, sources/glossary, page reader, B/W UI + dark mode, lab coach/status.
+Scaffold, sim core, 3D lab, full M1–M8 curriculum hardening:
+
+- **Phase 1** — capacity, spectrum, obstruction  
+- **Phase 2** — multi-factor performance stack + capstone quiz  
+- **Phase 3** — TCP/loss, gateway scarcity, elevation/contact/MC/Dijkstra code  
+- **Phase 4** — parameter sweeps, ISL-from-geometry, handoff policy, portfolio brief, optional comparative track, GEO long-fat-pipe, spectrum-shared Advanced  
+
+Sources/glossary, page reader, lab coach, code-alongs (14 exercises).
 
 ## Next
 
-1. **Polish** — content SOT cleanup (`curriculum` + `lessonPages`), sim unit tests, a11y/perf, deploy when ready  
-2. **Code-alongs MVP** — Pyodide shell, 4–6 exercises, lesson cards (see CODE_ALONGS.md)  
+1. **Polish** — sim unit tests, a11y/perf, deploy when ready  
+2. **Content refresh** — re-check Space Safety altitudes and McDowell counts on a schedule  
+3. **Lab extras** — optional ISL overlay; more scenario presets  
 
 ## Later
 
-Hidden tests, 1–2 portfolio projects, lab extras (ISL overlay, more tracks), optional backend for synced progress.
+Hidden tests, optional backend for synced progress, RF-lite optional track (dB intuition only).
 
 ## Backlog (ignore unless asked)
 

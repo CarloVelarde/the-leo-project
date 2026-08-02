@@ -73,12 +73,12 @@ export function OrbitAltitudeDiagram() {
         </text>
 
         {/* Starlink band callout */}
-        <rect x="24" y="250" width="280" height="48" rx="6" fill="#12182b" stroke="#2a3658" />
+        <rect x="24" y="250" width="300" height="48" rx="6" fill="#12182b" stroke="#2a3658" />
         <text x="38" y="270" fill="#cbd5e1" fontSize="11">
-          Starlink broadband shells (public docs):
+          Starlink-class broadband: LEO shells
         </text>
         <text x="38" y="288" fill="#80ed99" fontSize="11">
-          roughly hundreds of km (LEO) — not GEO
+          hundreds of km (dated public plans) — not GEO
         </text>
       </svg>
     </Figure>

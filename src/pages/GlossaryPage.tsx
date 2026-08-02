@@ -25,7 +25,10 @@ export function GlossaryPage() {
   return (
     <div className="mx-auto max-w-2xl px-6 py-16">
       <h1 className="text-4xl font-semibold tracking-tight text-ink">Glossary</h1>
-      <p className="mt-3 text-ink-muted">Core terms for the learning path.</p>
+      <p className="mt-3 text-ink-muted">
+        Terms for the full path — Internet, orbits, constellation, terminals, and space network.
+        Each term links to related words and modules.
+      </p>
 
       <div className="mt-8">
         <label htmlFor="glossary-search" className="sr-only">

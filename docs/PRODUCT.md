@@ -1,6 +1,6 @@
 # Product
 
-Public education site: how **Starlink-style LEO mega-constellations** work—from Internet basics to end-to-end connectivity—via page-by-page lessons, a guided 3D lab, and planned optional Python code-alongs.
+Public education site: how **Starlink-style LEO mega-constellations** work—from Internet basics to end-to-end connectivity—via page-by-page lessons, a guided 3D lab, and optional Python code-alongs.
 
 **Not** affiliated with SpaceX. No reverse-engineering of proprietary algorithms.
 
@@ -17,6 +17,7 @@ Public education site: how **Starlink-style LEO mega-constellations** work—fro
 3. **Optional depth** (Advanced, optional tracks, code-alongs)—never block Next.  
 4. **Same simplified models** everywhere (circular Kepler, geometric elevation, parametric shells).  
 5. **Trust:** assumptions visible; sources curated; time-sensitive numbers dated.  
+6. **Navigation:** prev/next pages, module jump, home/path/glossary/lab/code from the reader.  
 
 ## Identity
 

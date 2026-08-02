@@ -308,7 +308,7 @@ function SidebarContent({
         <p className="px-2 py-1 text-[10px] font-semibold tracking-widest text-ink-faint uppercase">
           All modules
         </p>
-        <ul className="mt-1 max-h-48 overflow-y-auto">
+        <ul className="mt-1 max-h-40 overflow-y-auto">
           {CURRICULUM.filter((m) => m.track === 'core').map((m) => (
             <li key={m.id}>
               <Link
@@ -326,13 +326,43 @@ function SidebarContent({
             </li>
           ))}
         </ul>
-        <Link
-          to="/learn"
-          onClick={onNavigate}
-          className="mt-2 block px-2 py-2 text-xs text-ink-faint no-underline hover:text-ink"
-        >
-          ← Learning path
-        </Link>
+        <div className="mt-2 space-y-0.5 border-t border-line pt-2">
+          <Link
+            to="/learn"
+            onClick={onNavigate}
+            className="block rounded-md px-2 py-2 text-xs text-ink-muted no-underline hover:text-ink"
+          >
+            Learning path
+          </Link>
+          <Link
+            to="/glossary"
+            onClick={onNavigate}
+            className="block rounded-md px-2 py-2 text-xs text-ink-muted no-underline hover:text-ink"
+          >
+            Glossary
+          </Link>
+          <Link
+            to="/simulate"
+            onClick={onNavigate}
+            className="block rounded-md px-2 py-2 text-xs text-ink-muted no-underline hover:text-ink"
+          >
+            3D lab
+          </Link>
+          <Link
+            to="/code"
+            onClick={onNavigate}
+            className="block rounded-md px-2 py-2 text-xs text-ink-muted no-underline hover:text-ink"
+          >
+            Code-alongs
+          </Link>
+          <Link
+            to="/"
+            onClick={onNavigate}
+            className="block rounded-md px-2 py-2 text-xs text-ink-faint no-underline hover:text-ink"
+          >
+            Home
+          </Link>
+        </div>
       </div>
     </div>
   )

@@ -1,14 +1,18 @@
 import { Link } from 'react-router-dom'
-import { getExerciseForPage } from '@/code/exercises'
+import { getExercise, getExerciseForPage } from '@/code/exercises'
 
 type CodeAlongCardProps = {
   moduleSlug: string
   pageId: string
+  /** Pin a specific exercise when a page has more than one. */
+  exerciseId?: string
 }
 
 /** Optional entry point on a lesson page — never blocks Next. */
-export function CodeAlongCard({ moduleSlug, pageId }: CodeAlongCardProps) {
-  const ex = getExerciseForPage(moduleSlug, pageId)
+export function CodeAlongCard({ moduleSlug, pageId, exerciseId }: CodeAlongCardProps) {
+  const ex = exerciseId
+    ? getExercise(exerciseId)
+    : getExerciseForPage(moduleSlug, pageId)
   if (!ex) return null
 
   return (
