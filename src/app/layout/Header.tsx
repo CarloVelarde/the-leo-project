@@ -1,5 +1,5 @@
 import { NavLink, Link } from 'react-router-dom'
-import { GITHUB_REPO_URL } from '@/lib/site'
+import { GITHUB_REPO_URL, SITE_NAME } from '@/lib/site'
 import { useTheme } from '@/lib/theme'
 import { GitHubIcon } from '@/ui/GitHubIcon'
 
@@ -19,7 +19,7 @@ export function Header() {
           to="/"
           className="text-sm font-semibold tracking-[0.18em] text-ink uppercase no-underline"
         >
-          Starlink Edu
+          {SITE_NAME}
         </Link>
         <nav className="flex flex-wrap items-center gap-5 sm:gap-7">
           <NavLink to="/learn" className={navClass}>

@@ -1,16 +1,16 @@
-# Starlink Edu
+# The Leo Project
 
 [![CI](https://github.com/CarloVelarde/starlink-edu/actions/workflows/ci.yml/badge.svg)](https://github.com/CarloVelarde/starlink-edu/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-[Live demo](https://starlink-edu.vercel.app/) · [Source](https://github.com/CarloVelarde/starlink-edu)
+[Live demo](https://theleoproject.app/) · [Source](https://github.com/CarloVelarde/starlink-edu)
 
-Public education site for **Starlink style LEO constellations**: page by page lessons, a guided 3D lab, and optional in browser Python code alongs.
+Public education site for **Starlink-style LEO constellations**: page-by-page lessons, a guided 3D lab, and optional in-browser Python code-alongs.
 
 Not affiliated with SpaceX. Pedagogical models only (circular Kepler, geometric elevation).
 
 <p>
-  <img src="docs/screenshots/01-home.jpg" alt="Starlink Edu home" width="800" />
+  <img src="docs/screenshots/01-home.jpg" alt="The Leo Project home" width="800" />
 </p>
 <p>
   <img src="docs/screenshots/02-lab.jpg" alt="3D constellation lab" width="800" />

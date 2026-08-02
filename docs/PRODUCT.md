@@ -1,6 +1,6 @@
 # Product
 
-Public education site: how **Starlink-style LEO mega-constellations** work—from Internet basics to end-to-end connectivity—via page-by-page lessons, a guided 3D lab, and optional Python code-alongs.
+**The Leo Project** ([theleoproject.app](https://theleoproject.app/)) — public education site: how **Starlink-style LEO mega-constellations** work—from Internet basics to end-to-end connectivity—via page-by-page lessons, a guided 3D lab, and optional Python code-alongs.
 
 **Not** affiliated with SpaceX. No reverse-engineering of proprietary algorithms.
 

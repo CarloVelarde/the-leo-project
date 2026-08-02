@@ -3,7 +3,7 @@ import type { LabParams } from '@/sim/types'
 import { labParamsToSearch } from '@/lib/labParams'
 import { DEFAULT_LAB_PARAMS } from '@/sim/constants'
 
-const STORAGE_KEY = 'starlink-edu:lab-coach-done'
+const STORAGE_KEY = 'the-leo-project:lab-coach-done'
 
 export type LabCoachAction =
   | { type: 'applyParams'; params: Partial<LabParams> }

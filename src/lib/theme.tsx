@@ -17,7 +17,7 @@ type ThemeContextValue = {
 }
 
 const ThemeContext = createContext<ThemeContextValue | null>(null)
-const STORAGE_KEY = 'starlink-edu:theme'
+const STORAGE_KEY = 'the-leo-project:theme'
 
 function getInitial(): Theme {
   try {

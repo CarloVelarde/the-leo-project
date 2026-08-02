@@ -5,7 +5,7 @@ export function OrbitAltitudeDiagram() {
   return (
     <Figure
       caption="Orbit regimes used in this course. Distances are schematic (GEO is much farther than the drawing can show to scale)."
-      credit="Conceptual diagram for Starlink Edu · values from ESA orbit classifications"
+      credit="Conceptual diagram for The Leo Project · values from ESA orbit classifications"
     >
       <svg viewBox="0 0 640 320" className="mx-auto h-auto w-full max-w-xl" role="img">
         <title>LEO, MEO, and GEO altitude comparison</title>

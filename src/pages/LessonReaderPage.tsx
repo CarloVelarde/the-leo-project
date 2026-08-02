@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
+import { SITE_NAME } from '@/lib/site'
 import {
   CURRICULUM,
   getCurriculumModule,
@@ -266,7 +267,7 @@ function SidebarContent({
           className="text-xs font-semibold tracking-[0.18em] text-ink uppercase no-underline"
           onClick={onNavigate}
         >
-          Starlink Edu
+          {SITE_NAME}
         </Link>
         <p className="mt-4 text-xs text-ink-faint">
           {mod.track === 'core' ? `Module ${mod.order}` : 'Optional track'}

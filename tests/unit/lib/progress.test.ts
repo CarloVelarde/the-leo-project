@@ -59,7 +59,7 @@ describe('progress adapter (localStorage)', () => {
   })
 
   it('recovers to empty state when storage holds invalid JSON', () => {
-    localStorage.setItem('starlink-edu:progress:v1', '{not-json')
+    localStorage.setItem('the-leo-project:progress:v1', '{not-json')
     const state = loadProgress()
     expect(state.completedModuleIds).toEqual([])
     expect(state.lastModuleId).toBeNull()

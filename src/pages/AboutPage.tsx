@@ -8,7 +8,7 @@ export function AboutPage() {
       <h1 className="text-4xl font-semibold tracking-tight text-ink">About</h1>
       <div className="mt-8 space-y-5 text-base leading-relaxed text-ink-muted">
         <p>
-          Starlink Edu is a public education project that uses Starlink-style LEO broadband as a
+          The Leo Project is a public education site that uses Starlink-style LEO broadband as a
           case study for mega-constellations. The path starts from Internet fundamentals — not
           orbital jargon — so technical learners with zero space background can build real
           intuition.

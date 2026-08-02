@@ -3,7 +3,7 @@
  * v1: localStorage only. Designed so a future backend can swap the adapter.
  */
 
-const STORAGE_KEY = 'starlink-edu:progress:v1'
+const STORAGE_KEY = 'the-leo-project:progress:v1'
 
 export type ProgressState = {
   completedModuleIds: string[]
