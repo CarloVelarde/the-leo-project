@@ -26,8 +26,9 @@ export function GlossaryPage() {
     <div className="mx-auto max-w-2xl px-6 py-16">
       <h1 className="text-4xl font-semibold tracking-tight text-ink">Glossary</h1>
       <p className="mt-3 text-ink-muted">
-        Terms for the full path — Internet, orbits, constellation, terminals, and space network.
-        Each term links to related words and modules.
+        Plain language definitions for the full path: Internet basics, orbits, fleets, terminals, and
+        the space network. Each term links to related words and modules. No engineering background
+        required.
       </p>
 
       <div className="mt-8">

@@ -10,8 +10,9 @@ export function CodeIndexPage() {
       </p>
       <h1 className="mt-2 text-4xl font-semibold tracking-tight text-ink">Code-alongs</h1>
       <p className="mt-3 text-ink-muted">
-        Short Python exercises that re-express ideas from the lessons. In-browser. Never required
-        to finish a module.
+        Short Python exercises that re express lesson ideas with the same simplified lab model.
+        In browser. Optional: never required to finish a module. Steps use plain language; open any
+        exercise after the matching lesson page.
       </p>
 
       <ul className="mt-10 divide-y divide-line border-y border-line">

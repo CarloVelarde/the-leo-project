@@ -1,5 +1,7 @@
 /**
- * Optional Python code-alongs — high-signal concepts only.
+ * Optional Python code-alongs: high signal concepts only.
+ * User facing copy matches lesson voice: plain language, no assumed engineering jargon.
+ * Starter/solution/tests keep the same simplified lab model and CHECK_OK contract.
  */
 
 export type CodeExercise = {
@@ -22,7 +24,11 @@ export type CodeExercise = {
   testCode: string
 }
 
-const PRELUDE = `# Shared constants (same model as the 3D lab)
+const PRELUDE = `# Shared constants (same simplified model as the 3D lab)
+# EARTH_RADIUS_KM: average Earth radius used for teaching
+# MU_EARTH: Earth gravity parameter in km^3/s^2
+# C_KM_S: speed of light in km/s
+# GEO_ALTITUDE_KM: geostationary altitude (~35,786 km)
 EARTH_RADIUS_KM = 6371.0
 MU_EARTH = 398600.4418  # km^3/s^2
 C_KM_S = 299792.458
@@ -33,20 +39,20 @@ import math
 export const CODE_EXERCISES: CodeExercise[] = [
   {
     id: 'light-time',
-    title: 'Light-time: GEO vs LEO',
+    title: 'Light time: GEO vs LEO',
     moduleSlug: 'geo-problem',
     pageId: 'delay',
     minutes: 12,
-    summary: 'Compute pure propagation delay from distance — why GEO feels slow.',
-    goal: 'Compare one-way light time for GEO vs a 550 km LEO hop.',
+    summary: 'Compute pure travel time from distance. See why tall GEO paths wait longer than low LEO paths.',
+    goal: 'Compare one way light time for GEO height vs a 550 km LEO hop.',
     steps: [
-      'Implement one_way_ms(distance_km) — convert distance (km) to milliseconds using C_KM_S.',
-      'Formula: time_ms = distance_km / C_KM_S × 1000.',
-      'Implement geo_vs_leo() — return (geo_ms, leo_ms) using GEO_ALTITUDE_KM and 550 km (one-way only).',
+      'Implement one_way_ms(distance_km): convert distance in km to milliseconds using C_KM_S.',
+      'Formula: time_ms = distance_km / C_KM_S * 1000.',
+      'Implement geo_vs_leo(): return (geo_ms, leo_ms) using GEO_ALTITUDE_KM and 550 km (one way only).',
       'Click Run checks when both functions are done.',
     ],
-    success: 'Checks pass when GEO one-way is ~119 ms and LEO 550 km is ~1.8 ms.',
-    predict: 'Is GEO one-way delay closer to 10 ms, 100 ms, or 1000 ms?',
+    success: 'Checks pass when GEO one way is about 119 ms and LEO 550 km is about 1.8 ms.',
+    predict: 'Is GEO one way delay closer to 10 ms, 100 ms, or 1000 ms?',
     starterCode: `${PRELUDE}
 def one_way_ms(distance_km: float) -> float:
     """One-way light time in milliseconds for distance in km."""
@@ -82,16 +88,16 @@ print(f"GEO one-way ≈ {g:.2f} ms · LEO 550 km ≈ {l:.2f} ms · ratio ≈ {g/
     moduleSlug: 'leo-advantage',
     pageId: 'latency',
     minutes: 12,
-    summary: 'Kepler period for circular orbits — what the lab period readout uses.',
-    goal: 'Compute circular-orbit period and see how it grows with altitude.',
+    summary: 'Compute how long one circular loop takes. Same idea the lab period readout uses.',
+    goal: 'Compute circular orbit period and see how it grows with altitude.',
     steps: [
       'Implement period_minutes(altitude_km).',
-      'Use a = EARTH_RADIUS_KM + altitude_km and T = 2π √(a³ / MU_EARTH) in seconds, then convert to minutes.',
-      'Implement compare_altitudes() — return periods at 550 km and 1100 km.',
+      'Use a = EARTH_RADIUS_KM + altitude_km and T = 2 * pi * sqrt(a**3 / MU_EARTH) in seconds, then convert to minutes.',
+      'Implement compare_altitudes(): return periods at 550 km and 1100 km.',
       'Run checks to verify both values.',
     ],
-    success: 'Period at 550 km ≈ 96 min; at 1100 km ≈ 107 min (higher → longer).',
-    predict: 'If altitude goes from 550 → 1100 km, does period increase or decrease?',
+    success: 'Period at 550 km is about 96 min; at 1100 km about 107 min (higher means longer).',
+    predict: 'If altitude goes from 550 to 1100 km, does period increase or decrease?',
     starterCode: `${PRELUDE}
 def period_minutes(altitude_km: float) -> float:
     """Orbital period in minutes for a circular orbit at altitude_km."""
@@ -129,18 +135,18 @@ print(f"550 km → {p550:.1f} min · 1100 km → {p1100:.1f} min")
     moduleSlug: 'constellation-design',
     pageId: 'density',
     minutes: 15,
-    summary: 'Estimate how often a user is “online” — same geometric idea as the lab.',
+    summary: 'Estimate how often a user is online from elevation samples. Same geometric idea as the lab.',
     goal: 'Measure online fraction from elevation samples for sparse vs dense skies.',
     steps: [
-      'Implement online_fraction(elevations_deg, min_elev) — fraction of samples with elevation ≥ min_elev (return 0..1).',
+      'Implement online_fraction(elevations_deg, min_elev): fraction of samples with elevation >= min_elev (return 0..1).',
       'Use the lists sparse_elevations and dense_elevations already in the starter.',
-      'Implement sparse_vs_dense(min_elev=25) — return (sparse_fraction, dense_fraction).',
-      'Run checks at min elevation 25°.',
+      'Implement sparse_vs_dense(min_elev=25): return (sparse_fraction, dense_fraction).',
+      'Run checks at min elevation 25 degrees.',
     ],
-    success: 'Dense should be fully online at 25°; sparse only a small share of samples.',
-    predict: 'At 25° min elevation, is dense online more often than sparse?',
+    success: 'Dense should be fully online at 25 degrees; sparse only a small share of samples.',
+    predict: 'At 25 degrees min elevation, is dense online more often than sparse?',
     starterCode: `${PRELUDE}
-# Synthetic elevation samples (deg) over time — stand-ins for lab geometry
+# Synthetic elevation samples (deg) over time: stand-ins for lab geometry
 sparse_elevations = [-10, -5, 5, 12, 20, 28, 15, 8, -2, -8, 3, 18, 30, 22, 10]
 dense_elevations  = [40, 35, 50, 28, 45, 60, 33, 42, 55, 38, 48, 52, 30, 44, 58]
 
@@ -184,15 +190,15 @@ print(f"Online fraction @25° — sparse {s*100:.0f}% · dense {d*100:.0f}%")
     moduleSlug: 'user-terminal',
     pageId: 'handoff',
     minutes: 12,
-    summary: 'Detect serving-satellite switches — the same idea as the lab handoff counter.',
+    summary: 'Detect serving satellite switches. Same idea as the lab handoff counter.',
     goal: 'Count how many times the serving satellite changes over a sequence.',
     steps: [
       'Implement count_handoffs(serving_ids) where each entry is a sat id string or None (offline).',
-      'Count a handoff when the serving id changes from one non-None sat to a different non-None sat.',
-      'Going offline (A → None) does not count. Coming back to a new sat (None → B) counts if there was a previous sat.',
+      'Count a handoff when the serving id changes from one real sat to a different real sat.',
+      'Going offline (A to None) does not count. Coming back to a new sat (None to B) counts if there was a previous sat.',
       'Repeated same id does not count.',
     ],
-    success: 'Examples: [A,B,C] → 2 handoffs; [A,A,B,None,C] → 2 handoffs.',
+    success: 'Examples: [A,B,C] means 2 handoffs; [A,A,B,None,C] means 2 handoffs.',
     predict: 'For [A, A, B, B, None, C], how many handoffs?',
     starterCode: `${PRELUDE}
 def count_handoffs(serving_ids: list[str | None]) -> int:
@@ -235,16 +241,16 @@ print("handoffs(['A','B',None,'C']) =", count_handoffs(["A", "B", None, "C"]))
     moduleSlug: 'space-network',
     pageId: 'mesh',
     minutes: 15,
-    summary: 'Shortest hop count on a small graph — intuition for ISL routing.',
+    summary: 'Count the fewest hops on a small graph. First intuition for routing through satellites.',
     goal: 'Find the fewest hops between two nodes on an unweighted graph (BFS).',
     steps: [
-      'Implement hops(adj, start, goal) where adj maps node → list of neighbors.',
-      'Return the number of edges on the shortest path (0 if start == goal).',
+      'Implement hops(adj, start, goal) where adj maps node to a list of neighbors.',
+      'Return the number of edges on the shortest path (0 if start equals goal).',
       'Return -1 if goal is unreachable.',
       'Use BFS (deque is imported in the starter).',
     ],
-    success: 'On line A–B–C–D, hops(A, D) is 3. On the sample mesh, U → GW is 2 hops.',
-    predict: 'On a line A–B–C–D, what is hops(A, D)?',
+    success: 'On line A-B-C-D, hops(A, D) is 3. On the sample mesh, U to GW is 2 hops.',
+    predict: 'On a line A-B-C-D, what is hops(A, D)?',
     starterCode: `${PRELUDE}
 from collections import deque
 
@@ -291,16 +297,16 @@ print("U → GW hops:", hops(mesh, "U", "GW"))
     moduleSlug: 'user-terminal',
     pageId: 'elevation',
     minutes: 12,
-    summary: 'Geometric elevation from altitude + ground range — same idea as the lab mask.',
-    goal: 'Decide whether a sat is usable above a min elevation.',
+    summary: 'Decide if a satellite is high enough above the horizon. Same idea as the lab elevation mask.',
+    goal: 'Decide whether a sat is usable above a minimum elevation.',
     steps: [
-      'Implement elev_deg(h_km, ground_range_km) using spherical-Earth geometry (flat toy is OK if documented).',
-      'Use: elev = degrees(atan2(h_km, ground_range_km)) as a simple flat-Earth teaching model.',
-      'Implement is_visible(h_km, ground_range_km, min_elev) — True if elev >= min_elev.',
-      'Run checks for 25° and 40° masks.',
+      'Implement elev_deg(h_km, ground_range_km) with the simple flat Earth teaching model.',
+      'Use elev = degrees(atan2(h_km, ground_range_km)).',
+      'Implement is_visible(h_km, ground_range_km, min_elev): True if elev >= min_elev.',
+      'Run checks for 25 degree and 40 degree masks.',
     ],
-    success: 'Sat at 550 km over 800 km ground range is visible at 25° but not at 40° (flat model).',
-    predict: 'Does raising min elevation make more or fewer ground ranges “online”?',
+    success: 'Sat at 550 km over 800 km ground range is visible at 25 degrees but not at 40 degrees (flat model).',
+    predict: 'Does raising min elevation make more or fewer ground ranges online?',
     starterCode: `${PRELUDE}
 def elev_deg(h_km: float, ground_range_km: float) -> float:
     """Simple flat-Earth elevation (deg): atan2(height, ground range)."""
@@ -336,15 +342,15 @@ print(f"elev(550 km, 800 km ground) ≈ {e:.1f}°")
     moduleSlug: 'user-terminal',
     pageId: 'elevation',
     minutes: 12,
-    summary: 'From a visibility timeline, measure online samples and contact segments.',
-    goal: 'Turn a 0/1 visibility sequence into contact stats (events, not continuous RF).',
+    summary: 'From a 0/1 visibility timeline, measure how often and how long you are online.',
+    goal: 'Turn a 0/1 visibility sequence into contact stats (events, not full radio simulation).',
     steps: [
-      'visibility is a list of 0/1 samples over time (1 = online).',
-      'Implement online_fraction(visibility) — mean of the samples (0..1).',
-      'Implement count_contacts(visibility) — number of contiguous runs of 1s.',
-      'Implement longest_contact(visibility) — length of longest run of 1s (0 if none).',
+      'visibility is a list of 0/1 samples over time (1 means online).',
+      'Implement online_fraction(visibility): mean of the samples (0..1).',
+      'Implement count_contacts(visibility): number of contiguous runs of 1s.',
+      'Implement longest_contact(visibility): length of longest run of 1s (0 if none).',
     ],
-    success: 'On [0,1,1,1,0,0,1,1], fraction=5/8, contacts=2, longest=3.',
+    success: 'On [0,1,1,1,0,0,1,1], fraction is 5/8, contacts is 2, longest is 3.',
     predict: 'How many separate contacts in [1,1,0,1,0,1,1,1]?',
     starterCode: `${PRELUDE}
 def online_fraction(visibility: list[int]) -> float:
@@ -406,16 +412,16 @@ print("contacts:", count_contacts(v), "longest:", longest_contact(v))
     moduleSlug: 'constellation-design',
     pageId: 'capacity',
     minutes: 15,
-    summary: 'Estimate online fraction from random elevation draws — sampling honesty.',
-    goal: 'Compare two sample sizes of synthetic elevations against a min elev mask.',
+    summary: 'Estimate online fraction from random elevation draws. Practice honest sampling.',
+    goal: 'Compare synthetic sparse vs dense elevation samples against a min elevation mask.',
     steps: [
       'online_fraction(elevations, min_elev) as in the sparse/dense exercise.',
-      'mc_coverage(seed, n, min_elev) — use the provided draw_elevations(seed, n) helper.',
-      'Return fraction online for n samples (synthetic: denser sky → higher elevs).',
-      'Run checks: larger n is still in (0, 1]; dense seed beats sparse seed.',
+      'mc_coverage(seed, n, kind, min_elev): use the provided draw_elevations(seed, n, kind) helper.',
+      'Return fraction online for n samples (synthetic denser sky tends toward higher elevations).',
+      'Run checks: results stay in 0..1 and dense beats sparse at 25 degrees.',
     ],
-    success: 'Dense-like seed has higher online fraction than sparse-like seed at 25°.',
-    predict: 'Does increasing n change the true sky, or only the estimate stability?',
+    success: 'Dense like seed has higher online fraction than sparse like seed at 25 degrees.',
+    predict: 'Does increasing n change the true sky, or only how stable the estimate is?',
     starterCode: `${PRELUDE}
 import random
 
@@ -470,15 +476,15 @@ print(f"MC @25° — sparse {s*100:.0f}% · dense {d*100:.0f}% (n=200)")
     moduleSlug: 'space-network',
     pageId: 'mesh',
     minutes: 15,
-    summary: 'Min total edge weight vs hop count — hops ≠ milliseconds.',
+    summary: 'Find the path with the smallest total delay weight. Hops are not the same as milliseconds.',
     goal: 'Shortest path by delay weight on a tiny sat graph.',
     steps: [
-      'Graph: adj maps node → list of (neighbor, weight_ms).',
-      'Implement path_delay_ms(adj, start, goal) — Dijkstra; return min total weight.',
-      'Return -1.0 if unreachable; 0.0 if start == goal.',
-      'Compare with hop-only intuition on the sample mesh.',
+      'Graph: adj maps node to a list of (neighbor, weight_ms) pairs.',
+      'Implement path_delay_ms(adj, start, goal) with Dijkstra; return min total weight.',
+      'Return -1.0 if unreachable; 0.0 if start equals goal.',
+      'Compare with hop only intuition on the sample mesh.',
     ],
-    success: 'On the sample, U→GW min delay is 12 ms (not the 3-hop path).',
+    success: 'On the sample, U to GW min delay is 12 ms (not the longer 3 hop style path).',
     predict: 'Can a path with more hops have lower total delay?',
     starterCode: `${PRELUDE}
 import heapq
@@ -544,16 +550,16 @@ print("U → GW delay:", path_delay_ms(mesh, "U", "GW"), "ms")
     moduleSlug: 'optional-code-path',
     pageId: 'sweep',
     minutes: 12,
-    summary: 'Table period and light-time floors across altitudes — sensitivity, not product RTT.',
+    summary: 'Build a small table of period and light time floors across altitudes. Sensitivity, not product RTT.',
     goal: 'Return rows of (altitude_km, period_min, one_way_ms) for a list of altitudes.',
     steps: [
-      'Reuse period and light-time formulas from earlier exercises.',
-      'Implement sweep(altitudes_km) → list of (h, period_minutes, one_way_ms).',
-      'one_way_ms uses altitude as distance (nadir toy — same as light-time exercise).',
+      'Reuse period and light time formulas from earlier exercises.',
+      'Implement sweep(altitudes_km): list of (h, period_minutes, one_way_ms).',
+      'one_way_ms uses altitude as distance (straight up toy, same as the light time exercise).',
       'Run checks on [340, 550, 1100].',
     ],
-    success: 'Higher altitude → longer period and larger one-way light-time.',
-    predict: 'Does 1100 km roughly double 550 km light-time, or less than double?',
+    success: 'Higher altitude means longer period and larger one way light time.',
+    predict: 'Does 1100 km roughly double 550 km light time, or less than double?',
     starterCode: `${PRELUDE}
 def period_minutes(altitude_km: float) -> float:
     a = EARTH_RADIUS_KM + altitude_km
@@ -596,15 +602,15 @@ for h, t, ms in rows:
     moduleSlug: 'space-network',
     pageId: 'mesh',
     minutes: 15,
-    summary: 'Build sat-to-sat edges if distance < threshold — graph from geometry, not hand-wiring.',
+    summary: 'Connect satellites if they are close enough. Build a graph from positions, not by hand.',
     goal: 'From 2D positions, return an adjacency dict for unweighted BFS.',
     steps: [
-      'positions: dict name → (x, y) in km (toy plane).',
-      'Implement dist(a, b) Euclidean.',
-      'Implement build_isl_graph(positions, max_range_km) — undirected edges if dist < max_range.',
-      'No self-loops. Neighbors can be in any order.',
+      'positions: dict name to (x, y) in km (toy flat plane).',
+      'Implement dist(a, b) Euclidean distance.',
+      'Implement build_isl_graph(positions, max_range_km): undirected edges if 0 < dist < max_range.',
+      'No self loops. Neighbor list order can be anything.',
     ],
-    success: 'Three collinear sats at 0, 500, 1000 km with max_range 600 link A-B and B-C only.',
+    success: 'Three sats on a line at 0, 500, 1000 km with max_range 600 link A-B and B-C only.',
     predict: 'If max_range is 400 km on that line, how many edges?',
     starterCode: `${PRELUDE}
 def dist(p: tuple[float, float], q: tuple[float, float]) -> float:
@@ -656,15 +662,15 @@ print("graph @600 km:", g)
     moduleSlug: 'user-terminal',
     pageId: 'handoff',
     minutes: 12,
-    summary: 'Sticky vs pick-highest-elev — heuristics, not “the” algorithm.',
-    goal: 'Count serving switches under two simple policies on the same elev timeline.',
+    summary: 'Compare sticky vs always pick highest elevation. Simple rules, not a real operator algorithm.',
+    goal: 'Count serving switches under two simple policies on the same elevation timeline.',
     steps: [
-      'samples: list of dict sat_id → elev_deg (only visible sats; may be empty).',
-      'policy_sticky(samples): keep current sat while elev >= 25; else pick max elev sat.',
-      'policy_max_elev(samples): always pick sat with highest elev (or None if empty).',
-      'Return handoff counts for both (same count_handoffs rule as earlier exercise).',
+      'samples: list of dicts from sat id to elev_deg (only visible sats; may be empty).',
+      'policy_sticky(samples): keep current sat while elev >= 25; else pick the max elev sat.',
+      'policy_max_elev(samples): always pick the sat with highest elev (or None if empty).',
+      'Return handoff counts for both (same count_handoffs rule as the earlier exercise).',
     ],
-    success: 'On the sample timeline, max-elev handoffs >= sticky handoffs.',
+    success: 'On the sample timeline, max elev handoffs are at least as many as sticky handoffs.',
     predict: 'Does always chasing the highest elev sat usually hand off more often?',
     starterCode: `${PRELUDE}
 MIN_ELEV = 25.0
@@ -757,20 +763,20 @@ print(f"sticky handoffs={st} · max-elev handoffs={mx}")
   },
   {
     id: 'compose-delay-hops',
-    title: 'Compose: light-time × hops',
+    title: 'Compose: light time times hops',
     moduleSlug: 'optional-code-path',
     pageId: 'compose',
     minutes: 12,
-    summary: 'Toy end-to-end: one-hop light-time times hop count — not full RF latency.',
+    summary: 'Toy end to end: one hop light time times hop count. Not full radio latency.',
     goal: 'Combine d/c with a hop count into a simple path delay estimate.',
     steps: [
-      'Implement one_way_ms(distance_km) as in the GEO light-time exercise.',
+      'Implement one_way_ms(distance_km) as in the GEO light time exercise.',
       'Implement path_delay_ms(distance_km, hops) = one_way_ms(distance_km) * hops.',
-      'Implement leo_vs_geo_mesh() — LEO 550 km over 3 hops vs GEO altitude over 2 hops (one-way each hop).',
-      'Run checks. Remember: this ignores processing, queues, and non-straight paths.',
+      'Implement leo_vs_geo_mesh(): LEO 550 km over 3 hops vs GEO altitude over 2 hops (one way each hop).',
+      'Run checks. Remember: this ignores processing, queues, and non straight paths.',
     ],
-    success: 'LEO 3-hop path delay ≪ GEO 2-hop path delay under pure light-time.',
-    predict: 'Is 3 LEO hops at 550 km still much less light-time than 2 GEO hops?',
+    success: 'LEO 3 hop path delay is still much smaller than GEO 2 hop path delay under pure light time.',
+    predict: 'Is 3 LEO hops at 550 km still much less light time than 2 GEO hops?',
     starterCode: `${PRELUDE}
 def one_way_ms(distance_km: float) -> float:
     """One-way light time in milliseconds."""
@@ -814,15 +820,15 @@ print(f"LEO 3 hops ≈ {leo:.2f} ms · GEO 2 hops ≈ {geo:.2f} ms")
     moduleSlug: 'end-to-end',
     pageId: 'lab',
     minutes: 12,
-    summary: 'Same toy model as the programmer path — light-time × hops for intuition.',
-    goal: 'Estimate pure propagation for a multi-hop path using lab constants.',
+    summary: 'Same toy model as the programmer path: light time times hops for intuition.',
+    goal: 'Estimate pure travel time for a multi hop path using lab constants.',
     steps: [
       'Implement one_way_ms(distance_km).',
       'Implement path_delay_ms(distance_km, hops).',
       'Return leo_3hop and geo_2hop delays from leo_vs_geo_mesh().',
-      'Run checks; note this is a floor, not user-experience RTT.',
+      'Run checks; note this is a floor, not full user experience RTT.',
     ],
-    success: 'Checks match GEO 2-hop ~239 ms light-time vs LEO 3-hop ~5.5 ms.',
+    success: 'Checks match GEO 2 hop about 239 ms light time vs LEO 3 hop about 5.5 ms.',
     predict: 'Does adding one LEO hop erase the GEO advantage?',
     starterCode: `${PRELUDE}
 def one_way_ms(distance_km: float) -> float:

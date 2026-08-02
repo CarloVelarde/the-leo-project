@@ -1,6 +1,6 @@
 # Code-alongs
 
-**Stance:** Main path stays conceptual. Optional Python re-expresses high-signal models (~10–15 min), in-browser. Never blocks Next.
+**Stance:** Main path stays conceptual. Optional Python re expresses high signal models (about 10 to 15 min), in browser. Never blocks Next. Steps and goals use the same beginner friendly voice as lessons.
 
 ## Shipped exercises
 
