@@ -1,5 +1,7 @@
 # Starlink Edu
 
+**Live:** https://starlink-edu.vercel.app/
+
 Learn how Starlink-style LEO satellite constellations work — lessons, a 3D lab, and optional Python code-alongs.
 
 Not affiliated with SpaceX.
@@ -19,16 +21,6 @@ Open the URL Vite prints (usually `http://localhost:5173`).
 npm run build    # production build
 npm run preview  # preview the build
 ```
-
-## Deploy (Vercel)
-
-1. Push to GitHub (already done for this repo).
-2. At [vercel.com](https://vercel.com) → **Add New…** → **Project**.
-3. Import `starlink-edu` (connect GitHub if prompted).
-4. Leave defaults: Framework **Vite**, Build `npm run build`, Output `dist`.
-5. **Deploy**. You get a `*.vercel.app` URL with HTTPS.
-
-SPA routing is handled by `vercel.json`. Later pushes to `main` redeploy automatically.
 
 ## Stack
 

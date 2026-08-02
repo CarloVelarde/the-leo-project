@@ -1,5 +1,7 @@
 import { NavLink, Link } from 'react-router-dom'
+import { GITHUB_REPO_URL } from '@/lib/site'
 import { useTheme } from '@/lib/theme'
+import { GitHubIcon } from '@/ui/GitHubIcon'
 
 const navClass = ({ isActive }: { isActive: boolean }) =>
   [
@@ -35,6 +37,16 @@ export function Header() {
           <NavLink to="/about" className={navClass}>
             About
           </NavLink>
+          <a
+            href={GITHUB_REPO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-ink opacity-60 transition-opacity hover:opacity-100"
+            aria-label="View source on GitHub"
+            title="GitHub"
+          >
+            <GitHubIcon />
+          </a>
           <button
             type="button"
             onClick={toggle}

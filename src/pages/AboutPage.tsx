@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom'
+import { GITHUB_REPO_URL } from '@/lib/site'
+import { GitHubIcon } from '@/ui/GitHubIcon'
 
 export function AboutPage() {
   return (
@@ -10,6 +12,17 @@ export function AboutPage() {
           case study for mega-constellations. The path starts from Internet fundamentals — not
           orbital jargon — so technical learners with zero space background can build real
           intuition.
+        </p>
+        <p>
+          <a
+            href={GITHUB_REPO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 font-medium text-ink underline-offset-4 hover:underline"
+          >
+            <GitHubIcon />
+            Source on GitHub
+          </a>
         </p>
         <p>
           <strong className="font-semibold text-ink">Learning design:</strong> eight core
